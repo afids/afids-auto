@@ -10,14 +10,14 @@ import nibabel as nib
 import csv
 import itertools
 from sklearn.ensemble import RandomForestRegressor
+import joblib
 import os
 import glob
-import time
-import joblib
+import pathlib
 from imresize import *
 
 # Trains on a set of downsampled images to predict fiducial location at a coarse level.
-current = os.path.dirname(os.path.abspath('coarse_train.py'))
+current = pathlib.Path('coarse_train.py').parent.absolute()
 os.chdir(current)
 os.chdir('pythonimg')
 
@@ -35,13 +35,14 @@ for file in glob.glob('OAS1-0***_MR1_T1_MEAN_mni_rigid.fcsv'):
 print(nii_list)
 print(fcsv_list)
 len(nii_list)
+os.chdir('..')
+
 
 # Loops through for each of 32 fiducials.
 for g in range(32):
     finalpredarr = np.zeros((1,2001))
     for i in range(len(nii_list)):
         # Loading image.
-        os.chdir('..')
         os.chdir('pythonimg')
         niimeta = nib.load(nii_list[i])
         hdr = niimeta.header
@@ -219,6 +220,7 @@ for g in range(32):
     os.chdir('models')
     with open(model2save, 'wb') as f:
         joblib.dump(Mdl, f)
-        
+    
+    os.chdir('..')
     print('complete')
 
