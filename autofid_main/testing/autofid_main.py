@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri May 22 02:18:14 2020
-
 @author: danie
 """
 
@@ -12,7 +11,6 @@ import itertools
 import os
 import time
 import joblib
-import pathlib
 from imresize import *
 from nilearn.image import resample_img
 import pandas as pd
@@ -207,8 +205,7 @@ smax = file['arr_1']
 perm = [2,0,1]
 smin = smin[:,perm]
 smax = smax[:,perm]
-os.chdir('..')
-os.chdir('training\\models')
+os.chdir('/project/6050199/dcao6/autofid/models/')
 
 start = time.time()
 
