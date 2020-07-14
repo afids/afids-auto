@@ -3,13 +3,15 @@ Auto-afids uses random forest models to automatically locate 32 anatomical fiduc
 
 # Preprocessing:
 This is the initial step to align 25 OASIS-1 T1w brain images to MNI space to create the training set. Involves all files and folders except the folder, "autofid_main."
-This step revolves around the Snakefile (see Snakefile for more details). Specifically, it takes images from a bids directory and their corresponding .fcsv files in the OAS1_unaligned folder as inputs. Afterwards, it uses FSL Flirt to rigidly register the image to an MNI space template. The .fcsv files are transformed as well. The outputs are found in the OAS1_aligned folder.
+This step revolves around the Snakefile (see Snakefile for more details). Specifically, it takes images from a bids directory and their corresponding .fcsv files in the OAS1_unaligned folder as inputs. Afterwards, it uses FSL Flirt to rigidly register the image to an MNI space template. The .fcsv files are transformed as well. 
 
-To run, ssh login and cd to your folder with the snakefile. Then, input:
+To run, ssh login and cd to the folder with the snakefile. Then, input:
 
 `snakemake -j [N]`
 
 [N] denotes the number of cores to use.
+
+The outputs are currently found in the OAS1_aligned folder.
 
 # Main pipeline:
 In the autofid_main folder, there are three subdirectories: training, testing, and results. 
