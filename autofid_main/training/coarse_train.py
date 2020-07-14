@@ -166,15 +166,12 @@ for g in range(32):
 
         # Generation of features (random blocks of intensity around fiducial)
         testerarr = np.zeros((4000*full.shape[0]))
-        start = time.time()
         numerator = J[cornerlist[:,3]+1, cornerlist[:,4]+1, cornerlist[:,5]+1] - J[cornerlist[:,0],cornerlist[:,4]+1,cornerlist[:,5]+1] - \
         J[cornerlist[:,3]+1,cornerlist[:,4]+1,cornerlist[:,2]] - J[cornerlist[:,3]+1,cornerlist[:,1],cornerlist[:,5]+1] + \
         J[cornerlist[:,3]+1,cornerlist[:,1],cornerlist[:,2]] + J[cornerlist[:,0],cornerlist[:,1],cornerlist[:,5]+1] + \
         J[cornerlist[:,0],cornerlist[:,4]+1,cornerlist[:,2]] - J[cornerlist[:,0],cornerlist[:,1],cornerlist[:,2]]
         denominator = (cornerlist[:,3]-cornerlist[:,0]+1)*(cornerlist[:,4]-cornerlist[:,1]+1)*(cornerlist[:,5]-cornerlist[:,2]+1)
         testerarr = numerator/denominator
-        end = time.time()
-        print(end-start)
 
         vector1arr = np.zeros((4000*full.shape[0]))
         vector2arr = np.zeros((4000*full.shape[0]))
