@@ -20,13 +20,17 @@ import sys
 
 # Autofid main script: use on new mri T1w image to find predicted fiducial location.
 
-# Demo: uncomment the following code, and then run: autofid_main(image,ground_truth,fid)
-# By doing this, we will obtain the predicted coordinates and AFLE for the anterior commissure (fid 1).
-# current = pathlib.Path('autofid_main.py').parent.absolute()
-# os.chdir(current)
-# image = str(current) + '\\OAS1\\sub-0109_T1w.nii'
-# ground_truth = str(current) + '\\OAS1\\OAS1_0109_MR1_T1_MEAN.fcsv'
-# fid = 1
+# Demo: To run autofid_main using examples that come with this package (see OAS1 folder), use the following line of code on the terminal after moving to this directory.
+
+# arg1='OAS1/sub-0109_T1w.nii'; arg2='OAS1/OAS1_0109_MR1_T1_MEAN.fcsv' ;arg3=1; python autofid_main.py $arg1 $arg2 $arg3
+
+# arg1: image file
+# arg2: .fcsv ground_truth file (optional)
+# arg3: fiducial number
+# Arguments can be modified to encompass custom image files and fiducial files outside of the samples available here.
+
+# To use autofid_main without a .fcsv file, the code input to the terminal can look like this:
+# arg1='OAS1/sub-0109_T1w.nii'; arg3=1; python autofid_main.py $arg1 $arg3
 
 if len(sys.argv) < 4:
     arg0 = sys.argv[0]
