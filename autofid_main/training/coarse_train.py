@@ -205,7 +205,6 @@ for g in range(32):
         finalpred = np.asarray(finalpred)
         # Concatenate to array of feature vectors.
         finalpredarr = np.concatenate((finalpredarr,finalpred))
-        print(current)
     
     # Model training.
     finalpredarr = finalpredarr[1:,:]    
