@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon May 18 14:47:15 2020
-
 @author: danie
 """
 
@@ -14,11 +13,13 @@ import joblib
 import os
 import glob
 import pathlib
+from pathlib import Path
 from imresize import *
 
 # Trains on a set of upsampled images to predict fiducial location at a high level.
 current = pathlib.Path('fine_train.py').parent.absolute()
 os.chdir(current)
+os.chdir('/project/6050199/dcao6/autofid/')
 os.chdir('pythonimg')
 
 nii_list = []
@@ -43,6 +44,7 @@ for g in range(32):
     finalpredarr = np.zeros((1,2001))
     for i in range(len(nii_list)):
         # Loading image.
+        os.chdir('/project/6050199/dcao6/autofid/')
         os.chdir('pythonimg')          
         niimeta = nib.load(nii_list[i])
         hdr = niimeta.header
@@ -225,6 +227,8 @@ for g in range(32):
     Mdl = regr_rf.fit(X_train, y_train)
     
     model2save = 'finemodelfid{}'.format(g+1)
+    os.chdir(current)
+    Path("models").mkdir(parents=True, exist_ok=True)
     os.chdir('models')
     with open(model2save, 'wb') as f:
         joblib.dump(Mdl, f)
