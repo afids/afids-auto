@@ -42,7 +42,7 @@ rule fsl_to_ras:
 
 rule fid_tform_mni_rigid:
     input:
-        orig = lambda wildcards: 'OAS1_unaligned/OAS1_{subject}_MR1_T1_MEAN.fcsv'.format(subject=wildcards.subject),
+        orig = lambda wildcards: '/project/6050199/dcao6/autofid/training/OAS1_orig/OAS1_{subject}_MR1_T1_MEAN.fcsv'.format(subject=wildcards.subject),
         xfm_new = 'OAS1_aligned/sub-{subject}/sub-{subject}_T1w_rigid_xfm_slicer.txt', 
         template = 'dummy.fcsv'
     output:
