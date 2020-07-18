@@ -1,9 +1,24 @@
+---
+tags: [Import-7a2f]
+title: Auto-afids
+created: '2020-07-18T04:27:30.292Z'
+modified: '2020-07-18T07:34:12.470Z'
+---
+
 # Auto-afids
 Auto-afids uses random forest models to automatically locate 32 anatomical fiducials, which were originally described in the Afids project.
 
-# Preprocessing:
-This is the initial step to align 25 OASIS-1 T1w brain images to MNI space to create the training set. Involves all files and folders except the folder, 'autofid_main.'
-This step revolves around the Snakefile (see Snakefile for more details). Specifically, it takes images from a bids directory and their corresponding .fcsv files as inputs. Afterwards, it uses FSL Flirt to rigidly register the image to an MNI space template. The .fcsv files are transformed as well. 
+## Preprocessing
+This is the initial step to align the T1w brain images to MNI space to create the training set. The currently available datasets are:
+* **OASIS (25 subjects)**: /scratch/dcao6/autofid/data/OASIS
+* **lhsc_dbs (40 subjects)**: /scratch/dcao6/autofid/data/lhsc_dbs
+* **HCP (30 subjects)**: /scratch/dcao6/autofid/data/HCP
+
+This step revolves around the `workflow/Snakefile` (see Snakefile for more details). Specifically, from the listed BIDS datasets it takes the following data as input:
+* ***/bids** which stores the nifti files in BIDS format
+* ***/deriv/afids** which stores the `.fcsv` files with the associated coordinates of 32 anatomical fiducial points
+
+Using FSL `Flirt`, the imaging data is rigidly registered to MNI space (). The transform is applied to the imaging data and the associated  `.fcsv` files. 
 
 To run, ssh login and cd to the folder with the snakefile. First, make sure the appropriate modules are loaded. FSL and ANTS are the two modules being used. First input:
 
