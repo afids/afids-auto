@@ -1,10 +1,3 @@
----
-tags: [Import-7a2f]
-title: Auto-afids
-created: '2020-07-18T04:27:30.292Z'
-modified: '2020-07-18T07:34:12.470Z'
----
-
 # Auto-afids
 Auto-afids uses random forest models to automatically locate 32 anatomical fiducials, which were originally described in the Afids project.
 
