@@ -1,0 +1,3 @@
+NameError in line 22 of /home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile:
+name 'fids_layout' is not defined
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile", line 22, in <module>

@@ -1,0 +1,3 @@
+Building DAG of jobs...
+CyclicGraphException in line 57 of /home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile:
+Cyclic dependency on rule modelTrain.
