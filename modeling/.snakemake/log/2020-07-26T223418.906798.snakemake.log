@@ -1,0 +1,8 @@
+Building DAG of jobs...
+InputFunctionException in line 72 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Error:
+  KeyError: 'subject'
+Wildcards:
+  afid_num=01
+Traceback:
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 66, in model_inputs

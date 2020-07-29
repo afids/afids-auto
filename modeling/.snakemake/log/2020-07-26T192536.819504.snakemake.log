@@ -1,0 +1,12 @@
+Building DAG of jobs...
+AmbiguousRuleException:
+Rules fsl_to_ras and align_mni_rigid are ambiguous for the file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz.
+Consider starting rule output with a unique prefix, constrain your wildcards, or use the ruleorder directive.
+Wildcards:
+	fsl_to_ras: subject=0010
+	align_mni_rigid: subject=0010
+Expected input files:
+	fsl_to_ras: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat
+	align_mni_rigid: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gzExpected output files:
+	fsl_to_ras: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+	align_mni_rigid: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat

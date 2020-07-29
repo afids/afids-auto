@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	1	fid_tform_mni_rigid
+	1	fsl_to_ras
+	4
+
+[Sun Jul 26 20:55:41 2020]
+rule align_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat
+    jobid: 3
+    reason: Updated input files: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz
+    wildcards: subject=0010
+
+
+[Sun Jul 26 20:55:41 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 2
+    reason: Input files updated by another job: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz
+    wildcards: subject=0010
+
+RuleException in line 19 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+'InputFiles' object has no attribute 'moving'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 111, in run_jobs
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 120, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 131, in _run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 151, in printjob
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 137, in printjob

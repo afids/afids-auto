@@ -1,0 +1,9 @@
+Building DAG of jobs...
+InputFunctionException in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Error:
+  NameError: name 'wc' is not defined
+Wildcards:
+  afid_num=01
+  train_level=coarse
+Traceback:
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 60, in model_inputs

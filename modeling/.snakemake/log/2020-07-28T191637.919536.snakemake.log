@@ -1,0 +1,3 @@
+SyntaxError in line 6 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+invalid syntax
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/Snakefile", line 44, in <module>

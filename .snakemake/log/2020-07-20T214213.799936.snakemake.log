@@ -1,3 +1,0 @@
-WildcardError in line 64 of /home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile:
-No values given for wildcard 'afid'.
-  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile", line 64, in <module>

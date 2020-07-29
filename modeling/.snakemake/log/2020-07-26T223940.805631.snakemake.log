@@ -1,0 +1,138 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	32	coarseTrain
+	64	featureExtract_coarse
+	1	fid_tform_mni_rigid
+	1	fsl_to_ras
+	100
+
+[Sun Jul 26 22:39:41 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0086_registration.done
+    jobid: 39
+    wildcards: afid_num=05_sub-0086
+
+[Sun Jul 26 22:39:41 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0086_registration.done
+    jobid: 46
+    wildcards: afid_num=12_sub-0086
+
+[Sun Jul 26 22:39:41 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0086_registration.done
+    jobid: 54
+    wildcards: afid_num=20_sub-0086
+
+[Sun Jul 26 22:39:41 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0086_registration.done
+    jobid: 61
+    wildcards: afid_num=27_sub-0086
+
+[Sun Jul 26 22:39:41 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_registration.done
+    jobid: 103
+    wildcards: afid_num=03
+
+[Sun Jul 26 22:39:41 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_registration.done
+    jobid: 111
+    wildcards: afid_num=11
+
+[Sun Jul 26 22:39:41 2020]
+[Sun Jul 26 22:39:41 2020]
+Error in rule featureExtract_coarse:
+Error in rule featureExtract_coarse:
+    jobid: 46
+    jobid: 111
+[Sun Jul 26 22:39:41 2020]
+[Sun Jul 26 22:39:41 2020]
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0086_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_registration.done
+Error in rule featureExtract_coarse:
+Error in rule featureExtract_coarse:
+
+
+[Sun Jul 26 22:39:41 2020]
+[Sun Jul 26 22:39:41 2020]
+    jobid: 61
+    jobid: 54
+Error in rule featureExtract_coarse:
+Error in rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0086_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0086_registration.done
+    jobid: 39
+    jobid: 103
+
+
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0086_registration.done
+RuleException:
+AttributeError in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Can't pickle local object 'get_nii_files.<locals>.<lambda>'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 63, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_registration.done
+RuleException:
+AttributeError in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Can't pickle local object 'get_nii_files.<locals>.<lambda>'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 63, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+
+
+RuleException:
+AttributeError in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Can't pickle local object 'get_nii_files.<locals>.<lambda>'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 63, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+RuleException:
+AttributeError in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Can't pickle local object 'get_nii_files.<locals>.<lambda>'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 63, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+RuleException:
+AttributeError in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Can't pickle local object 'get_nii_files.<locals>.<lambda>'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 63, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+RuleException:
+AttributeError in line 63 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Can't pickle local object 'get_nii_files.<locals>.<lambda>'
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 63, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T223940.805631.snakemake.log

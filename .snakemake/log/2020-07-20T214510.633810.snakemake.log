@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 56 of /home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile:
-Missing input files for rule modelTrain:
-1

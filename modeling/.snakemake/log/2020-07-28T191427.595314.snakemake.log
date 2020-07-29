@@ -1,0 +1,4 @@
+IndentationError in line 5 of <tokenize>:
+unindent does not match any outer indentation level (<tokenize>, line 5)
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/Snakefile", line 44, in <module>
+  File "/usr/lib/python3.8/tokenize.py", line 512, in _tokenize

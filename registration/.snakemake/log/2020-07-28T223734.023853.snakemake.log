@@ -1,0 +1,212 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	2	align_mni_rigid
+	1	all
+	8	fid_tform_mni_rigid
+	7	fsl_to_ras
+	18
+
+[Tue Jul 28 22:37:34 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 11
+    wildcards: subject=0114
+
+
+[Tue Jul 28 22:37:34 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 13
+    wildcards: subject=0145
+
+
+[Tue Jul 28 22:37:34 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0117/anat/sub-0117_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0117/anat/sub-0117_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0117/anat/sub-0117_registration.done
+    jobid: 4
+    wildcards: subject=0117
+
+[Tue Jul 28 22:37:34 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 9
+    wildcards: subject=0010
+
+
+[Tue Jul 28 22:37:34 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 15
+    wildcards: subject=0180
+
+
+[Tue Jul 28 22:37:34 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 16
+    wildcards: subject=0200
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0117/anat/sub-0117_registration.done.
+[Tue Jul 28 22:37:34 2020]
+Finished job 4.
+1 of 18 steps (6%) done
+
+[Tue Jul 28 22:37:34 2020]
+rule align_mni_rigid:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat
+    jobid: 18
+    wildcards: subject=0086
+
+[Tue Jul 28 22:37:34 2020]
+Finished job 16.
+2 of 18 steps (11%) done
+
+[Tue Jul 28 22:37:34 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_registration.done
+    jobid: 8
+    wildcards: subject=0200
+
+[Tue Jul 28 22:37:34 2020]
+Finished job 9.
+3 of 18 steps (17%) done
+
+[Tue Jul 28 22:37:34 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    jobid: 1
+    wildcards: subject=0010
+
+[Tue Jul 28 22:37:34 2020]
+Finished job 11.
+4 of 18 steps (22%) done
+
+[Tue Jul 28 22:37:34 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_registration.done
+    jobid: 3
+    wildcards: subject=0114
+
+[Tue Jul 28 22:37:34 2020]
+Finished job 15.
+5 of 18 steps (28%) done
+[Tue Jul 28 22:37:34 2020]
+Finished job 13.
+6 of 18 steps (33%) done
+
+[Tue Jul 28 22:37:34 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_registration.done
+    jobid: 7
+    wildcards: subject=0180
+
+[Tue Jul 28 22:37:34 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_registration.done
+    jobid: 5
+    wildcards: subject=0145
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_registration.done.
+[Tue Jul 28 22:37:35 2020]
+Finished job 7.
+7 of 18 steps (39%) done
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_registration.done.
+[Tue Jul 28 22:37:35 2020]
+Finished job 8.
+8 of 18 steps (44%) done
+
+[Tue Jul 28 22:37:35 2020]
+rule align_mni_rigid:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_xfm.mat
+    jobid: 22
+    wildcards: subject=0177
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done.
+[Tue Jul 28 22:37:35 2020]
+Finished job 1.
+9 of 18 steps (50%) done
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_registration.done.
+[Tue Jul 28 22:37:35 2020]
+Finished job 3.
+10 of 18 steps (56%) done
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_registration.done.
+[Tue Jul 28 22:37:35 2020]
+Finished job 5.
+11 of 18 steps (61%) done
+[Tue Jul 28 22:40:15 2020]
+Finished job 18.
+12 of 18 steps (67%) done
+
+[Tue Jul 28 22:40:15 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 10
+    wildcards: subject=0086
+
+[Tue Jul 28 22:40:15 2020]
+Finished job 22.
+13 of 18 steps (72%) done
+
+[Tue Jul 28 22:40:15 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 14
+    wildcards: subject=0177
+
+[Tue Jul 28 22:40:15 2020]
+Finished job 10.
+14 of 18 steps (78%) done
+
+[Tue Jul 28 22:40:15 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_registration.done
+    jobid: 2
+    wildcards: subject=0086
+
+[Tue Jul 28 22:40:16 2020]
+Finished job 14.
+15 of 18 steps (83%) done
+
+[Tue Jul 28 22:40:16 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_desc-ras_xfm.txt
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_registration.done
+    jobid: 6
+    wildcards: subject=0177
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_registration.done.
+[Tue Jul 28 22:40:16 2020]
+Finished job 2.
+16 of 18 steps (89%) done
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_registration.done.
+[Tue Jul 28 22:40:16 2020]
+Finished job 6.
+17 of 18 steps (94%) done
+
+[Tue Jul 28 22:40:16 2020]
+localrule all:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0114/anat/sub-0114_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0117/anat/sub-0117_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0145/anat/sub-0145_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0177/anat/sub-0177_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0180/anat/sub-0180_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0200/anat/sub-0200_registration.done
+    jobid: 0
+
+[Tue Jul 28 22:40:16 2020]
+Finished job 0.
+18 of 18 steps (100%) done
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/registration/.snakemake/log/2020-07-28T223734.023853.snakemake.log

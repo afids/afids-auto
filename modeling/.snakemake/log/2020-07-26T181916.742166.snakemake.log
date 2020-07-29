@@ -1,0 +1,73 @@
+The flag 'directory' used in rule coarseTrain is only valid for outputs, not inputs.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 5
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	96	coarseTrain
+	96	featureExtract
+	1	fid_tform_mni_rigid
+	195
+
+[Sun Jul 26 18:19:18 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/afids/sub-0010/anat/sub-0010_space-T1w_afids.fcsv
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_sub-0010_desc-medium_features.npy
+    jobid: 44
+    wildcards: afid_num=10, subject=0010, train_level=medium
+
+[Sun Jul 26 18:19:18 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/afids/sub-0010/anat/sub-0010_space-T1w_afids.fcsv
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_sub-0010_desc-fine_features.npy
+    jobid: 73
+    wildcards: afid_num=07, subject=0010, train_level=fine
+
+[Sun Jul 26 18:19:18 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/afids/sub-0010/anat/sub-0010_space-T1w_afids.fcsv
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_sub-0010_desc-medium_features.npy
+    jobid: 45
+    wildcards: afid_num=11, subject=0010, train_level=medium
+
+[Sun Jul 26 18:19:18 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/afids/sub-0010/anat/sub-0010_space-T1w_afids.fcsv
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_sub-0010_desc-medium_features.npy
+    jobid: 59
+    wildcards: afid_num=25, subject=0010, train_level=medium
+
+[Sun Jul 26 18:19:18 2020]
+rule align_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 1
+    wildcards: subject=0010
+
+Activating singularity image /home/greydon/Documents/GitHub/Auto-afids/.snakemake/singularity/44a4f7d6cbcfe66cab33c8fbb383d328.simg
+[Sun Jul 26 18:19:18 2020]
+Error in rule align_mni_rigid:
+    jobid: 1
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    shell:
+        flirt -in /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz -ref resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz -out /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz -omat /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat -dof 6 -coarsesearch 60 -finesearch 18 -cost mutualinfo -interp sinc &&         resources/c3d_affine_tool -ref /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz -src /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat -fsl2ras -o /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt &&         resources/c3d_affine_tool -ref /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz -src /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat -fsl2ras -oitk /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Sun Jul 26 18:19:24 2020]
+Finished job 73.
+1 of 195 steps (0.51%) done
+[Sun Jul 26 18:19:24 2020]
+Finished job 59.
+2 of 195 steps (1%) done
+[Sun Jul 26 18:19:24 2020]
+Finished job 45.
+3 of 195 steps (2%) done
+[Sun Jul 26 18:19:24 2020]
+Finished job 44.
+4 of 195 steps (2%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T181916.742166.snakemake.log
