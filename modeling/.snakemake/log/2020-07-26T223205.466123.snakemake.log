@@ -1,5 +1,0 @@
-Building DAG of jobs...
-ChildIOException:
-File/directory is a child to another output:
-('/media/veracrypt6/projects/autofids/data/OASIS/deriv/features', A)
-('/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_desc-coarse_features.npy', featureExtract_coarse)

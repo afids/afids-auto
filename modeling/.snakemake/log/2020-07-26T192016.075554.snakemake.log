@@ -1,4 +1,0 @@
-NameError in line 32 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
-name 'desc' is not defined
-  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile", line 67, in <module>
-  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 32, in <module>
