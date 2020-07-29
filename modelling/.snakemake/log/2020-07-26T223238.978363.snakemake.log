@@ -1,8 +1,0 @@
-Building DAG of jobs...
-InputFunctionException in line 80 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
-Error:
-  AttributeError: 'Checkpoints' object has no attribute 'A'
-Wildcards:
-  afid_num=01
-Traceback:
-  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 66, in gatherForD_fromC_basedOnA

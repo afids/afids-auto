@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 31 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
-Missing input files for rule fid_tform_mni_rigid:
-/media/veracrypt6/projects/autofids/data/OASIS/deriv/afids/sub-0010/anat/sub-0010_space-T1w_afids.fcsv

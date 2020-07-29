@@ -1,3 +1,0 @@
-FileNotFoundError in line 9 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/Snakefile:
-[Errno 2] No such file or directory: '/home/greydon/Documents/GitHub/Auto-afids/config/config.yml'
-  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/Snakefile", line 9, in <module>

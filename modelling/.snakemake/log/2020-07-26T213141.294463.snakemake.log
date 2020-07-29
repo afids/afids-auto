@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 62 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
-Missing input files for rule coarseTrain:
-/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01*_desc-coarse_features.npy
