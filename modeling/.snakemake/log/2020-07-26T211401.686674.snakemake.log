@@ -1,0 +1,125 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	all
+	10	featureExtract
+	11
+
+[Sun Jul 26 21:14:02 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0010_desc-medium_features.npy
+    jobid: 53
+    wildcards: afid_num=20, subject=0010, train_level=medium
+
+[Sun Jul 26 21:14:02 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_sub-0010_desc-fine_features.npy
+    jobid: 81
+    wildcards: afid_num=16, subject=0010, train_level=fine
+
+[Sun Jul 26 21:14:02 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_sub-0010_desc-medium_features.npy
+    jobid: 59
+    wildcards: afid_num=26, subject=0010, train_level=medium
+
+[Sun Jul 26 21:14:02 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_sub-0010_desc-medium_features.npy
+    jobid: 51
+    wildcards: afid_num=18, subject=0010, train_level=medium
+
+[Sun Jul 26 21:14:02 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_sub-0010_desc-fine_features.npy
+    jobid: 83
+    wildcards: afid_num=18, subject=0010, train_level=fine
+
+[Sun Jul 26 21:14:02 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_sub-0010_desc-fine_features.npy
+    jobid: 89
+    wildcards: afid_num=24, subject=0010, train_level=fine
+
+[Sun Jul 26 21:14:09 2020]
+Finished job 51.
+1 of 11 steps (9%) done
+
+[Sun Jul 26 21:14:09 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_sub-0010_desc-fine_features.npy
+    jobid: 96
+    wildcards: afid_num=31, subject=0010, train_level=fine
+
+[Sun Jul 26 21:14:10 2020]
+Finished job 83.
+2 of 11 steps (18%) done
+
+[Sun Jul 26 21:14:10 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_sub-0010_desc-medium_features.npy
+    jobid: 52
+    wildcards: afid_num=19, subject=0010, train_level=medium
+
+[Sun Jul 26 21:14:10 2020]
+Finished job 53.
+3 of 11 steps (27%) done
+
+[Sun Jul 26 21:14:10 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_sub-0010_desc-fine_features.npy
+    jobid: 82
+    wildcards: afid_num=17, subject=0010, train_level=fine
+
+[Sun Jul 26 21:14:11 2020]
+Finished job 81.
+4 of 11 steps (36%) done
+
+[Sun Jul 26 21:14:11 2020]
+rule featureExtract:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_sub-0010_desc-fine_features.npy
+    jobid: 97
+    wildcards: afid_num=32, subject=0010, train_level=fine
+
+[Sun Jul 26 21:14:11 2020]
+Finished job 89.
+5 of 11 steps (45%) done
+[Sun Jul 26 21:14:12 2020]
+Finished job 59.
+6 of 11 steps (55%) done
+[Sun Jul 26 21:14:14 2020]
+Finished job 96.
+7 of 11 steps (64%) done
+[Sun Jul 26 21:14:15 2020]
+Finished job 52.
+8 of 11 steps (73%) done
+[Sun Jul 26 21:14:15 2020]
+Finished job 82.
+9 of 11 steps (82%) done
+[Sun Jul 26 21:14:16 2020]
+Finished job 97.
+10 of 11 steps (91%) done
+
+[Sun Jul 26 21:14:16 2020]
+localrule all:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_registration.done, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_sub-0010_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_sub-0010_desc-medium_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_sub-0010_desc-fine_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_sub-0010_desc-fine_features.npy
+    jobid: 0
+
+[Sun Jul 26 21:14:16 2020]
+Finished job 0.
+11 of 11 steps (100%) done
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T211401.686674.snakemake.log

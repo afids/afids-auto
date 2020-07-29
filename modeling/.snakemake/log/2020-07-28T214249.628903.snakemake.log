@@ -1,0 +1,134 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	96	featureExtract
+	96	modelTrain
+	193
+
+[Tue Jul 28 21:42:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-coarse_features.hkl
+    jobid: 4
+    wildcards: afid_num=02, train_level=coarse
+
+[Tue Jul 28 21:42:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-coarse_features.hkl
+    jobid: 34
+    wildcards: afid_num=12, train_level=coarse
+
+[Tue Jul 28 21:42:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-medium_features.hkl
+    jobid: 5
+    wildcards: afid_num=02, train_level=medium
+
+[Tue Jul 28 21:42:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-medium_features.hkl
+    jobid: 35
+    wildcards: afid_num=12, train_level=medium
+
+[Tue Jul 28 21:42:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-fine_features.hkl
+    jobid: 6
+    wildcards: afid_num=02, train_level=fine
+
+[Tue Jul 28 21:42:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-fine_features.hkl
+    jobid: 36
+    wildcards: afid_num=12, train_level=fine
+
+[Tue Jul 28 21:42:50 2020]
+Error in rule featureExtract:
+    jobid: 6
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-fine_features.hkl
+
+RuleException:
+CalledProcessError in line 20 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpow5gdj3s.data_store.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 20, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 21:42:50 2020]
+Error in rule featureExtract:
+    jobid: 36
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-fine_features.hkl
+
+RuleException:
+CalledProcessError in line 20 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpag2roxq5.data_store.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 20, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 21:42:50 2020]
+Error in rule featureExtract:
+    jobid: 35
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-medium_features.hkl
+
+RuleException:
+CalledProcessError in line 20 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmp1exti23u.data_store.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 20, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 21:42:50 2020]
+Error in rule featureExtract:
+    jobid: 34
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-coarse_features.hkl
+
+RuleException:
+CalledProcessError in line 20 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpm1nkdptz.data_store.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 20, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 21:42:50 2020]
+Error in rule featureExtract:
+    jobid: 4
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-coarse_features.hkl
+
+RuleException:
+CalledProcessError in line 20 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpwwdlfbw2.data_store.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 20, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 21:42:50 2020]
+Error in rule featureExtract:
+    jobid: 5
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-medium_features.hkl
+
+RuleException:
+CalledProcessError in line 20 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpiz0eb2nd.data_store.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 20, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/log/2020-07-28T214249.628903.snakemake.log

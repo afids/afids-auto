@@ -1,0 +1,37 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	all
+	96	coarseTrain
+	97
+
+[Sun Jul 26 21:20:58 2020]
+rule coarseTrain:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_sub-0010_desc-fine_features.npy
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/models/afid-07_desc-fine_model
+    jobid: 118
+    wildcards: afid_num=07, train_level=fine
+    threads: 4
+    resources: mem_mb=4000
+
+[Sun Jul 26 21:20:59 2020]
+Error in rule coarseTrain:
+    jobid: 118
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/models/afid-07_desc-fine_model
+
+RuleException:
+CalledProcessError in line 71 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmpn3bfjow3.train.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 71, in __rule_coarseTrain
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T212058.084541.snakemake.log

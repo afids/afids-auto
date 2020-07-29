@@ -1,0 +1,27 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	32	featureExtract
+	33
+
+[Tue Jul 28 19:17:33 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_desc-coarse_features.hkl
+    jobid: 2
+    wildcards: afid_num=02
+
+InputFunctionException in line 12 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Error:
+  ValueError: too many values to unpack (expected 1)
+Wildcards:
+  afid_num=02
+Traceback:
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 6, in get_files
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 111, in run_jobs
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 416, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 460, in run_single_job
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 437, in job_args_and_prepare

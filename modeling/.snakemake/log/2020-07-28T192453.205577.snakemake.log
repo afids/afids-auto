@@ -1,0 +1,252 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	32	featureExtract
+	33
+
+[Tue Jul 28 19:24:53 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_desc-coarse_features.hkl
+    jobid: 2
+    wildcards: afid_num=02
+
+[Tue Jul 28 19:24:53 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_desc-coarse_features.hkl
+    jobid: 10
+    wildcards: afid_num=10
+
+[Tue Jul 28 19:24:53 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_desc-coarse_features.hkl
+    jobid: 17
+    wildcards: afid_num=17
+
+[Tue Jul 28 19:24:53 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_desc-coarse_features.hkl
+    jobid: 25
+    wildcards: afid_num=25
+
+[Tue Jul 28 19:24:53 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_desc-coarse_features.hkl
+    jobid: 32
+    wildcards: afid_num=32
+
+[Tue Jul 28 19:24:53 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_desc-coarse_features.hkl
+    jobid: 3
+    wildcards: afid_num=03
+
+[Tue Jul 28 19:25:14 2020]
+Finished job 3.
+1 of 33 steps (3%) done
+
+[Tue Jul 28 19:25:14 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_desc-coarse_features.hkl
+    jobid: 11
+    wildcards: afid_num=11
+
+[Tue Jul 28 19:25:14 2020]
+Finished job 17.
+2 of 33 steps (6%) done
+
+[Tue Jul 28 19:25:14 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_desc-coarse_features.hkl
+    jobid: 18
+    wildcards: afid_num=18
+
+[Tue Jul 28 19:25:14 2020]
+Finished job 10.
+3 of 33 steps (9%) done
+
+[Tue Jul 28 19:25:14 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_desc-coarse_features.hkl
+    jobid: 26
+    wildcards: afid_num=26
+
+[Tue Jul 28 19:25:14 2020]
+Finished job 2.
+4 of 33 steps (12%) done
+
+[Tue Jul 28 19:25:14 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_desc-coarse_features.hkl
+    jobid: 4
+    wildcards: afid_num=04
+
+[Tue Jul 28 19:25:15 2020]
+Finished job 25.
+5 of 33 steps (15%) done
+
+[Tue Jul 28 19:25:15 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_desc-coarse_features.hkl
+    jobid: 12
+    wildcards: afid_num=12
+
+[Tue Jul 28 19:25:15 2020]
+Finished job 32.
+6 of 33 steps (18%) done
+
+[Tue Jul 28 19:25:15 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_desc-coarse_features.hkl
+    jobid: 19
+    wildcards: afid_num=19
+
+[Tue Jul 28 19:25:33 2020]
+Finished job 12.
+7 of 33 steps (21%) done
+
+[Tue Jul 28 19:25:33 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_desc-coarse_features.hkl
+    jobid: 27
+    wildcards: afid_num=27
+
+[Tue Jul 28 19:25:33 2020]
+Finished job 4.
+8 of 33 steps (24%) done
+
+[Tue Jul 28 19:25:33 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_desc-coarse_features.hkl
+    jobid: 5
+    wildcards: afid_num=05
+
+[Tue Jul 28 19:25:34 2020]
+Finished job 26.
+9 of 33 steps (27%) done
+
+[Tue Jul 28 19:25:34 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_desc-coarse_features.hkl
+    jobid: 13
+    wildcards: afid_num=13
+
+[Tue Jul 28 19:25:35 2020]
+Finished job 19.
+10 of 33 steps (30%) done
+
+[Tue Jul 28 19:25:35 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_desc-coarse_features.hkl
+    jobid: 20
+    wildcards: afid_num=20
+
+[Tue Jul 28 19:25:35 2020]
+Finished job 11.
+11 of 33 steps (33%) done
+
+[Tue Jul 28 19:25:35 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_desc-coarse_features.hkl
+    jobid: 28
+    wildcards: afid_num=28
+
+[Tue Jul 28 19:25:35 2020]
+Finished job 18.
+12 of 33 steps (36%) done
+
+[Tue Jul 28 19:25:35 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_desc-coarse_features.hkl
+    jobid: 6
+    wildcards: afid_num=06
+
+Terminating processes on user request, this might take some time.
+[Tue Jul 28 19:25:44 2020]
+Error in rule featureExtract:
+    jobid: 20
+[Tue Jul 28 19:25:44 2020]
+[Tue Jul 28 19:25:44 2020]
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_desc-coarse_features.hkl
+Error in rule featureExtract:
+Error in rule featureExtract:
+
+    jobid: 28
+    jobid: 6
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_desc-coarse_features.hkl
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_desc-coarse_features.hkl
+
+
+RuleException:
+CalledProcessError in line 21 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpxusipsls.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 21, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+RuleException:
+CalledProcessError in line 21 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmp2fwn3t3e.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 21, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+RuleException:
+CalledProcessError in line 21 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpdux8bwuo.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 21, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 19:25:44 2020]
+Error in rule featureExtract:
+    jobid: 13
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_desc-coarse_features.hkl
+
+RuleException:
+CalledProcessError in line 21 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpwfwshusb.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 21, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 19:25:44 2020]
+Error in rule featureExtract:
+    jobid: 5
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_desc-coarse_features.hkl
+
+RuleException:
+CalledProcessError in line 21 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpjfpqksjh.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 21, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Tue Jul 28 19:25:44 2020]
+Error in rule featureExtract:
+    jobid: 27
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_desc-coarse_features.hkl
+
+RuleException:
+CalledProcessError in line 21 of /home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/scripts/tmpj844k0st.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/modeling/workflow/rules/modelTraining.smk", line 21, in __rule_featureExtract
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/log/2020-07-28T192453.205577.snakemake.log

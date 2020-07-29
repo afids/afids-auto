@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 5
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	1	fid_tform_mni_rigid
+	3
+
+[Sun Jul 26 19:04:48 2020]
+rule align_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 1
+    wildcards: subject=0010
+
+Terminating processes on user request, this might take some time.
+[Sun Jul 26 19:04:56 2020]
+Error in rule align_mni_rigid:
+    jobid: 1
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    shell:
+        flirt -in /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz -ref resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz -out /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz -omat /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat -dof 6 -coarsesearch 60 -finesearch 18 -cost mutualinfo -interp sinc &&         resources/c3d_affine_tool -ref /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz -src /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat -fsl2ras -o /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt &&         resources/c3d_affine_tool -ref /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz -src /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat -fsl2ras -oitk /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T190448.196442.snakemake.log

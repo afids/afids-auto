@@ -1,0 +1,335 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	32	featureExtract
+	33
+
+[Tue Jul 28 19:53:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_space-T1w_desc-coarse_features.hkl
+    jobid: 1
+    wildcards: afid_num=01
+
+[Tue Jul 28 19:53:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-coarse_features.hkl
+    jobid: 2
+    wildcards: afid_num=02
+
+[Tue Jul 28 19:53:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_space-T1w_desc-coarse_features.hkl
+    jobid: 10
+    wildcards: afid_num=10
+
+[Tue Jul 28 19:53:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_space-T1w_desc-coarse_features.hkl
+    jobid: 17
+    wildcards: afid_num=17
+
+[Tue Jul 28 19:53:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_space-T1w_desc-coarse_features.hkl
+    jobid: 25
+    wildcards: afid_num=25
+
+
+[Tue Jul 28 19:53:50 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_space-T1w_desc-coarse_features.hkl
+    jobid: 32
+    wildcards: afid_num=32
+
+[Tue Jul 28 19:57:29 2020]
+Finished job 1.
+1 of 33 steps (3%) done
+
+[Tue Jul 28 19:57:29 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_space-T1w_desc-coarse_features.hkl
+    jobid: 3
+    wildcards: afid_num=03
+
+[Tue Jul 28 19:57:56 2020]
+Finished job 25.
+2 of 33 steps (6%) done
+
+[Tue Jul 28 19:57:56 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_space-T1w_desc-coarse_features.hkl
+    jobid: 11
+    wildcards: afid_num=11
+
+[Tue Jul 28 19:58:20 2020]
+Finished job 10.
+3 of 33 steps (9%) done
+
+[Tue Jul 28 19:58:23 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_space-T1w_desc-coarse_features.hkl
+    jobid: 18
+    wildcards: afid_num=18
+
+[Tue Jul 28 19:58:25 2020]
+Finished job 17.
+4 of 33 steps (12%) done
+
+[Tue Jul 28 19:58:27 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_space-T1w_desc-coarse_features.hkl
+    jobid: 26
+    wildcards: afid_num=26
+
+[Tue Jul 28 19:58:31 2020]
+Finished job 2.
+5 of 33 steps (15%) done
+
+[Tue Jul 28 19:58:31 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_space-T1w_desc-coarse_features.hkl
+    jobid: 4
+    wildcards: afid_num=04
+
+[Tue Jul 28 19:58:31 2020]
+Finished job 32.
+6 of 33 steps (18%) done
+
+[Tue Jul 28 19:58:31 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-coarse_features.hkl
+    jobid: 12
+    wildcards: afid_num=12
+
+[Tue Jul 28 20:01:28 2020]
+Finished job 3.
+7 of 33 steps (21%) done
+
+[Tue Jul 28 20:01:28 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_space-T1w_desc-coarse_features.hkl
+    jobid: 19
+    wildcards: afid_num=19
+
+[Tue Jul 28 20:01:51 2020]
+Finished job 11.
+8 of 33 steps (24%) done
+
+[Tue Jul 28 20:01:51 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_space-T1w_desc-coarse_features.hkl
+    jobid: 27
+    wildcards: afid_num=27
+
+[Tue Jul 28 20:02:12 2020]
+Finished job 18.
+9 of 33 steps (27%) done
+
+[Tue Jul 28 20:02:12 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_space-T1w_desc-coarse_features.hkl
+    jobid: 5
+    wildcards: afid_num=05
+
+[Tue Jul 28 20:02:24 2020]
+Finished job 4.
+10 of 33 steps (30%) done
+
+[Tue Jul 28 20:02:32 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_space-T1w_desc-coarse_features.hkl
+    jobid: 13
+    wildcards: afid_num=13
+
+[Tue Jul 28 20:02:41 2020]
+Finished job 26.
+11 of 33 steps (33%) done
+
+[Tue Jul 28 20:02:46 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_space-T1w_desc-coarse_features.hkl
+    jobid: 20
+    wildcards: afid_num=20
+
+[Tue Jul 28 20:02:46 2020]
+Finished job 12.
+12 of 33 steps (36%) done
+
+[Tue Jul 28 20:02:46 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_space-T1w_desc-coarse_features.hkl
+    jobid: 28
+    wildcards: afid_num=28
+
+[Tue Jul 28 20:05:31 2020]
+Finished job 19.
+13 of 33 steps (39%) done
+
+[Tue Jul 28 20:05:31 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_space-T1w_desc-coarse_features.hkl
+    jobid: 6
+    wildcards: afid_num=06
+
+[Tue Jul 28 20:05:48 2020]
+Finished job 27.
+14 of 33 steps (42%) done
+
+[Tue Jul 28 20:05:48 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_space-T1w_desc-coarse_features.hkl
+    jobid: 14
+    wildcards: afid_num=14
+
+[Tue Jul 28 20:06:10 2020]
+Finished job 5.
+15 of 33 steps (45%) done
+
+[Tue Jul 28 20:06:10 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_space-T1w_desc-coarse_features.hkl
+    jobid: 21
+    wildcards: afid_num=21
+
+[Tue Jul 28 20:06:28 2020]
+Finished job 13.
+16 of 33 steps (48%) done
+
+[Tue Jul 28 20:06:28 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_space-T1w_desc-coarse_features.hkl
+    jobid: 29
+    wildcards: afid_num=29
+
+[Tue Jul 28 20:06:32 2020]
+Finished job 28.
+17 of 33 steps (52%) done
+
+[Tue Jul 28 20:06:32 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_space-T1w_desc-coarse_features.hkl
+    jobid: 7
+    wildcards: afid_num=07
+
+[Tue Jul 28 20:06:37 2020]
+Finished job 20.
+18 of 33 steps (55%) done
+
+[Tue Jul 28 20:06:37 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_space-T1w_desc-coarse_features.hkl
+    jobid: 15
+    wildcards: afid_num=15
+
+[Tue Jul 28 20:09:23 2020]
+Finished job 6.
+19 of 33 steps (58%) done
+
+[Tue Jul 28 20:09:23 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_space-T1w_desc-coarse_features.hkl
+    jobid: 22
+    wildcards: afid_num=22
+
+[Tue Jul 28 20:09:39 2020]
+Finished job 14.
+20 of 33 steps (61%) done
+
+[Tue Jul 28 20:09:39 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_space-T1w_desc-coarse_features.hkl
+    jobid: 30
+    wildcards: afid_num=30
+
+[Tue Jul 28 20:09:57 2020]
+Finished job 21.
+21 of 33 steps (64%) done
+
+[Tue Jul 28 20:09:57 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_space-T1w_desc-coarse_features.hkl
+    jobid: 8
+    wildcards: afid_num=08
+
+[Tue Jul 28 20:10:22 2020]
+Finished job 29.
+22 of 33 steps (67%) done
+
+[Tue Jul 28 20:10:22 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_space-T1w_desc-coarse_features.hkl
+    jobid: 16
+    wildcards: afid_num=16
+
+[Tue Jul 28 20:10:24 2020]
+Finished job 7.
+23 of 33 steps (70%) done
+
+[Tue Jul 28 20:10:24 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_space-T1w_desc-coarse_features.hkl
+    jobid: 23
+    wildcards: afid_num=23
+
+[Tue Jul 28 20:10:42 2020]
+Finished job 15.
+24 of 33 steps (73%) done
+
+[Tue Jul 28 20:10:42 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_space-T1w_desc-coarse_features.hkl
+    jobid: 31
+    wildcards: afid_num=31
+
+[Tue Jul 28 20:13:14 2020]
+Finished job 22.
+25 of 33 steps (76%) done
+
+[Tue Jul 28 20:13:14 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_space-T1w_desc-coarse_features.hkl
+    jobid: 9
+    wildcards: afid_num=09
+
+[Tue Jul 28 20:13:31 2020]
+Finished job 30.
+26 of 33 steps (79%) done
+
+[Tue Jul 28 20:13:31 2020]
+rule featureExtract:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_space-T1w_desc-coarse_features.hkl
+    jobid: 24
+    wildcards: afid_num=24
+
+[Tue Jul 28 20:13:59 2020]
+Finished job 8.
+27 of 33 steps (82%) done
+[Tue Jul 28 20:14:16 2020]
+Finished job 16.
+28 of 33 steps (85%) done
+[Tue Jul 28 20:14:38 2020]
+Finished job 31.
+29 of 33 steps (88%) done
+[Tue Jul 28 20:14:39 2020]
+Finished job 23.
+30 of 33 steps (91%) done
+[Tue Jul 28 20:15:41 2020]
+Finished job 9.
+31 of 33 steps (94%) done
+[Tue Jul 28 20:15:48 2020]
+Finished job 24.
+32 of 33 steps (97%) done
+
+[Tue Jul 28 20:15:48 2020]
+localrule all:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-11_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-17_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-18_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-19_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-25_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-26_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_space-T1w_desc-coarse_features.hkl, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_space-T1w_desc-coarse_features.hkl
+    jobid: 0
+
+[Tue Jul 28 20:15:48 2020]
+Finished job 0.
+33 of 33 steps (100%) done
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/modeling/.snakemake/log/2020-07-28T195350.211043.snakemake.log

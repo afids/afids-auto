@@ -1,0 +1,16 @@
+Building DAG of jobs...
+MissingInputException in line 57 of /home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile:
+Missing input files for rule all:
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-31_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-02_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-32_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-03_sub-0010_desc-fine_features.npy
+/media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_sub-0010_desc-fine_features.npy

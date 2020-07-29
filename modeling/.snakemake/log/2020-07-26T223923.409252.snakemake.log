@@ -1,0 +1,3 @@
+SyntaxError in line 72 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+invalid syntax
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/Snakefile", line 68, in <module>

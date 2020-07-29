@@ -1,0 +1,55 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 5
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	1	fid_tform_mni_rigid
+	1	fsl_to_ras
+	4
+
+[Sun Jul 26 19:36:14 2020]
+rule align_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat
+    jobid: 1
+    wildcards: subject=0010
+
+[Sun Jul 26 19:36:14 2020]
+Finished job 1.
+1 of 4 steps (25%) done
+
+[Sun Jul 26 19:36:14 2020]
+rule fsl_to_ras:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0010/anat/sub-0010_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm
+    jobid: 2
+    wildcards: subject=0010
+
+[Sun Jul 26 19:36:14 2020]
+Finished job 2.
+2 of 4 steps (50%) done
+
+[Sun Jul 26 19:36:14 2020]
+rule fid_tform_mni_rigid:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/afids/sub-0010/anat/sub-0010_space-T1w_desc-average_afids.fcsv, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm, resources/dummy.fcsv
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv
+    jobid: 3
+    wildcards: subject=0010
+
+[Sun Jul 26 19:36:14 2020]
+Finished job 3.
+3 of 4 steps (75%) done
+
+[Sun Jul 26 19:36:14 2020]
+localrule all:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_xfm.mat, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.txt, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_xfm.tfm, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0010/anat/sub-0010_space-MNI152NLin2009cAsym_desc-ras_afids.fcsv
+    jobid: 0
+
+[Sun Jul 26 19:36:14 2020]
+Finished job 0.
+4 of 4 steps (100%) done
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T193614.043569.snakemake.log

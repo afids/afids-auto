@@ -1,0 +1,54 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	96	coarseTrain
+	96	featureExtract
+	1	fid_tform_mni_rigid
+	1	fsl_to_ras
+	196
+
+[Sun Jul 26 21:28:01 2020]
+rule coarseTrain:
+    input: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-10_sub-0010_desc-medium_features.npy
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/models/afid-10_desc-medium_model
+    jobid: 223
+    wildcards: afid_num=10, train_level=medium
+    threads: 4
+    resources: mem_mb=4000
+
+[Sun Jul 26 21:28:01 2020]
+rule align_mni_rigid:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat
+    jobid: 294
+    wildcards: subject=0086
+
+[Sun Jul 26 21:28:01 2020]
+Error in rule coarseTrain:
+    jobid: 223
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/models/afid-10_desc-medium_model
+
+RuleException:
+CalledProcessError in line 75 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmp7bo05i0f.train.py' returned non-zero exit status 1.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 75, in __rule_coarseTrain
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+Terminating processes on user request, this might take some time.
+[Sun Jul 26 21:28:21 2020]
+Error in rule align_mni_rigid:
+    jobid: 294
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat
+    shell:
+        flirt -in /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0086/anat/sub-0086_T1w.nii.gz -ref resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz -out /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz -omat /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat -dof 6 -coarsesearch 60 -finesearch 18 -cost mutualinfo -interp sinc
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T212800.589533.snakemake.log

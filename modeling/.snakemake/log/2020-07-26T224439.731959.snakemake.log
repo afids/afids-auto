@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	32	coarseTrain
+	64	featureExtract_coarse
+	1	fid_tform_mni_rigid
+	1	fsl_to_ras
+	100
+
+[Sun Jul 26 22:44:40 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_sub-0086_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-04_sub-0086_registration.done
+    jobid: 38
+    wildcards: afid_num=04_sub-0086
+
+InputFunctionException in line 55 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Error:
+  TypeError: unhashable type: 'list'
+Wildcards:
+  afid_num=04_sub-0086
+Traceback:
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 47, in get_files
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 111, in run_jobs
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 416, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 460, in run_single_job
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 437, in job_args_and_prepare

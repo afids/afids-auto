@@ -1,0 +1,294 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job counts:
+	count	jobs
+	1	align_mni_rigid
+	1	all
+	32	featureExtract_coarse
+	1	fid_tform_mni_rigid
+	1	fsl_to_ras
+	36
+
+[Sun Jul 26 22:57:13 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_registration.done
+    jobid: 7
+    wildcards: afid_num=05
+
+[Sun Jul 26 22:57:13 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_registration.done
+    jobid: 14
+    wildcards: afid_num=12
+
+[Sun Jul 26 22:57:13 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_registration.done
+    jobid: 22
+    wildcards: afid_num=20
+
+[Sun Jul 26 22:57:13 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_registration.done
+    jobid: 29
+    wildcards: afid_num=27
+
+[Sun Jul 26 22:57:13 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_registration.done
+    jobid: 8
+    wildcards: afid_num=06
+
+[Sun Jul 26 22:57:13 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_registration.done
+    jobid: 15
+    wildcards: afid_num=13
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-20_registration.done.
+[Sun Jul 26 22:57:20 2020]
+Finished job 22.
+1 of 36 steps (3%) done
+
+[Sun Jul 26 22:57:20 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_registration.done
+    jobid: 23
+    wildcards: afid_num=21
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-06_registration.done.
+[Sun Jul 26 22:57:21 2020]
+Finished job 8.
+2 of 36 steps (6%) done
+
+[Sun Jul 26 22:57:21 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_registration.done
+    jobid: 30
+    wildcards: afid_num=28
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-13_registration.done.
+[Sun Jul 26 22:57:22 2020]
+Finished job 15.
+3 of 36 steps (8%) done
+
+[Sun Jul 26 22:57:22 2020]
+rule align_mni_rigid:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat
+    jobid: 38
+    wildcards: subject=0086
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-27_registration.done.
+[Sun Jul 26 22:57:22 2020]
+Finished job 29.
+4 of 36 steps (11%) done
+
+[Sun Jul 26 22:57:22 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_registration.done
+    jobid: 3
+    wildcards: afid_num=01
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-12_registration.done.
+[Sun Jul 26 22:57:22 2020]
+Finished job 14.
+5 of 36 steps (14%) done
+
+[Sun Jul 26 22:57:22 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_registration.done
+    jobid: 9
+    wildcards: afid_num=07
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-05_registration.done.
+[Sun Jul 26 22:57:23 2020]
+Finished job 7.
+6 of 36 steps (17%) done
+
+[Sun Jul 26 22:57:23 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_registration.done
+    jobid: 16
+    wildcards: afid_num=14
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-28_registration.done.
+[Sun Jul 26 22:57:28 2020]
+Finished job 30.
+7 of 36 steps (19%) done
+
+[Sun Jul 26 22:57:28 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_registration.done
+    jobid: 24
+    wildcards: afid_num=22
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-01_registration.done.
+[Sun Jul 26 22:57:28 2020]
+Finished job 3.
+8 of 36 steps (22%) done
+
+[Sun Jul 26 22:57:28 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_registration.done
+    jobid: 31
+    wildcards: afid_num=29
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-21_registration.done.
+[Sun Jul 26 22:57:29 2020]
+Finished job 23.
+9 of 36 steps (25%) done
+
+[Sun Jul 26 22:57:29 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_registration.done
+    jobid: 10
+    wildcards: afid_num=08
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-07_registration.done.
+[Sun Jul 26 22:57:30 2020]
+Finished job 9.
+10 of 36 steps (28%) done
+
+[Sun Jul 26 22:57:30 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_registration.done
+    jobid: 17
+    wildcards: afid_num=15
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-14_registration.done.
+[Sun Jul 26 22:57:31 2020]
+Finished job 16.
+11 of 36 steps (31%) done
+
+[Sun Jul 26 22:57:31 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_registration.done
+    jobid: 25
+    wildcards: afid_num=23
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-29_registration.done.
+[Sun Jul 26 22:57:35 2020]
+Finished job 31.
+12 of 36 steps (33%) done
+
+[Sun Jul 26 22:57:35 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_registration.done
+    jobid: 32
+    wildcards: afid_num=30
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-08_registration.done.
+[Sun Jul 26 22:57:36 2020]
+Finished job 10.
+13 of 36 steps (36%) done
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-22_registration.done.
+[Sun Jul 26 22:57:36 2020]
+Finished job 24.
+14 of 36 steps (39%) done
+
+[Sun Jul 26 22:57:36 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_registration.done
+    jobid: 11
+    wildcards: afid_num=09
+
+[Sun Jul 26 22:57:36 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_registration.done
+    jobid: 18
+    wildcards: afid_num=16
+
+Touching output file /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-15_registration.done.
+[Sun Jul 26 22:57:38 2020]
+Finished job 17.
+15 of 36 steps (42%) done
+
+[Sun Jul 26 22:57:38 2020]
+rule featureExtract_coarse:
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_registration.done
+    jobid: 26
+    wildcards: afid_num=24
+
+Terminating processes on user request, this might take some time.
+[Sun Jul 26 22:57:38 2020]
+Error in rule align_mni_rigid:
+    jobid: 38
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz, /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat
+    shell:
+        flirt -in /media/veracrypt6/projects/autofids/data/OASIS/bids/sub-0086/anat/sub-0086_T1w.nii.gz -ref resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz -out /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_T1w.nii.gz -omat /media/veracrypt6/projects/autofids/data/OASIS/deriv/mni_space/sub-0086/anat/sub-0086_space-MNI152NLin2009cAsym_xfm.mat -dof 6 -coarsesearch 60 -finesearch 18 -cost mutualinfo -interp sinc
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Sun Jul 26 22:57:38 2020]
+Error in rule featureExtract_coarse:
+    jobid: 25
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-23_registration.done
+
+RuleException:
+CalledProcessError in line 61 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmp984y27sc.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 61, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Sun Jul 26 22:57:38 2020]
+Error in rule featureExtract_coarse:
+    jobid: 32
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-30_registration.done
+
+RuleException:
+CalledProcessError in line 61 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmp7oni5d38.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 61, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Sun Jul 26 22:57:38 2020]
+Error in rule featureExtract_coarse:
+    jobid: 26
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-24_registration.done
+
+RuleException:
+CalledProcessError in line 61 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmp851g11kb.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 61, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+[Sun Jul 26 22:57:38 2020]
+Error in rule featureExtract_coarse:
+    jobid: 18
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-16_registration.done
+
+[Sun Jul 26 22:57:38 2020]
+Error in rule featureExtract_coarse:
+    jobid: 11
+    output: /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_desc-coarse_features.npy, /media/veracrypt6/projects/autofids/data/OASIS/deriv/features/afid-09_registration.done
+
+RuleException:
+CalledProcessError in line 61 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmpausbrxmh.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 61, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+RuleException:
+CalledProcessError in line 61 of /home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk:
+Command 'set -euo pipefail;  /usr/bin/python3 /home/greydon/Documents/GitHub/Auto-afids/.snakemake/scripts/tmp4x8cw2jh.data_store.py' died with <Signals.SIGINT: 2>.
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2168, in run_wrapper
+  File "/home/greydon/Documents/GitHub/Auto-afids/workflow/rules/mniTransform.smk", line 61, in __rule_featureExtract_coarse
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 529, in _callback
+  File "/usr/lib/python3.8/concurrent/futures/thread.py", line 57, in run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 515, in cached_or_run
+  File "/home/greydon/.local/lib/python3.8/site-packages/snakemake/executors/__init__.py", line 2199, in run_wrapper
+Complete log: /home/greydon/Documents/GitHub/Auto-afids/.snakemake/log/2020-07-26T225713.021364.snakemake.log
