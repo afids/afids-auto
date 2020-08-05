@@ -9,12 +9,6 @@ xfm_txt = snakemake.input[0]
 template = snakemake.params[1]
 fcsv_new = snakemake.output[0]
 
-print(fcsv_source)
-print(xfm_txt)
-print(template)
-print(fcsv_new)
-
-
 with open(fcsv_source, 'r') as file:
     reader = csv.reader(file)
     next(reader)
