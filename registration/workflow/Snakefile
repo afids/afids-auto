@@ -41,4 +41,7 @@ rule all:
     input:
         expand(bids_name(root=join(config['output_dir'],'deriv','mni_space'),kind='anat',subject='{subject}',suffix='registration.done'), subject=subjects),
 
-include: 'rules/mniTransform.smk'
+if basename(config['input_dir']).lower()== 'oasis':
+	include: 'rules/mniTransform_withbet.smk'
+else:
+	include: 'rules/mniTransform.smk'
