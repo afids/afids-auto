@@ -3,8 +3,8 @@
 # NOTE: within the output path a new directory is created called /deriv/mni_space
 # thus you can set output anywhere you want, if it's set the same as input then data 
 # will be written to deriv
-input_dir: /media/veracrypt6/projects/autofids/data/OASIS
-output_dir: /media/veracrypt6/projects/autofids/data/OASIS
+input_dir: /home/dcao6/scratch/autofid_final/OASIS/Original/
+output_dir: /home/dcao6/scratch/autofid_final/temp/
 
 #template: 'template_align_mni_rigid.nii.gz'
 template: 'resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz'

@@ -17,44 +17,30 @@ from pathlib import Path
 from imresize import *
 
 # Trains on a set of downsampled images to predict fiducial location at a coarse level.
-current = pathlib.Path('coarse_train.py').parent.absolute()
+patient_id = []
+current = pathlib.Path('fine_train.py').parent.absolute()
 os.chdir(current)
-os.chdir('/project/6050199/dcao6/autofid/')
-os.chdir('pythonimg')
+os.chdir('/scratch/dcao6/autofid_final/data/OASIS/deriv/afids_mni')
 
-nii_list = []
-fcsv_list = []
-for file in glob.glob('sub-0***_T1w_rigid.nii.gz'):
-    nii_list.append(file)
-
-os.chdir('..')
-os.chdir('pythonfcsv')
-
-for file in glob.glob('OAS1-0***_MR1_T1_MEAN_mni_rigid.fcsv'):
-    fcsv_list.append(file)
+for file in glob.glob('sub*'):
+    patient_id.append(file)
     
-print(nii_list)
-print(fcsv_list)
-len(nii_list)
-os.chdir('..')
-
+print(patient_id)
 
 # Loops through for each of 32 fiducials.
 for g in range(32):
     finalpredarr = np.zeros((1,2001))
-    for i in range(len(nii_list)):
+    for i in range(len(patient_id)):
         # Loading image.
-        os.chdir('/project/6050199/dcao6/autofid/')
-        os.chdir('pythonimg')
-        niimeta = nib.load(nii_list[i])
+        os.chdir('/scratch/dcao6/autofid_final/data/OASIS/deriv/afids_mni')
+        os.chdir(patient_id[i]) 
+        niimeta = nib.load(glob.glob('*.nii.gz')[0])
         hdr = niimeta.header
         img = niimeta.get_fdata()
         img = np.transpose(img,(2,0,1))
         
         # Loading and processing .fcsv file.
-        os.chdir('..')
-        os.chdir('pythonfcsv')
-        with open(fcsv_list[i]) as file:
+        with open(glob.glob('*.fcsv')[0]) as file:
             csv_reader = csv.reader(file, delimiter=',')
             next(csv_reader)
             next(csv_reader)
@@ -110,8 +96,8 @@ for g in range(32):
                 print('Error in sform_code or qform_code, cannot obtain coordinates.')
             
         os.chdir('..')
-        img = np.single(img)
-        img = (img-np.amin(img))/(np.amax(img)-np.amin(img))
+        #img = np.single(img)
+        #img = (img-np.amin(img))/(np.amax(img)-np.amin(img))
         
         # Downsampled image.
         img_new = imresize(img,0.25)
@@ -215,7 +201,7 @@ for g in range(32):
     y_train = finalpredarr[:,-1]
     Mdl = regr_rf.fit(X_train, y_train)
     
-    model2save = 'coarsemodelfid{}'.format(g+1)
+    model2save = 'coarsemodelOASIS{}'.format(g+1)
     os.chdir(current)
     Path("models").mkdir(parents=True, exist_ok=True)
     os.chdir('models')

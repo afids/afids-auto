@@ -6,8 +6,8 @@ from scripts.commonsmk import bids_name
 import shutil
 import yaml
 
-#with open('/home/greydon/Documents/GitHub/Auto-afids/modeling/config/config.yml') as file:
-#    config = yaml.load(file, Loader=yaml.FullLoader)
+#with open('/home/dcao6/scratch/autofid_final/Auto-afids-feature-store-model-train/modelling/config/config.yml') as file:
+    #config = yaml.load(file, Loader=yaml.FullLoader)
     
 configfile: "config/config.yml"
 
