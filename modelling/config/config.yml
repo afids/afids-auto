@@ -14,16 +14,16 @@ meta_nifti:
   datatype: anat
   scope: raw
 
-deriv_meta:
-  afids:
+derivatives_meta:
+  afids_groundtruth:
     suffix: afids
     extension: .fcsv
-    datatype: anat
-    scope: afids
+    scope: derivatives
+    desc: groundtruth
   features:
     suffix: features
     extension: .npy
-    scope: features
+    scope: derivatives
 
 #Set model training
 model_params:

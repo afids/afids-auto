@@ -15,13 +15,12 @@ meta_nifti:
   datatype: anat
   scope: raw
 
-deriv_meta:
-  afids:
+derivatives_meta:
+  afids_groundtruth:
     suffix: afids
     extension: .fcsv
-    datatype: anat
-    scope: afids
-    desc: average
+    scope: derivatives
+    desc: groundtruth
 
 flirt:
     dof: 6
