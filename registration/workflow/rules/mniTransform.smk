@@ -51,7 +51,7 @@ rule align_mni_rigid:
     envmodules: 'fsl'
     #log: 'logs/align_mni_rigid/sub-{subject}_T1w.log'
     shell:
-        'flirt -in {params.moving} -ref {params.fixed} -out {output.warped} -    omat {output.xfm} -dof {params.dof} -coarsesearch {params.coarse} -finesearch    {params.fine} -cost {params.cost} -interp {params.interp}'
+        'flirt -in {params.moving} -ref {params.fixed} -out {output.warped} -omat {output.xfm} -dof {params.dof} -coarsesearch {params.coarse} -finesearch {params.fine} -cost {params.cost} -interp {params.interp}'
 
 rule fsl_to_ras:
     input:
@@ -87,8 +87,8 @@ rule fsl_to_ras:
             **{'space':'MNI152NLin2009cAsym', 'desc':'ras'}
         ),
     shell:
-        'resources/c3d_affine_tool -ref {input.warped} -src {params.moving_vol}  {input.xfm} -fsl2ras -o {output.xfm_new} && \
-        resources/c3d_affine_tool -ref {input.warped} -src {params.moving_vol}   {input.xfm} -fsl2ras -oitk {output.tfm_new}'
+        'resources/c3d_affine_tool -ref {input.warped} -src {params.moving_vol} {input.xfm} -fsl2ras -o {output.xfm_new} && \
+        resources/c3d_affine_tool -ref {input.warped} -src {params.moving_vol} {input.xfm} -fsl2ras -oitk {output.tfm_new}'
 
 rule fid_tform_mni_rigid:
     input:
