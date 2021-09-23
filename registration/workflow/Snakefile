@@ -1,4 +1,4 @@
-mport os
+import os
 from os.path import join,abspath,basename
 from glob import glob
 from bids import BIDSLayout
