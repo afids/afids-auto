@@ -9,48 +9,36 @@ xfm_txt = snakemake.input[0]
 template = snakemake.params[1]
 fcsv_new = snakemake.output[0]
 
-with open(fcsv_source, 'r') as file:
+with open(fcsv_source, "r", encoding="utf-8") as file:
     reader = csv.reader(file)
     next(reader)
     next(reader)
     next(reader)
-    arr = np.empty((0,3))
+    arr = np.empty((0, 3))
     for row in reader:
         x = row[1:4]
-        arr = np.vstack([arr,x])
-    arr = np.asarray(arr,dtype='float64')
+        arr = np.vstack([arr, x])
+    arr = np.asarray(arr, dtype="float64")
 
+with open(xfm_txt, "r", encoding="utf-8") as file:
+    contents = file.readlines()
 
-f = open(xfm_txt, 'r')
-contents = f.readlines()
-list_of_lists = []
-for line in contents:
-    stripped_line = line.strip()
-    line_list = stripped_line.split()
-    list_of_lists.append(line_list)
-
-tform = np.empty((0,4))
-for row in list_of_lists:
+tform = np.empty((0, 4))
+for row in [line.strip().split() for line in contents]:
     x = row[:]
-    tform = np.vstack([tform,x])
+    tform = np.vstack([tform, x])
 
-tform = np.asarray(tform,dtype='float64')
+tform = np.asarray(tform, dtype="float64")
 tform = np.linalg.inv(tform)
-ones = np.ones((32,1))
-arr = np.hstack((arr,ones))
+ones = np.ones((32, 1))
+arr = np.hstack((arr, ones))
 
-'''
-factor = np.array([[1, 1, 1, 1],[1, 1, 1, 1],[1, 1, 1, 1],[1, 1, 1, 1]])
-tform = np.multiply(tform,factor)
-'''
-
-tform_applied = np.empty((0,4))
+tform_applied = np.empty((0, 4))
 for i in range(32):
-    x = np.matmul(tform,arr[i].transpose())
-    tform_applied = np.vstack([tform_applied,x])
+    x = np.matmul(tform, arr[i].transpose())
+    tform_applied = np.vstack([tform_applied, x])
 
-
-with open(template, 'r') as file:
+with open(template, "r", encoding='utf-8') as file:
     list_of_lists = []
     reader = csv.reader(file)
     for i in range(3):
@@ -59,12 +47,6 @@ with open(template, 'r') as file:
         val[1:4] = tform_applied[idx][:3]
         list_of_lists.append(val)
 
-
-with open(fcsv_new, "w", newline="") as f:
+with open(fcsv_new, "w", newline="", encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerows(list_of_lists)
-
-
-
-
-
