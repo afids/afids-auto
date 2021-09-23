@@ -45,7 +45,7 @@ rule fid_tform_mni_rigid:
     input:
         xfm_new=bids_name(root=join(config['output_dir'],'deriv','mni_space'),kind='anat',subject='{subject}',suffix='xfm.txt',**{'space':'MNI152NLin2009cAsym','desc':'ras'}),
     params:
-        bids_name(root=join(config['input_dir'],'deriv','afids'),kind='anat',subject='{subject}',session=None,suffix=suffix_afids,**{'space':'T1w','desc':'average'}),
+        bids_name(root=join(config['input_dir'],'derivatives','afids_groundtruth'),subject='{subject}',session=None,suffix=suffix_afids,**{'space':'T1w','desc':'groundtruth'}),
         template = 'resources/dummy.fcsv',
     output:
         fcsv_new=bids_name(root=join(config['output_dir'],'deriv','mni_space'),kind='anat',subject='{subject}',suffix=suffix_afids,**{'space':'MNI152NLin2009cAsym','desc':'ras'}),
