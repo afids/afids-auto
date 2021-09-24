@@ -7,9 +7,9 @@ import shutil
 
 configfile: "config/config.yml"
 
-# Copy dataset_description.json files to deriv directories (for BIDSlayout indexing)
+# Copy dataset_description.json files to derivatives directories (for BIDSlayout indexing)
 deriv_dirs=[0]
-deriv_dirs[0]= mniSpace = join(config['output_dir'],'deriv','mni_space')
+deriv_dirs[0]= mniSpace = join(config['output_dir'],'derivatives','afids_mni')
 
 for idir in deriv_dirs:
     if not os.path.exists(idir):
@@ -27,7 +27,7 @@ for idir in deriv_dirs:
 # Load the BIDS directory
 layout = BIDSLayout(
     join(config['input_dir'], 'bids'),
-    derivatives=join(config['input_dir'], 'deriv'),
+    derivatives=join(config['input_dir'], 'derivatives'),
     validate=False
 )
 
@@ -37,8 +37,8 @@ runs = layout.get_runs(**config['meta_nifti'])
 
 suffix = config['meta_nifti']['suffix'] + config['meta_nifti']['extension']
 suffix_afids = (
-    config['deriv_meta']['afids']['suffix']
-    + config['deriv_meta']['afids']['extension']
+    config['derivatives_meta']['afids_groundtruth']['suffix']
+    + config['derivatives_meta']['afids_groundtruth']['extension']
 )
 
 # Set the name for the input moving volume
@@ -60,8 +60,7 @@ rule all:
     input:
         expand(
             bids_name(
-                root=join(config['output_dir'],'deriv','mni_space'),
-                kind='anat',
+                root=join(config['output_dir'], 'derivatives', 'afids_mni'),
                 subject='{subject}',
                 suffix='registration.done'
             ),

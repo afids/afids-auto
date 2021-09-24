@@ -27,14 +27,14 @@ def get_moving_vol(wc):
 rule align_mni_rigid:
     output:
         warped=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix=suffix,
             **{'space':'MNI152NLin2009cAsym'}
         ),
         xfm=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix='xfm.mat',
@@ -56,14 +56,14 @@ rule align_mni_rigid:
 rule fsl_to_ras:
     input:
         xfm=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix='xfm.mat',
             **{'space':'MNI152NLin2009cAsym'}
         ),
         warped=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix=suffix,
@@ -73,14 +73,14 @@ rule fsl_to_ras:
         moving_vol = get_moving_vol,
     output:
         xfm_new=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix='xfm.txt',
             **{'space':'MNI152NLin2009cAsym', 'desc':'ras'}
         ),
         tfm_new=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix='xfm.tfm',
@@ -93,7 +93,7 @@ rule fsl_to_ras:
 rule fid_tform_mni_rigid:
     input:
         xfm_new=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             kind='anat',
             subject='{subject}',
             suffix='xfm.txt',
@@ -110,16 +110,14 @@ rule fid_tform_mni_rigid:
         template = 'resources/dummy.fcsv',
     output:
         fcsv_new=bids_name(
-            root=join(config['output_dir'], 'deriv', 'mni_space'),
-            kind='anat',
+            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
             subject='{subject}',
             suffix=suffix_afids,
             **{'space':'MNI152NLin2009cAsym', 'desc':'ras'}
         ),
         reg_done = touch(
             bids_name(
-                root=join(config['output_dir'], 'deriv', 'mni_space'),
-                kind='anat',
+                root=join(config['output_dir'], 'derivatives', 'afids_mni'),
                 subject='{subject}',
                 suffix='registration.done'
             )
