@@ -1,0 +1,63 @@
+rule featureExtract:
+    input:
+        expand(
+            bids(
+                root=join(config["output_dir"], "derivatives", "afids_mni"),
+                datatype="anat",
+                suffix="T1w.nii.gz",
+                space="MNI152NLin2009cAsym",
+                **config["input_wildcards"]["t1w"],
+            ),
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        expand(
+            bids(
+                root=join(config["output_dir"], "derivatives", "afids_mni"),
+                suffix="afids.fcsv",
+                space="MNI152NLin2009cAsym",
+                desc="ras",
+                **config["input_wildcards"]["t1w"],
+            ),
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+    params:
+        afid_num='{afid_num}',
+        model_params=config['model_params'],
+        train_level='{train_level}',
+    output:
+        bids(
+            root=join(config["output_dir"], "derivatives", "features"),
+            prefix="afid-{afid_num}",
+            suffix="features.hkl",
+            desc="{train_level}",
+            space="MNI152NLin2009cAsym",
+        )
+    script:
+        "../scripts/data_store.py"
+
+rule modelTrain:
+    input:
+        bids(
+            root=join(config["output_dir"], "derivatives", "features"),
+            prefix="afid-{afid-num}",
+            suffix="features.hkl",
+            desc="{train_level}",
+            space="MNI152NLin2009cAsym",
+        )
+    params:
+        model_params = config['model_params'],
+    threads: workflow.cores * config['model_params']['num_threads']
+    resources:
+        mem_mb=config['model_params']['max_memory']
+    output:
+        bids(
+            root=join(config["output_dir"], "derivatives", "models"),
+            prefix="afid-{afid_num}",
+            suffix="model",
+            desc="{train_level}",
+            space="MNI152NLin2009cAsym",
+        ),
+    script:
+        "../scripts/train.py"
