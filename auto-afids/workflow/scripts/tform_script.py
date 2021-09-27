@@ -4,9 +4,9 @@
 import csv
 import numpy as np
 
-fcsv_source = snakemake.params[1]
+fcsv_source = snakemake.input[1]
 xfm_txt = snakemake.input[0]
-template = snakemake.params[2]
+template = snakemake.input[2]
 fcsv_new = snakemake.output[0]
 
 with open(fcsv_source, "r", encoding="utf-8") as file:
