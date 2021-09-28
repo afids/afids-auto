@@ -47,5 +47,5 @@ y_train = finalpredarr[:, -1]
 
 Mdl = regr_rf.fit(X_train, y_train)
 
-with open(args.out_name, "wb", encoding="utf-8") as out_file:
+with open(args.out_name, "wb") as out_file:
     joblib.dump(Mdl, out_file)

@@ -41,7 +41,7 @@ def train_model(
         for row in csv_reader:
             arr = np.vstack([arr, np.asarray(row[1:4], dtype="float64")])
 
-    arr = load_arr(hdr, afid_idx)
+    arr = load_arr(hdr, afid_idx, arr)
 
     img = np.single(img_source)
     img = (img - np.amin(img)) / (np.amax(img) - np.amin(img))
@@ -49,10 +49,7 @@ def train_model(
     inner, outer, patch, skip = setup_by_level(train_level, arr, img)
 
     if skip:
-        return {
-            "name": os.path.basename(nii_filename).split("_")[0],
-            "data_arr": np.asarray(finalpredarr, dtype=np.float32),
-        }
+        return {}
 
     J = patch.cumsum(0).cumsum(1).cumsum(2)
 
@@ -137,7 +134,7 @@ def train_model(
     }
 
 
-def load_arr(hdr, afid_idx):
+def load_arr(hdr, afid_idx, arr):
     if hdr["qform_code"] > 0 and hdr["sform_code"] == 0:
         newarr = []
         B = hdr["quatern_b"]
@@ -254,6 +251,11 @@ def train_all(args):
         )
         for nii, fcsv in zip(args.nii_files, args.fcsv_files)
     ]
+    finalpredarr_all = [
+        finalpredarr
+        for finalpredarr in finalpredarr_all
+        if len(finalpredarr) > 0
+    ]
 
     # Save to file
     data = {
@@ -262,7 +264,7 @@ def train_all(args):
     }
 
     # Dump data to file
-    with open(args.output_dir, "w", encoding="utf-8") as out_dir:
+    with open(args.output_dir, "wb") as out_dir:
         hkl.dump(data, out_dir)
 
 
@@ -272,8 +274,8 @@ if __name__ == "__main__":
             output_dir=snakemake.output[0],
             afid_idx=snakemake.params[0],
             model_params=snakemake.params[1],
-            nii_files=snakemake.input[0],
-            fcsv_files=snakemake.input[1],
+            nii_files=snakemake.input["nii_files"],
+            fcsv_files=snakemake.input["fcsv_files"],
             train_level=snakemake.params[2],
         )
     )

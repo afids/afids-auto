@@ -1,6 +1,6 @@
 rule featureExtract:
     input:
-        expand(
+        nii_files=expand(
             bids(
                 root=join(config["output_dir"], "derivatives", "afids_mni"),
                 datatype="anat",
@@ -11,7 +11,7 @@ rule featureExtract:
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
-        expand(
+        fcsv_files=expand(
             bids(
                 root=join(config["output_dir"], "derivatives", "afids_mni"),
                 suffix="afids.fcsv",
@@ -41,7 +41,7 @@ rule modelTrain:
     input:
         bids(
             root=join(config["output_dir"], "derivatives", "features"),
-            prefix="afid-{afid-num}",
+            prefix="afid-{afid_num}",
             suffix="features.hkl",
             desc="{train_level}",
             space="MNI152NLin2009cAsym",

@@ -104,7 +104,7 @@ model_params:
   percent_holdout: 80
   num_threads: 0.75 # Percent of total cores defined by J
   max_memory: 4000
-  feature_offsets: /home/greydon/Documents/GitHub/Auto-afids/modelling/resources/feature_offsets.npz
+  feature_offsets: resources/feature_offsets.npz
   randomforest:
     n_estimators: 20
     max_features: 0.33
