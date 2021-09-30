@@ -1,16 +1,19 @@
+rule initialFeatures:
+    input:
+        nii_file=config["input_path"]["t1w"],
+        feature_offsets="resources/feature_offsets.npz",
+    output:
+        bids(
+            join(config["output_dir"], "derivatives", "initial_features"),
+            suffix="initial_features.npz",
+            **config["input_wildcards"]["t1w"],
+        )
+    script:
+        "../scripts/gen_initial_features.py"
+
 rule applyModel:
     input:
-        nii_files=expand(
-            bids(
-                root=config["input_dir"], 
-                datatype="anat",
-                suffix="T1w.nii.gz",
-                space="MNI152Nlin2009cAsym",
-                **config["input_wildcards"]["t1w"],
-            )
-            zip,
-            **config["input_zip_lists"]["t1w"]
-        ),
+        nii_file=config["input_path"]["t1w"]
         models=expand(
             bids(
                 root=join(config["model_dir"], "derivatives", "models")
@@ -21,4 +24,19 @@ rule applyModel:
             ),
             train_level=["coarse", "med", "fine"],
         ),
-        feature_offsets="resources/feature_offsets.npz"
+        feature_offsets="resources/feature_offsets.npz",
+        initial_features="bids(
+            join(config["output_dir"], "derivatives", "initial_features"),
+            suffix="initial_features.npz",
+            **config["input_wildcards"]["t1w"],
+        )
+    params:
+        afid_num="{afid_num}"
+    output:
+        afid=bids(
+            root=join(config["output_dir"], "derivatives", "auto-afids"),
+            prefix="afid-{afid_num}",
+            suffix="afid.txt",
+            space="MNI152NLin2009cAsym",
+            **config["input_wildcards"]["t1w"]
+        )
