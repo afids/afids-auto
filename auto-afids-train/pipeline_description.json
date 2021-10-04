@@ -1,5 +1,5 @@
 {
-    "Name": "auto_afids - Automatically fit AFIDs to a T1w image.",
+    "Name": "auto_afids - Automatically fit AFIDs to T1w images.",
     "BIDSVersion": "1.4.0",
     "DatasetType": "derivative",
     "GeneratedBy": [

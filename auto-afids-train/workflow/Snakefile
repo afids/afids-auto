@@ -1,9 +1,9 @@
 #---- begin snakebids boilerplate ----------------------------------------------
 
-from os.path import join
-
 import snakebids
 from snakebids import bids
+
+from os.path import join
 
 configfile: 'config/snakebids.yml'
 
@@ -27,19 +27,19 @@ wildcard_constraints:  **snakebids.get_wildcard_constraints(\
 
 #---- end snakebids boilerplate ------------------------------------------------
 
-
-
 rule all:
-    input: 
+    input:
         expand(
             bids(
-                root=join(config["output_dir"], "derivatives", "auto-afids"),
+                root=join(config["output_dir"], "derivatives", "models"),
                 prefix="afid-{afid_num}",
-                suffix='afid.txt',
+                suffix="model",
+                desc="{train_level}",
                 space="MNI152NLin2009cAsym",
-                **config['input_wildcards']['t1w']
-            ), 
-            afid_num=range(1, 33),
-            **config['input_lists']['t1w']
+            ),
+            afid_num=[str(num).zfill(2) for num in range(1, 33)],
+            train_level=["coarse", "medium", "fine"],
         )
 
+include: "rules/mniTransform.smk"
+include: "rules/modelTraining.smk"

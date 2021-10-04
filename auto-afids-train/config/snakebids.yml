@@ -44,12 +44,14 @@ parse_args:
   bids_dir:
     help: The directory with the input dataset formatted according 
           to the BIDS standard.
+    type: Path
 
   output_dir:
     help: The directory where the output files 
           should be stored. If you are running group level analysis
           this folder should be prepopulated with the results of the
           participant level analysis.
+    type: Path
 
   analysis_level: 
     help: Level of the analysis that will be performed. 
@@ -74,13 +76,38 @@ parse_args:
   --derivatives:
     help: 'Path(s) to a derivatives dataset, for folder(s) that contains multiple derivatives datasets (default: %(default)s) '
     default: False
+    type: Path
     nargs: '+'
 
  # custom command-line parameters can then be added, these will get added to the config
-  --model_dir:
-      nargs: '+'
-      type: Path
-      required: True
-
 
 #--- workflow specific configuration -- below is just an example:
+
+
+#singularity containers
+singularity:
+    fsl: 'docker://brainlife/fsl/6.0.0'
+
+flirt:
+    dof: 6
+    coarsesearch: 60
+    finesearch: 18
+    cost: mutualinfo    # {mutualinfo,corratio,normcorr,normmi,leastsq,labeldiff,bbr}
+    interp: sinc        # {trilinear,nearestneighbour,sinc,spline}
+
+template: 'resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz'
+
+registration: False
+
+# Set model training
+model_params:
+  percent_holdout: 80
+  num_threads: 0.75 # Percent of total cores defined by J
+  max_memory: 4000
+  feature_offsets: resources/feature_offsets.npz
+  randomforest:
+    n_estimators: 20
+    max_features: 0.33
+    min_samples_leaf: 5
+    random_state: 2 
+    n_jobs: -1

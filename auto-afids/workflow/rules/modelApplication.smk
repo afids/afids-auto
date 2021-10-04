@@ -24,7 +24,7 @@ rule applyModel:
             ),
             train_level=["coarse", "med", "fine"],
         ),
-        feature_offsets="resources/feature_offsets.npz",
+        feature_offsets="../resources/feature_offsets.npz",
         initial_features="bids(
             join(config["output_dir"], "derivatives", "initial_features"),
             suffix="initial_features.npz",
