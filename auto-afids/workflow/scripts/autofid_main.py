@@ -44,6 +44,8 @@ def main(
     img = np.transpose(img, (2, 0, 1))
 
     # Starting at a coarse resolution level of the image (downsampled by a factor of 4).
+    img = np.single(img)
+    img = (img - np.amin(img)) / (np.amax(img) - np.amin(img))
     img_new = imresize(img, 0.25)
 
     img_pad = np.pad(img_new, 50, mode="constant")
@@ -80,20 +82,19 @@ def main(
     # current image.
     with open(coarse_model, "rb") as f:
         model = joblib.load(f)
-
     answer = model.predict(diff_coarse)
     df = pd.DataFrame(answer)
     diff, full2, _, _ = check_prediction(df, full, Jstored, smin, smax, False)
 
     answer = model.predict(diff)
     df = pd.DataFrame(answer)
+    # Problem line
     diff, fullmed, Jstored2, testing = check_prediction(
         df, full2, img, smin, smax, True
     )
 
     with open(med_model, "rb") as f:
         model = joblib.load(f)
-
     answer = model.predict(diff)
     df = pd.DataFrame(answer)
     diff, fullmed, _, _ = check_prediction(
@@ -102,13 +103,13 @@ def main(
 
     answer = model.predict(diff)
     df = pd.DataFrame(answer)
+    # Problem line
     diff, fullfine, _, _ = check_prediction(
         df, fullmed, img, smin, smax, True, testing=testing
     )
 
     with open(fine_model, "rb") as f:
         model = joblib.load(f)
-
     answer = model.predict(diff)
     df = pd.DataFrame(answer)
     idx = df[0].idxmin()
@@ -209,5 +210,5 @@ if __name__ == "__main__":
         snakemake.input["models"][0],
         snakemake.input["models"][1],
         snakemake.input["models"][2],
-        snakemake.output,
+        snakemake.output[0],
     )

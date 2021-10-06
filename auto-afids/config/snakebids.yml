@@ -78,7 +78,6 @@ parse_args:
 
  # custom command-line parameters can then be added, these will get added to the config
   --model_dir:
-      nargs: '+'
       type: Path
       required: True
 

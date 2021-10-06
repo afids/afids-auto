@@ -5,7 +5,7 @@ rule initialFeatures:
     output:
         bids(
             join(config["output_dir"], "derivatives", "initial_features"),
-            suffix="initial_features.npz",
+            suffix="initial_features.npy",
             **config["input_wildcards"]["t1w"],
         )
     script:
@@ -13,21 +13,22 @@ rule initialFeatures:
 
 rule applyModel:
     input:
-        nii_file=config["input_path"]["t1w"]
+        nii_file=config["input_path"]["t1w"],
         models=expand(
             bids(
-                root=join(config["model_dir"], "derivatives", "models")
+                root=join(config["model_dir"], "derivatives", "models"),
                 prefix="afid-{afid_num}",
                 suffix="model",
-                desc="{train_level}"
-                space="MNI152NLin2009cAsym"
+                desc="{train_level}",
+                space="MNI152NLin2009cAsym",
             ),
-            train_level=["coarse", "med", "fine"],
+            train_level=["coarse", "medium", "fine"],
+            allow_missing=True,
         ),
-        feature_offsets="../resources/feature_offsets.npz",
-        initial_features="bids(
+        feature_offsets="resources/feature_offsets.npz",
+        initial_features=bids(
             join(config["output_dir"], "derivatives", "initial_features"),
-            suffix="initial_features.npz",
+            suffix="initial_features.npy",
             **config["input_wildcards"]["t1w"],
         )
     params:
@@ -40,3 +41,5 @@ rule applyModel:
             space="MNI152NLin2009cAsym",
             **config["input_wildcards"]["t1w"]
         )
+    script:
+        "../scripts/autofid_main.py"

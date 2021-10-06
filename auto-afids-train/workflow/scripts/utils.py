@@ -1,6 +1,6 @@
 import csv
 
-from numpy import np
+import numpy as np
 
 
 def process_testerarr(full, smin, smax, Jstored, int_cornerlist):

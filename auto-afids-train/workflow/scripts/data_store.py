@@ -33,7 +33,8 @@ def train_model(
 
     # Load and process .fcsv file.
     arr = read_fcsv(fcsv_filename, hdr)
-    arr = arr[afid_idx - 1, ...]
+    print(f"Read fcsv. Shape: {arr.shape}")
+    arr = arr[int(afid_idx) - 1:int(afid_idx), ...]
 
     img = np.single(img_source)
     img = (img - np.amin(img)) / (np.amax(img) - np.amin(img))

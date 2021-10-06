@@ -27,8 +27,6 @@ wildcard_constraints:  **snakebids.get_wildcard_constraints(\
 
 #---- end snakebids boilerplate ------------------------------------------------
 
-
-
 rule all:
     input: 
         expand(
@@ -38,8 +36,10 @@ rule all:
                 suffix='afid.txt',
                 space="MNI152NLin2009cAsym",
                 **config['input_wildcards']['t1w']
-            ), 
-            afid_num=range(1, 33),
-            **config['input_lists']['t1w']
+            ),
+            zip,
+            afid_num=[str(num).zfill(2) for num in range(1, 33)],
+            **config['input_zip_lists']['t1w']
         )
 
+include: "rules/modelApplication.smk"
