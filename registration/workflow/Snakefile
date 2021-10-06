@@ -29,11 +29,16 @@ runs = layout.get_runs(**config['meta_nifti'])
 suffix = config['meta_nifti']['suffix'] + config['meta_nifti']['extension']
 suffix_afids = config['derivatives_meta']['afids_groundtruth']['suffix'] + config['derivatives_meta']['afids_groundtruth']['extension']
 
+# Set the name for the input moving volume
+moving_volume = bids_name(root=join(config['input_dir'],'bids'),kind='anat',subject='{subject}',session='{session}',suffix=suffix)
+if len(sessions)==0:
+    moving_volume = bids_name(root=join(config['input_dir'],'bids'),kind='anat',subject='{subject}',session=None,suffix=suffix)
+
+if len(runs)>0:
+    moving_volume = moving_volume.split(suffix)[0] + bids_name(suffix=suffix, **{'run':'01'})
+
 rule all:
     input:
         expand(bids_name(root=join(config['output_dir'], 'derivatives', 'afids_mni'), subject='{subject}', suffix='registration.done'), subject=subjects),
 
-if basename(config['input_dir']).lower()== 'oasis':
-	include: 'rules/mniTransform_withbet.smk'
-else:
-	include: 'rules/mniTransform.smk'
+include: 'rules/mniTransform.smk'

@@ -20,7 +20,7 @@ import sys
 
 # Demo: To run autofid_main using examples that come with this package (see OAS1 folder), use the following line of code on the terminal after moving to this directory.
 
-# arg1='OAS1/sub-0109_T1w.nii'; arg2='OAS1/OAS1_0109_MR1_T1_MEAN.fcsv' ;arg3=1; python autofid_main.py $arg1 $arg2 $arg3
+# arg1='HCP_testing/sub-103111_space-MNI152NLin2009cAsym_T1w.nii.gz'; arg2='HCP_testing/sub-103111_space-MNI152NLin2009cAsym_desc-ras_afids_ground_truth.fcsv' ;arg3=1; python autofid_main.py $arg1 $arg2 $arg3
 
 # arg1: image file
 # arg2: .fcsv ground_truth file (optional)
@@ -28,7 +28,8 @@ import sys
 # Arguments can be modified to encompass custom image files and fiducial files outside of the samples available here.
 
 # To use autofid_main without a .fcsv file, the code input to the terminal can look like this:
-# arg1='OAS1/sub-0109_T1w.nii'; arg3=1; python autofid_main.py $arg1 $arg3
+# arg1='HCP_testing/sub-103111_space-MNI152NLin2009cAsym_T1w.nii.gz'; arg3=1; python autofid_main.py $arg1 $arg3
+
 
 if len(sys.argv) < 4:
     arg0 = sys.argv[0]
@@ -40,7 +41,7 @@ else:
     arg1 = sys.argv[1]
     arg2 = sys.argv[2]
     arg3 = sys.argv[3]
-    
+  
 # Loading the image in, as well as some initial variables.
 testingarr = np.empty((0,3))
 distarr = np.empty((0,1))
@@ -111,8 +112,8 @@ else:
             print('Error in sform_code or qform_code, cannot obtain coordinates.')
 
 # Starting at a coarse resolution level of the image (downsampled by a factor of 4).
-img = np.single(img)
-img = (img-np.amin(img))/(np.amax(img)-np.amin(img))
+#img = np.single(img)
+#img = (img-np.amin(img))/(np.amax(img)-np.amin(img))
 img_new = imresize(img,0.25)
 
 img_pad = np.pad(img_new, 50, mode='constant')
@@ -121,11 +122,11 @@ imagefile = os.path.basename(arg1)
 extra = '_initialfeatures'
 
 
-if os.path.exists(imagefile[:-4]+'%s' % extra + '.npy') == True:
+if os.path.exists(imagefile[:-7]+'%s' % extra + '.npy') == True:
     # In this section, if an 'initial features' file exists, then that file will be loaded.
     # Loading this will load intensity features for that image and will speed up processing speed.
     print('Loading initial features...')
-    diff_coarse = np.load(imagefile[:-4]+'%s' % extra + '.npy')
+    diff_coarse = np.load(imagefile[:-7]+'%s' % extra + '.npy')
     iterables = [ range(50,img_pad.shape[1]-50,2), range(50,img_pad.shape[2]-50,2), range(50,img_pad.shape[0]-50,2) ]
     
     full = []
@@ -193,7 +194,7 @@ else:
     vector2arr = vector2arr.astype(int)
     diff = testerarr[vector1arr] - testerarr[vector2arr]
     diff_coarse = np.reshape(diff,(full.shape[0],2000))
-    np.save(imagefile[:-4]+'%s' % extra + '.npy',diff_coarse)
+    np.save(imagefile[:-7]+'%s' % extra + '.npy',diff_coarse)
     print('Saving initial features file for future use...')
     print('Starting autofid...')
 
@@ -205,14 +206,14 @@ smax = file['arr_1']
 perm = [2,0,1]
 smin = smin[:,perm]
 smax = smax[:,perm]
-os.chdir('/project/6050199/dcao6/autofid/models/')
+os.chdir('/project/6050199/dcao6/autofid/models/new/')
 
 start = time.time()
 
 for g in range(int(arg3)-1,int(arg3)):
     
     # Loads regression forest trained on downsampled resolution, and tests the current image.
-    with open('coarsemodelfid%d' % (g+1),'rb') as f:
+    with open('coarse_models_OASIS/coarsemodelOASIS%d' % (g+1),'rb') as f:
         model = joblib.load(f)
     
     answer = model.predict(diff_coarse)
@@ -354,7 +355,7 @@ for g in range(int(arg3)-1,int(arg3)):
     diff = testerarr[vector1arr] - testerarr[vector2arr]
     diff = np.reshape(diff,(fullmed.shape[0],2000))
     
-    with open('medmodelfid%d' % (g+1),'rb') as f:
+    with open('med_models_OASIS/medmodelOASIS%d' % (g+1),'rb') as f:
         model = joblib.load(f)
     
     answer = model.predict(diff)
@@ -497,7 +498,7 @@ for g in range(int(arg3)-1,int(arg3)):
     diff = testerarr[vector1arr] - testerarr[vector2arr]
     diff = np.reshape(diff,(fullfine.shape[0],2000))
     
-    with open('finemodelfid%d' % (g+1),'rb') as f:
+    with open('fine_models_OASIS/finemodelOASIS%d' % (g+1),'rb') as f:
         model = joblib.load(f)
     
     answer = model.predict(diff)
@@ -505,7 +506,7 @@ for g in range(int(arg3)-1,int(arg3)):
     
     idx = df[0].idxmin()
     
-    testing = testing - 30 + ((fullfine[idx]+0.5)/2)
+    testing = testing - 30 + (fullfine[idx]*(30/60.5) + (0.5*(30/60.5)))
     
     testingarr = np.vstack([testingarr,testing])
     if arg2 != None:
