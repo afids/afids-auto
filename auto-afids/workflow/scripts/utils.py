@@ -3,65 +3,129 @@ import csv
 import numpy as np
 
 
-def process_testerarr(full, smin, smax, Jstored, int_cornerlist):
-    mincornerlist = np.zeros((4000 * full.shape[0], 3)).astype("uint8")
-    maxcornerlist = np.zeros((4000 * full.shape[0], 3)).astype("uint8")
+def process_testerarr(voxels_to_test, smin, smax, img_cumsum, int_cornerlist):
+    """Compute differences between regions of an image.
 
-    for index in range(full.shape[0]):
-        mincorner = full[index] + smin
-        maxcorner = full[index] + smax
-        mincornerlist[index * 4000 : (index + 1) * 4000] = mincorner
-        maxcornerlist[index * 4000 : (index + 1) * 4000] = maxcorner
+    Parameters
+    ----------
+    voxels_to_test : array_like
+        An n * 3 array, where each 3-vector is the index of a voxel in
+        img_cumsum.
+    smin : int
+        A number that gets added to every 3-vector in full.
+    smax : int
+        A number that gets added to every 3-vector in float.
+    img_cumsum : array_like
+        A 3D array that's related to the image under investigation.
+    int_cornerlist : bool
+        cornerlist gets converted to int if this is True.
+    """
+    # Initialize corner lists with 4000 times the number of voxels provided
+    mincornerlist = np.zeros((4000 * voxels_to_test.shape[0], 3)).astype(
+        "uint8"
+    )
+    maxcornerlist = np.zeros((4000 * voxels_to_test.shape[0], 3)).astype(
+        "uint8"
+    )
 
+    # Fill the corner lists with each voxel plus smin/smax
+    for index in range(voxels_to_test.shape[0]):
+        mincornerlist[index * 4000 : (index + 1) * 4000] = (
+            voxels_to_test[index] + smin
+        )
+        maxcornerlist[index * 4000 : (index + 1) * 4000] = (
+            voxels_to_test[index] + smax
+        )
+
+    # Put the corner lists side-by-side, resulting in an (n * 4000) * 6 array
+    # Each row of this defines a cubic patch of img_cumsum to look at
     cornerlist = np.hstack((mincornerlist, maxcornerlist))
+    # Convert cornerlist to int from "uint8"
     if int_cornerlist:
         cornerlist = cornerlist.astype(int)
 
-    Jnew = np.zeros(
-        (Jstored.shape[0] + 1, Jstored.shape[1] + 1, Jstored.shape[2] + 1)
+    # Construct an array that's one bigger than Jstored along all axes, with
+    # the extra space filled by zeros
+    img_cumsum_expanded = np.zeros(
+        (
+            img_cumsum.shape[0] + 1,
+            img_cumsum.shape[1] + 1,
+            img_cumsum.shape[2] + 1,
+        )
     )
-    Jnew[1:, 1:, 1:] = Jstored
-    Jcoarse = Jnew
+    img_cumsum_expanded[1:, 1:, 1:] = img_cumsum
 
+    print(f"img_cumsum_expanded shape: {img_cumsum_expanded.shape}")
+    print(
+        f"All maxcorners: {cornerlist[:, 3]}, {cornerlist[:, 4]}, {cornerlist[:, 5]}"
+    )
+
+    # Construct a tester array from various parts of Jcoarse.
+    # Each cornerlist[:, idx] is an array of length (n * 4000) with vals from
+    # one column of cornerlist. So, The first element here is all the values at
+    # the maximum corners defined by the corner list.
+    # This ends up being an array of length (n * 4000)
     testerarr = (
-        Jcoarse[
+        img_cumsum_expanded[
             cornerlist[:, 3] + 1,
             cornerlist[:, 4] + 1,
             cornerlist[:, 5] + 1,
         ]
-        - Jcoarse[cornerlist[:, 0], cornerlist[:, 4] + 1, cornerlist[:, 5] + 1]
-        - Jcoarse[cornerlist[:, 3] + 1, cornerlist[:, 4] + 1, cornerlist[:, 2]]
-        - Jcoarse[cornerlist[:, 3] + 1, cornerlist[:, 1], cornerlist[:, 5] + 1]
-        + Jcoarse[cornerlist[:, 3] + 1, cornerlist[:, 1], cornerlist[:, 2]]
-        + Jcoarse[cornerlist[:, 0], cornerlist[:, 1], cornerlist[:, 5] + 1]
-        + Jcoarse[cornerlist[:, 0], cornerlist[:, 4] + 1, cornerlist[:, 2]]
-        - Jcoarse[cornerlist[:, 0], cornerlist[:, 1], cornerlist[:, 2]]
+        - img_cumsum_expanded[
+            cornerlist[:, 0], cornerlist[:, 4] + 1, cornerlist[:, 5] + 1
+        ]
+        - img_cumsum_expanded[
+            cornerlist[:, 3] + 1, cornerlist[:, 4] + 1, cornerlist[:, 2]
+        ]
+        - img_cumsum_expanded[
+            cornerlist[:, 3] + 1, cornerlist[:, 1], cornerlist[:, 5] + 1
+        ]
+        + img_cumsum_expanded[
+            cornerlist[:, 3] + 1, cornerlist[:, 1], cornerlist[:, 2]
+        ]
+        + img_cumsum_expanded[
+            cornerlist[:, 0], cornerlist[:, 1], cornerlist[:, 5] + 1
+        ]
+        + img_cumsum_expanded[
+            cornerlist[:, 0], cornerlist[:, 4] + 1, cornerlist[:, 2]
+        ]
+        - img_cumsum_expanded[
+            cornerlist[:, 0], cornerlist[:, 1], cornerlist[:, 2]
+        ]
     ) / (
         (cornerlist[:, 3] - cornerlist[:, 0] + 1)
         * (cornerlist[:, 4] - cornerlist[:, 1] + 1)
         * (cornerlist[:, 5] - cornerlist[:, 2] + 1)
     )
 
-    vector1arr = np.zeros((4000 * full.shape[0]))
-    vector2arr = np.zeros((4000 * full.shape[0]))
+    vector1arr = np.zeros((4000 * voxels_to_test.shape[0]))
+    vector2arr = np.zeros((4000 * voxels_to_test.shape[0]))
 
-    for index in range(full.shape[0]):
-        vector = range(index * 4000, index * 4000 + 2000)
-        vector1arr[index * 4000 : (index + 1) * 4000 - 2000] = vector
+    # Set up two arrays of indices, each with values equal to their indices or
+    # zero. These will each be length 4000 arrays, with half their values being
+    # zero.
+    # e.g. vector1arr[0:2000] = 0 - 1999, vector2arr[2000:4000] = 2000:3999
+    # e.g. vector2arr[0:2000] = 0       , vector1arr[2000:4000] = 0
+    for index in range(voxels_to_test.shape[0]):
+        vector1arr[index * 4000 : (index + 1) * 4000 - 2000] = range(
+            index * 4000, index * 4000 + 2000
+        )
+        vector2arr[index * 4000 + 2000 : (index + 1) * 4000] = range(
+            index * 4000 + 2000, index * 4000 + 4000
+        )
 
-    for index in range(full.shape[0]):
-        vector = range(index * 4000 + 2000, index * 4000 + 4000)
-        vector2arr[index * 4000 + 2000 : (index + 1) * 4000] = vector
-
+    # Keep only the nonzero elements of each vector array
     vector1arr[0] = 1
-    vector1arr = vector1arr[vector1arr != 0]
+    vector1arr = vector1arr[vector1arr != 0].astype(int)
     vector1arr[0] = 0
-    vector2arr = vector2arr[vector2arr != 0]
-    vector1arr = vector1arr.astype(int)
-    vector2arr = vector2arr.astype(int)
+    vector2arr = vector2arr[vector2arr != 0].astype(int)
 
+    # Subtract the elements in vector1arr from the elements in vector2arr
+    # So we're subtracting every other 2000 elements starting at index 2000
+    # from every other 2000 elements starting at index 0
     diff = testerarr[vector1arr] - testerarr[vector2arr]
-    diff = np.reshape(diff, (full.shape[0], 2000))
+    # And we end up with an n * 2000 array
+    diff = np.reshape(diff, (voxels_to_test.shape[0], 2000))
 
     return diff
 
