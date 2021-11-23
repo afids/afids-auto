@@ -1,7 +1,9 @@
 rule initialFeatures:
     input:
         nii_file=config["input_path"]["t1w"],
-        feature_offsets="resources/feature_offsets.npz",
+        feature_offsets=workflow.source_path(
+            "../resources/feature_offsets.npz"
+        ),
     output:
         bids(
             join(config["output_dir"], "derivatives", "initial_features"),
@@ -25,7 +27,9 @@ rule applyModel:
             train_level=["coarse", "medium", "fine"],
             allow_missing=True,
         ),
-        feature_offsets="resources/feature_offsets.npz",
+        feature_offsets=workflow.source_path(
+            "../resources/feature_offsets.npz"
+        ),
         initial_features=bids(
             join(config["output_dir"], "derivatives", "initial_features"),
             suffix="initial_features.npy",
