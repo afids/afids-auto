@@ -31,7 +31,7 @@ rule all:
     input:
         expand(
             bids(
-                root=join(config["output_dir"], "derivatives", "models"),
+                root=join(config["output_dir"], "auto-afids-train"),
                 prefix="afid-{afid_num}",
                 suffix="model",
                 desc="{train_level}",

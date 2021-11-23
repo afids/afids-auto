@@ -8,14 +8,14 @@ rule align_mni_rigid:
         config["input_path"]["t1w"]
     output:
         warped=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
+            root=join(config["output_dir"], "flirt"),
             datatype="anat",
             suffix="T1w.nii.gz",
             space="MNI152NLin2009cAsym",
             **config["input_wildcards"]["t1w"],
         ),
         xfm=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
+            root=join(config["output_dir"], "flirt"),
             datatype="anat",
             suffix="xfm.mat",
             space="MNI152NLin2009cAsym",
@@ -35,24 +35,12 @@ rule align_mni_rigid:
 
 rule fsl_to_ras:
     input:
-        warped=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
-            datatype="anat",
-            suffix="T1w.nii.gz",
-            space="MNI152NLin2009cAsym",
-            **config["input_wildcards"]["t1w"],
-        ),
-        xfm=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
-            datatype="anat",
-            suffix="xfm.mat",
-            space="MNI152NLin2009cAsym",
-            **config["input_wildcards"]["t1w"],
-        ),
+        warped=rules.align_mni_rigid.output.warped,
+        xfm=rules.align_mni_rigid.output.xfm,
         moving_vol=config["input_path"]["t1w"],
     output:
         xfm_new=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
+            root=join(config["output_dir"], "c3d_affine_tool"),
             datatype="anat",
             suffix="xfm.mat",
             space="MNI152NLin2009cAsym",
@@ -60,7 +48,7 @@ rule fsl_to_ras:
             **config["input_wildcards"]["t1w"],
         ),
         tfm_new=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
+            root=join(config["output_dir"], "c3d_affine_tool"),
             datatype="anat",
             suffix="xfm.tfm",
             space="MNI152NLin2009cAsym",
@@ -73,14 +61,7 @@ rule fsl_to_ras:
 
 rule fid_tform_mni_rigid:
     input:
-        xfm_new=bids(
-            root=join(config["output_dir"], "derivatives", "afids_mni"),
-            datatype="anat",
-            suffix="xfm.mat",
-            space="MNI152NLin2009cAsym",
-            desc="ras",
-            **config["input_wildcards"]["t1w"],
-        ),
+        xfm_new=rules.fsl_to_ras.output.xfm_new,
         groundtruth=bids(
             root=join(config["bids_dir"], 'derivatives', 'afids_groundtruth'),
             space="T1w",
@@ -91,7 +72,7 @@ rule fid_tform_mni_rigid:
         template = workflow.source_path('../../resources/dummy.fcsv'),
     output:
         fcsv_new=bids(
-            root=join(config['output_dir'], 'derivatives', 'afids_mni'),
+            root=join(config['output_dir'], 'auto-afids-train'),
             suffix="afids.fcsv",
             space='MNI152NLin2009cAsym',
             desc='ras',
@@ -99,7 +80,7 @@ rule fid_tform_mni_rigid:
         ),
         reg_done = touch(
             bids(
-                root=join(config['output_dir'], 'derivatives', 'afids_mni'),
+                root=join(config['output_dir'], 'auto-afids-train'),
                 subject='{subject}',
                 suffix='registration.done'
             )

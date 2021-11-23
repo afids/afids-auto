@@ -2,7 +2,7 @@ rule featureExtract:
     input:
         nii_files=expand(
             bids(
-                root=join(config["output_dir"], "derivatives", "afids_mni"),
+                root=join(config["output_dir"], "flirt"),
                 datatype="anat",
                 suffix="T1w.nii.gz",
                 space="MNI152NLin2009cAsym",
@@ -13,7 +13,7 @@ rule featureExtract:
         ),
         fcsv_files=expand(
             bids(
-                root=join(config["output_dir"], "derivatives", "afids_mni"),
+                root=join(config["output_dir"], "auto-afids-train"),
                 suffix="afids.fcsv",
                 space="MNI152NLin2009cAsym",
                 desc="ras",
@@ -28,7 +28,7 @@ rule featureExtract:
         train_level='{train_level}',
     output:
         bids(
-            root=join(config["output_dir"], "derivatives", "features"),
+            root=join(config["output_dir"], "auto-afids-train"),
             prefix="afid-{afid_num}",
             suffix="features.hkl",
             desc="{train_level}",
@@ -39,13 +39,7 @@ rule featureExtract:
 
 rule modelTrain:
     input:
-        bids(
-            root=join(config["output_dir"], "derivatives", "features"),
-            prefix="afid-{afid_num}",
-            suffix="features.hkl",
-            desc="{train_level}",
-            space="MNI152NLin2009cAsym",
-        )
+        rules.featureExtract.output
     params:
         model_params = config['model_params'],
     threads: workflow.cores * config['model_params']['num_threads']
@@ -53,7 +47,7 @@ rule modelTrain:
         mem_mb=config['model_params']['max_memory']
     output:
         bids(
-            root=join(config["output_dir"], "derivatives", "models"),
+            root=join(config["output_dir"], "auto-afids-train"),
             prefix="afid-{afid_num}",
             suffix="model",
             desc="{train_level}",
