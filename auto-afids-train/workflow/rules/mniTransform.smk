@@ -88,7 +88,7 @@ rule fid_tform_mni_rigid:
             suffix="afids.fcsv",
             **config["input_wildcards"]["t1w"],
         ),
-        template = workflow.source_path('../resources/dummy.fcsv'),
+        template = workflow.source_path('../../resources/dummy.fcsv'),
     output:
         fcsv_new=bids(
             root=join(config['output_dir'], 'derivatives', 'afids_mni'),
