@@ -6,7 +6,7 @@ rule initialFeatures:
         ),
     output:
         bids(
-            join(config["output_dir"], "derivatives", "initial_features"),
+            join(config["output_dir"], "auto-afids"),
             suffix="initial_features.npy",
             **config["input_wildcards"]["t1w"],
         )
@@ -18,7 +18,7 @@ rule applyModel:
         nii_file=config["input_path"]["t1w"],
         models=expand(
             bids(
-                root=join(config["model_dir"], "derivatives", "models"),
+                root=join(config["model_dir"], "auto-afids-train"),
                 prefix="afid-{afid_num}",
                 suffix="model",
                 desc="{train_level}",

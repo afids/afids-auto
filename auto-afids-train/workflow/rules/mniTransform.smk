@@ -5,7 +5,7 @@ import os
 
 rule align_mni_rigid:
     input:
-        config["input_path"]["t1w"]
+        image=config["input_path"]["t1w"]
     output:
         warped=bids(
             root=join(config["output_dir"], "flirt"),
@@ -22,7 +22,7 @@ rule align_mni_rigid:
             **config["input_wildcards"]["t1w"],
         ), 
     params:
-        fixed = config['template'],
+        fixed = workflow.source_path(config['template']),
         dof = config['flirt']['dof'],
         coarse = config['flirt']['coarsesearch'],
         fine = config['flirt']['finesearch'],
@@ -30,8 +30,8 @@ rule align_mni_rigid:
         interp = config['flirt']['interp'],
     envmodules: 'fsl'
     #log: 'logs/align_mni_rigid/sub-{subject}_T1w.log'
-    shell:
-        'flirt -in {input} -ref {params.fixed} -out {output.warped} -omat {output.xfm} -dof {params.dof} -coarsesearch {params.coarse} -finesearch {params.fine} -cost {params.cost} -interp {params.interp}'
+    script:
+        "../scripts/run_flirt.py"
 
 rule fsl_to_ras:
     input:

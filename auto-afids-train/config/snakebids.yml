@@ -95,7 +95,7 @@ flirt:
     cost: mutualinfo    # {mutualinfo,corratio,normcorr,normmi,leastsq,labeldiff,bbr}
     interp: sinc        # {trilinear,nearestneighbour,sinc,spline}
 
-template: 'resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz'
+template: '../../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz'
 
 registration: False
 
