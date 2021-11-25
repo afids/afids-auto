@@ -33,7 +33,6 @@ def train_model(
 
     # Load and process .fcsv file.
     arr = read_fcsv(fcsv_filename, hdr)
-    print(f"Read fcsv. Shape: {arr.shape}")
     arr = arr[int(afid_idx) - 1:int(afid_idx), ...]
 
     img = np.single(img_source)
@@ -82,6 +81,7 @@ def setup_by_level(train_level, arr, img):
     skip = False
     if train_level == "fine":
         arr = np.rint(arr).astype(int)[:, [2, 0, 1]]
+
         patch = imresize(
             img[
                 arr[0, 0] - 30 : arr[0, 0] + 31,
@@ -92,6 +92,10 @@ def setup_by_level(train_level, arr, img):
         )
 
         if arr[0, 0] < 30 or arr[0, 1] < 30 or arr[0, 2] < 30:
+            print("skip")
+            skip = True
+
+        if patch.shape[0] < 122 or patch.shape[1] < 122 or patch.shape[2] < 122:
             print("skip")
             skip = True
 

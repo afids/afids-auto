@@ -36,6 +36,7 @@ rule all:
                 suffix="model",
                 desc="{train_level}",
                 space="MNI152NLin2009cAsym",
+                res="iso1",
             ),
             afid_num=[str(num).zfill(2) for num in range(1, 33)],
             train_level=["coarse", "medium", "fine"],
