@@ -18,8 +18,9 @@ cost = snakemake.params["cost"]
 interp = snakemake.params["interp"]
 
 with tempfile.TemporaryDirectory() as tmpdir:
-    shutil.copy(fixed, tmpdir)
-    fixed_tmp = pathlib.Path(tmpdir) / pathlib.Path(fixed).name
+    fixed_tmp = pathlib.Path(tmpdir) / (pathlib.Path(fixed).name + ".nii.gz")
+    shutil.copyfile(fixed, fixed_tmp)
+    
 
     subprocess.run(
         [

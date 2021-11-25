@@ -55,9 +55,11 @@ rule fsl_to_ras:
             desc="ras",
             **config["input_wildcards"]["t1w"],
         ),
+    params:
+        c3d_affine_tool = workflow.source_path("../../resources/c3d_affine_tool")
     shell:
-        'resources/c3d_affine_tool -ref {input.warped} -src {input.moving_vol} {input.xfm} -fsl2ras -o {output.xfm_new} && \
-        resources/c3d_affine_tool -ref {input.warped} -src {input.moving_vol} {input.xfm} -fsl2ras -oitk {output.tfm_new}'
+        'c3d_affine_tool -ref {input.warped} -src {input.moving_vol} {input.xfm} -fsl2ras -o {output.xfm_new} && \
+        c3d_affine_tool -ref {input.warped} -src {input.moving_vol} {input.xfm} -fsl2ras -oitk {output.tfm_new}'
 
 rule fid_tform_mni_rigid:
     input:
@@ -69,6 +71,7 @@ rule fid_tform_mni_rigid:
             suffix="afids.fcsv",
             **config["input_wildcards"]["t1w"],
         ),
+    params:
         template = workflow.source_path('../../resources/dummy.fcsv'),
     output:
         fcsv_new=bids(

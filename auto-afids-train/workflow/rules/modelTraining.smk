@@ -25,6 +25,7 @@ rule featureExtract:
     params:
         afid_num='{afid_num}',
         model_params=config['model_params'],
+        feature_offsets=workflow.source_path(config["model_params"]["feature_offsets"]),
         train_level='{train_level}',
     output:
         bids(

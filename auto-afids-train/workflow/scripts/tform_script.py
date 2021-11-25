@@ -4,10 +4,10 @@
 import csv
 import numpy as np
 
-fcsv_source = snakemake.input[1]
-xfm_txt = snakemake.input[0]
-template = snakemake.input[2]
-fcsv_new = snakemake.output[0]
+fcsv_source = snakemake.input["groundtruth"]
+xfm_txt = snakemake.input["xfm_new"]
+template = snakemake.params["template"]
+fcsv_new = snakemake.output["fcsv_new"]
 
 with open(fcsv_source, "r", encoding="utf-8") as file:
     reader = csv.reader(file)

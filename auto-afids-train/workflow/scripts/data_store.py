@@ -22,7 +22,7 @@ class Namespace:
 
 
 def train_model(
-    nii_filename, fcsv_filename, afid_idx, train_level, model_params
+    nii_filename, fcsv_filename, afid_idx, train_level, model_params, feature_offsets,
 ):
     # Loading image
     niimeta = nib.load(nii_filename)
@@ -52,7 +52,7 @@ def train_model(
     full = np.unique(np.concatenate((inner, outer)), axis=0)
 
     # Loads offset file that specifies where to extract features.
-    file = np.load(model_params["feature_offsets"])
+    file = np.load(feature_offsets)
     smin = file["arr_0"]
     smax = file["arr_1"]
 
@@ -129,7 +129,7 @@ def train_all(args):
     )
     finalpredarr_all = [
         train_model(
-            nii, fcsv, args.afid_idx, args.train_level, args.model_params
+            nii, fcsv, args.afid_idx, args.train_level, args.model_params, args.feature_offsets,
         )
         for nii, fcsv in zip(args.nii_files, args.fcsv_files)
     ]
@@ -154,10 +154,11 @@ if __name__ == "__main__":
     train_all(
         Namespace(
             output_dir=snakemake.output[0],
-            afid_idx=snakemake.params[0],
-            model_params=snakemake.params[1],
+            afid_idx=snakemake.params['afid_num'],
+            model_params=snakemake.params['model_params'],
+            feature_offsets=snakemake.params["feature_offsets"],
             nii_files=snakemake.input["nii_files"],
             fcsv_files=snakemake.input["fcsv_files"],
-            train_level=snakemake.params[2],
+            train_level=snakemake.params['train_level'],
         )
     )
