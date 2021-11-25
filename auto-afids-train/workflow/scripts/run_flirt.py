@@ -7,6 +7,7 @@ import subprocess
 
 image = snakemake.input["image"]
 
+resampled = snakemake.output["resampled"]
 warped = snakemake.output["warped"]
 xfm = snakemake.output["xfm"]
 
@@ -42,7 +43,22 @@ with tempfile.TemporaryDirectory() as tmpdir:
             "-cost",
             cost,
             "-interp",
-            interp,
+            interp
+        ],
+        check=True
+    )
+
+    subprocess.run(
+        [
+            "flirt",
+            "-in",
+            warped,
+            "-ref",
+            fixed_tmp,
+            "-out",
+            resampled,
+            "-dof",
+            dof,
             "-applyisoxfm",
             "1",
         ],

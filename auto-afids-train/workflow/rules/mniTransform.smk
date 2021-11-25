@@ -7,12 +7,19 @@ rule align_mni_rigid:
     input:
         image=config["input_path"]["t1w"]
     output:
-        warped=bids(
+        resampled=bids(
             root=join(config["output_dir"], "flirt"),
             datatype="anat",
             suffix="T1w.nii.gz",
             space="MNI152NLin2009cAsym",
             res="iso1",
+            **config["input_wildcards"]["t1w"],
+        ),
+        warped=bids(
+            root=join(config["output_dir"], "flirt"),
+            datatype="anat",
+            suffix="T1w.nii.gz",
+            space="MNI152NLin2009cAsym",
             **config["input_wildcards"]["t1w"],
         ),
         xfm=bids(
@@ -37,7 +44,7 @@ rule align_mni_rigid:
 
 rule fsl_to_ras:
     input:
-        warped=rules.align_mni_rigid.output.warped,
+        warped=rules.align_mni_rigid.output.resampled,
         xfm=rules.align_mni_rigid.output.xfm,
         moving_vol=config["input_path"]["t1w"],
     output:
