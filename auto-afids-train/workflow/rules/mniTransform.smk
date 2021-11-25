@@ -12,6 +12,7 @@ rule align_mni_rigid:
             datatype="anat",
             suffix="T1w.nii.gz",
             space="MNI152NLin2009cAsym",
+            res="iso1",
             **config["input_wildcards"]["t1w"],
         ),
         xfm=bids(
@@ -19,6 +20,7 @@ rule align_mni_rigid:
             datatype="anat",
             suffix="xfm.mat",
             space="MNI152NLin2009cAsym",
+            res="iso1",
             **config["input_wildcards"]["t1w"],
         ), 
     params:
@@ -45,6 +47,7 @@ rule fsl_to_ras:
             suffix="xfm.mat",
             space="MNI152NLin2009cAsym",
             desc="ras",
+            res="iso1",
             **config["input_wildcards"]["t1w"],
         ),
         tfm_new=bids(
@@ -53,6 +56,7 @@ rule fsl_to_ras:
             suffix="xfm.tfm",
             space="MNI152NLin2009cAsym",
             desc="ras",
+            res="iso1",
             **config["input_wildcards"]["t1w"],
         ),
     params:
@@ -79,6 +83,7 @@ rule fid_tform_mni_rigid:
             suffix="afids.fcsv",
             space='MNI152NLin2009cAsym',
             desc='ras',
+            res="iso1",
             **config["input_wildcards"]["t1w"],
         ),
         reg_done = touch(

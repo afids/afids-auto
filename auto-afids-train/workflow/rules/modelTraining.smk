@@ -6,6 +6,7 @@ rule featureExtract:
                 datatype="anat",
                 suffix="T1w.nii.gz",
                 space="MNI152NLin2009cAsym",
+                res="iso1",
                 **config["input_wildcards"]["t1w"],
             ),
             zip,
@@ -17,6 +18,7 @@ rule featureExtract:
                 suffix="afids.fcsv",
                 space="MNI152NLin2009cAsym",
                 desc="ras",
+                res="iso1",
                 **config["input_wildcards"]["t1w"],
             ),
             zip,
@@ -34,6 +36,7 @@ rule featureExtract:
             suffix="features.hkl",
             desc="{train_level}",
             space="MNI152NLin2009cAsym",
+            res="iso1",
         )
     script:
         "../scripts/data_store.py"
@@ -53,6 +56,7 @@ rule modelTrain:
             suffix="model",
             desc="{train_level}",
             space="MNI152NLin2009cAsym",
+            res="iso1",
         ),
     script:
         "../scripts/train.py"
