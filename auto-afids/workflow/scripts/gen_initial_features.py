@@ -62,6 +62,6 @@ def gen_initial_features(path_img, path_feature_offsets, path_out):
 if __name__ == "__main__":
     gen_initial_features(
         snakemake.input["nii_file"],
-        snakemake.input["feature_offsets"],
+        snakemake.params["feature_offsets"],
         snakemake.output[0],
     )

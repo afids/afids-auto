@@ -1,11 +1,12 @@
 rule initialFeatures:
     input:
         nii_file=config["input_path"]["t1w"],
+    params:
         feature_offsets=workflow.source_path(
             "../../resources/feature_offsets.npz"
         ),
     output:
-        bids(
+        initial_features=bids(
             join(config["output_dir"], "auto-afids"),
             suffix="initial_features.npy",
             **config["input_wildcards"]["t1w"],
@@ -27,16 +28,12 @@ rule applyModel:
             train_level=["coarse", "medium", "fine"],
             allow_missing=True,
         ),
+        initial_features=rules.initialFeatures.output.initial_features,
+    params:
+        afid_num="{afid_num}",
         feature_offsets=workflow.source_path(
             "../../resources/feature_offsets.npz"
         ),
-        initial_features=bids(
-            join(config["output_dir"], "derivatives", "initial_features"),
-            suffix="initial_features.npy",
-            **config["input_wildcards"]["t1w"],
-        )
-    params:
-        afid_num="{afid_num}"
     output:
         afid=bids(
             root=join(config["output_dir"], "derivatives", "auto-afids"),
