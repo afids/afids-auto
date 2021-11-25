@@ -43,6 +43,8 @@ with tempfile.TemporaryDirectory() as tmpdir:
             cost,
             "-interp",
             interp,
+            "-applyisoxfm",
+            "1",
         ],
         check=True
     )
