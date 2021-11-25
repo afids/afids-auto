@@ -258,7 +258,7 @@ if __name__ == "__main__":
         None,
         snakemake.input["initial_features"],
         snakemake.params["afid_num"],
-        snakemake.input["feature_offsets"],
+        snakemake.params["feature_offsets"],
         snakemake.input["models"][0],
         snakemake.input["models"][1],
         snakemake.input["models"][2],
