@@ -24,6 +24,7 @@ rule applyModel:
                 suffix="model",
                 desc="{train_level}",
                 space="MNI152NLin2009cAsym",
+                res="iso1",
             ),
             train_level=["coarse", "medium", "fine"],
             allow_missing=True,

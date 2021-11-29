@@ -96,8 +96,8 @@ rule fid_tform_mni_rigid:
         reg_done = touch(
             bids(
                 root=join(config['output_dir'], 'auto-afids-train'),
-                subject='{subject}',
-                suffix='registration.done'
+                suffix='registration.done',
+                **config["input_wildcards"]["t1w"],
             )
         ),
     #log: 'logs/fid_tform_mni_rigid/sub-{subject}_T1w.log'
