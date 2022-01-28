@@ -1,0 +1,182 @@
+#---- begin snakebids boilerplate ----------------------------------------------
+
+import snakebids
+from snakebids import bids
+
+import os
+from os.path import join
+
+configfile: 'config/snakebids.yml'
+
+#writes inputs_config.yml and updates config dict
+config.update(
+    snakebids.generate_inputs(
+        bids_dir=config["bids_dir"],
+        pybids_inputs=config["pybids_inputs"],
+        derivatives=config["derivatives"],
+        participant_label=config["participant_label"],
+        exclude_participant_label=config["exclude_participant_label"]
+    )
+)
+
+
+
+#this adds constraints to the bids naming
+wildcard_constraints:  **snakebids.get_wildcard_constraints(\
+    config["pybids_inputs"]\
+)
+
+#---- end snakebids boilerplate ------------------------------------------------
+
+rule all:
+    input:
+        expand(
+            bids(
+                root=join(config["output_dir"], "auto-afids-train"),
+                datatype="anat",
+                suffix="model.rf",
+                desc="afid{afid_num}",
+                space=config["space"],
+            ),
+            afid_num=[str(num).zfill(2) for num in range(1, 33)],
+        )
+
+
+rule align_template_rigid:
+    input:
+        image=config["input_path"]["t1w"],
+    output:
+        warped=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            suffix="T1w.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        ),
+        xfm_ras=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            suffix="xfm.txt",
+            space=config["space"],
+            **config["subj_wildcards"],
+        ), 
+    params:
+        fixed = workflow.source_path(config['template']),
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras} -speeeed"
+
+
+rule fid_tform_mni_rigid:
+    input:
+        xfm_new=rules.align_template_rigid.output.xfm_ras,
+        groundtruth=bids(
+            root=join(config["bids_dir"], 'derivatives', 'afids_groundtruth'),
+            space="T1w",
+            desc="groundtruth",
+            suffix="afids.fcsv",
+            **config["subj_wildcards"],
+        ),
+    params:
+        template = workflow.source_path('../resources/dummy.fcsv'),
+    output:
+        # Need to consider LPS
+        fcsv_new=bids(
+            root=join(config['output_dir'], 'tform_script'),
+            suffix="afids.fcsv",
+            space=config["space"],
+            **config["subj_wildcards"],
+        ),
+    script:
+        './scripts/tform_script.py'
+
+
+rule rewrite_fcsv:
+    input:
+        fcsv_new=bids(
+            root=join(config["output_dir"], "tform_script"),
+            space=config["space"],
+            suffix="afids.fcsv",
+            **config["subj_wildcards"],
+        ),
+    output:
+        afids_txt=expand(
+            bids(
+                root=join(config["output_dir"], "fcsv_to_landmarks"),
+                space=config["space"],
+                desc="afid{afid_num}",
+                suffix="landmarks.txt",
+                **config["subj_wildcards"],
+            ),
+            afid_num=[str(num).zfill(2) for num in range(1, 33)],
+            allow_missing=True,
+        )
+    script:
+        "./scripts/fcsv_to_landmarks.py"
+
+
+rule landmarks_to_spheres:
+    input:
+        afids_txt=bids(
+            root=join(config["output_dir"], "fcsv_to_landmarks"),
+            space=config["space"],
+            desc="afid{afid_num}",
+            suffix="landmarks.txt",
+            **config["subj_wildcards"],
+        ),
+        warped=rules.align_template_rigid.output.warped,
+    output:
+        sphere=bids(
+            root=join(config["output_dir"], "landmarks_to_spheres"),
+            space=config["space"],
+            desc="afid{afid_num}",
+            suffix="landmarks.nii.gz",
+            **config["subj_wildcards"]
+        )
+    params:
+        sphere_size=config["c3d"]["landmarks"]["sphere_size"],
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} -o {output.sphere}"
+
+
+rule train_c3d:
+    input:
+        images_warped=expand(
+            bids(
+               root=join(config["output_dir"], "reg_aladin"),
+               datatype="anat",
+               suffix="T1w.nii.gz",
+               space=config["space"],
+               **config["subj_wildcards"],
+            ),
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        spheres=expand(
+            bids(
+                root=join(config["output_dir"], "landmarks_to_spheres"),
+                space=config["space"],
+                desc="afid{afid_num}",
+                suffix="landmarks.nii.gz",
+                **config["subj_wildcards"],
+            ),
+            zip,
+            allow_missing=True,
+            **config["input_zip_lists"]["t1w"],
+        ),
+    params:
+        patch=config["c3d"]["model_params"]["patch"],
+        treedepth=config["c3d"]["model_params"]["treedepth"],
+        ntrees=config["c3d"]["model_params"]["ntrees"],
+    output:
+        model=bids(
+            root=join(config["output_dir"], "auto-afids-train"),
+            datatype="anat",
+            suffix="model.rf",
+            desc="afid{afid_num}",
+            space=config["space"],
+        ),
+    container: config["singularity"]["neuroglia"]
+    shell:
+        'c4d -verbose {input.images_warped} -foreach -popas ALLMRI -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -push ALLMRI -push ALLSEG -rf-param-treedepth {params.treedepth} -rf-param-ntrees {params.ntrees} -rf-train {output.model}'
