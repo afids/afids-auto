@@ -1,10 +1,7 @@
-[tool.black]
-line-length = 79
-
 [tool.poetry]
 name = "auto-afids"
 version = "0.1.0"
-description = "\"SnakeBIDS App for automatic anatomical fiducial (AFIDs) placement\""
+description = "SnakeBIDS App for automatic anatomical fiducial (AFIDs) placement"
 authors = ["Daniel Cao, Tristan Kuehn, Greydon Gilmore, Jonathan Lau"]
 
 [tool.poetry.dependencies]
@@ -32,6 +29,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.poe.tasks]
 setup = "pre-commit install"
 quality = { shell = "isort c3d_train/*.py && black c3d_train && snakefmt c3d_train" }
+
+[tool.black]
+line-length = 79
 
 [tool.isort]
 profile = "black"
