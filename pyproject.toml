@@ -28,7 +28,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 setup = "pre-commit install"
-quality = { shell = "isort c3d_train/*.py && black c3d_train && snakefmt c3d_train" }
+quality = { shell = "isort c3d_train/*.py && black c3d_train" }
 
 [tool.isort]
 profile = "black"
