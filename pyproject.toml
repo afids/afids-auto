@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "auto-afids"
-version = "0.1.0"
+version = "0.1.0-pre.1"
 description = "SnakeBIDS App for automatic anatomical fiducial (AFIDs) placement"
 authors = ["Daniel Cao, Tristan Kuehn, Greydon Gilmore, Jonathan Lau"]
 
