@@ -61,10 +61,10 @@ rule align_template_rigid:
             **config["subj_wildcards"],
         ), 
     params:
-        fixed = workflow.source_path(config['template']),
+        fixed = join(workflow.basedir, config['template']),
     container: config["singularity"]["neuroglia"]
     shell:
-        "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras} -speeeed"
+        "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
 
 rule fid_tform_mni_rigid:
@@ -137,7 +137,7 @@ rule landmarks_to_spheres:
         sphere_size=config["c3d"]["landmarks"]["sphere_size"],
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} -o {output.sphere}"
+        "c3d {input.warped} -scale 0 -replace 0 2 -landmarks-to-spheres {input.afids_txt} {params.sphere_size} -o {output.sphere}"
 
 
 rule train_c3d:
