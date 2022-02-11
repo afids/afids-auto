@@ -35,16 +35,16 @@ rule all:
                 bids(
                     root=join(config["output_dir"], "c3d_rf-apply"),
                     space=config["space"],
+                    suffix="probs.nii.gz",
                     desc="afid{afid_num}",
-                    suffix="prob01.nii.gz",
                     **config["subj_wildcards"],
                 ),
-                zip,
-                **config["input_zip_lists"]["t1w"],
+                afid_num=range(1, 33),
                 allow_missing=True,
             ),
-            afid_num=[str(num).zfill(2) for num in range(1, 33)],
-        )
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
 
 
 rule align_template_rigid:
@@ -79,17 +79,20 @@ rule apply_model:
             root=join(config["model_dir"], "auto-afids-train"),
             datatype="anat",
             suffix="model.rf",
-            desc="afid{afid_num}",
             space=config["space"],
         )
     output:
-        prob_map=bids(
-            root=join(config["output_dir"], "c3d_rf-apply"),
-            space=config["space"],
-            desc="afid{afid_num}",
-            suffix="prob01.nii.gz",
-            **config["subj_wildcards"],
-        ),
+        prob_map=expand(
+            bids(
+                root=join(config["output_dir"], "c3d_rf-apply"),
+                space=config["space"],
+                suffix="probs.nii.gz",
+                desc="afid{afid_num}",
+                **config["subj_wildcards"],
+            ),
+            afid_num=range(1, 33),
+            allow_missing=True,
+        )
     container: config["singularity"]["neuroglia"]
     shell:
         'c4d -verbose {input.image} -rf-apply {input.model} -oo {output.prob_map}'

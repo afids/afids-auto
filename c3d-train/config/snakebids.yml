@@ -56,7 +56,7 @@ c3d:
     treedepth: 50
     ntrees: 200
   landmarks:
-    sphere_size: 1
+    sphere_size: 2
 template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
 space: MNI152NLin2009cAsym
 snakemake_dir: /scratch/tkuehn/Auto-afids/c3d-train

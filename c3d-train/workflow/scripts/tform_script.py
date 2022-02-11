@@ -3,6 +3,7 @@
 
 import csv
 import numpy as np
+import pandas as pd
 
 fcsv_source = snakemake.input["groundtruth"]
 xfm_txt = snakemake.input["xfm_new"]
@@ -11,7 +12,7 @@ fcsv_new = snakemake.output["fcsv_new"]
 
 # load transform from subj to template
 sub2template= np.loadtxt(xfm_txt)
-fcsv_df = pd.read_table(fcsv_input, sep=",", header=2)
+fcsv_df = pd.read_table(fcsv_source, sep=",", header=2)
 
 coords = fcsv_df[['x','y','z']].to_numpy()
 

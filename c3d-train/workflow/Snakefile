@@ -30,16 +30,12 @@ wildcard_constraints:  **snakebids.get_wildcard_constraints(\
 
 rule all:
     input:
-        expand(
-            bids(
-                root=join(config["output_dir"], "auto-afids-train"),
-                datatype="anat",
-                suffix="model.rf",
-                desc="afid{afid_num}",
-                space=config["space"],
-            ),
-            afid_num=[str(num).zfill(2) for num in range(1, 33)],
-        )
+        bids(
+            root=join(config["output_dir"], "auto-afids-train"),
+            datatype="anat",
+            suffix="model.rf",
+            space=config["space"],
+        ),
 
 
 rule align_template_rigid:
@@ -100,36 +96,24 @@ rule rewrite_fcsv:
             **config["subj_wildcards"],
         ),
     output:
-        afids_txt=expand(
-            bids(
-                root=join(config["output_dir"], "fcsv_to_landmarks"),
-                space=config["space"],
-                desc="afid{afid_num}",
-                suffix="landmarks.txt",
-                **config["subj_wildcards"],
-            ),
-            afid_num=[str(num).zfill(2) for num in range(1, 33)],
-            allow_missing=True,
-        )
+        landmarks=bids(
+            root=join(config["output_dir"], "fcsv_to_landmarks"),
+            space=config["space"],
+            suffix="landmarks.txt",
+            **config["subj_wildcards"],
+        ),
     script:
         "./scripts/fcsv_to_landmarks.py"
 
 
 rule landmarks_to_spheres:
     input:
-        afids_txt=bids(
-            root=join(config["output_dir"], "fcsv_to_landmarks"),
-            space=config["space"],
-            desc="afid{afid_num}",
-            suffix="landmarks.txt",
-            **config["subj_wildcards"],
-        ),
+        afids_txt=rules.rewrite_fcsv.output.landmarks,
         warped=rules.align_template_rigid.output.warped,
     output:
         sphere=bids(
             root=join(config["output_dir"], "landmarks_to_spheres"),
             space=config["space"],
-            desc="afid{afid_num}",
             suffix="landmarks.nii.gz",
             **config["subj_wildcards"]
         )
@@ -137,7 +121,7 @@ rule landmarks_to_spheres:
         sphere_size=config["c3d"]["landmarks"]["sphere_size"],
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d {input.warped} -scale 0 -replace 0 2 -landmarks-to-spheres {input.afids_txt} {params.sphere_size} -o {output.sphere}"
+        "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} {params.sphere_size} -o {output.sphere}"
 
 
 rule train_c3d:
@@ -157,7 +141,6 @@ rule train_c3d:
             bids(
                 root=join(config["output_dir"], "landmarks_to_spheres"),
                 space=config["space"],
-                desc="afid{afid_num}",
                 suffix="landmarks.nii.gz",
                 **config["subj_wildcards"],
             ),
@@ -174,7 +157,6 @@ rule train_c3d:
             root=join(config["output_dir"], "auto-afids-train"),
             datatype="anat",
             suffix="model.rf",
-            desc="afid{afid_num}",
             space=config["space"],
         ),
     container: config["singularity"]["neuroglia"]
