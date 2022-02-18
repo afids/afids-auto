@@ -58,97 +58,29 @@ rule align_template_rigid:
             **config["subj_wildcards"],
         ), 
     params:
-        fixed = config['template'],
+        fixed = join(workflow.basedir, config['template']),
     container: config["singularity"]["neuroglia"]
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
-
 ################### ADDED CODE ############################
-### Resampling
-rule downsample_template:
-    input:
-        image=rules.align_template_rigid.output.warped
-    output:
-        image=bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            datatype="anat",
-            res="0.5mm",
-            suffix="T1w.nii.gz",
-            space=config["space"],
-            **config["subj_wildcards"],
-        )
-    container: config["singularity"]["neuroglia"]
-    shell:
-        "c3d -verbose {input.image} -resample 200% -interpolation Cubic {output.image}"
-
-rule upsample_template:
-    input:
-        image=rules.align_template_rigid.output.warped
-    output:
-        image=bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            datatype="anat",
-            res="4mm",
-            suffix="T1w.nii.gz",
-            space=config["space"],
-            **config["subj_wildcards"],
-        )
-    container: config["singularity"]["neuroglia"]
-    shell:
-        "c3d -verbose {input.image} -resample 25% -interpolation Cubic {output.image}"
-
 ### Gradients
 rule gen_grad_template:
     input:
         image=rules.align_template_rigid.output.warped,
     output:
         grad=bids(
-            root=join(config["output_dir"], "reg_aladin"),
+            root=join(config["output_dir"], "c3d_grad"),
             datatype="anat",
             res="1mm",
-            desc="grad",
+            desc="gradalldirs",
             suffix="T1w.nii.gz",
             space=config["space"],
             **config["subj_wildcards"],
-        )
+        ),
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d -verbose {input.image} -grad -oo {output.grad}"
-
-rule gen_grad_downsample_template:
-    input:
-        image=rules.downsample_template.output.image,
-    output:
-        grad=bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            datatype="anat",
-            res="0.5mm",
-            desc="grad",
-            suffix="T1w.nii.gz",
-            space=config["space"],
-            **config["subj_wildcards"],
-        )
-    container: config["singularity"]["neuroglia"]
-    shell:
-        "c3d -verbose {input.image} -grad -oo {output.grad}"
-
-rule gen_grad_upsample_template:
-    input:
-        image=rules.upsample_template.output.image,
-    output:
-        grad=bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            datatype="anat",
-            res="4mm",
-            desc="grad",
-            suffix="T1w.nii.gz",
-            space=config["space"],
-            **config["subj_wildcards"],
-        )
-    container: config["singularity"]["neuroglia"]
-    shell:
-        "c3d -verbose {input.image} -grad -oo {output.grad}"
+        "c3d -verbose {input.image} -grad -omc {output.grad}"
 
 ##################### END OF ADDED CODE #####################
 
@@ -178,12 +110,7 @@ rule fid_tform_mni_rigid:
 
 rule rewrite_fcsv:
     input:
-        fcsv_new=bids(
-            root=join(config["output_dir"], "tform_script"),
-            space=config["space"],
-            suffix="afids.fcsv",
-            **config["subj_wildcards"],
-        ),
+        fcsv_new=rules.fid_tform_mni_rigid.output.fcsv_new,
     output:
         landmarks=bids(
             root=join(config["output_dir"], "fcsv_to_landmarks"),
@@ -216,89 +143,18 @@ rule landmarks_to_spheres:
 rule train_c3d:
     input:
         images_warped=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               res="1mm",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
-            zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-        images_warped_upsample=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               res="0.5mm",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
-            zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-        images_warped_downsample=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               res="4mm",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
+            rules.align_template_rigid.output.warped,
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
         images_grad=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               res="1mm",
-               desc="grad",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
-            zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-        images_grad_upsample=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               res="0.5mm",
-               desc="grad",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
-            zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-        images_grad_downsample=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               res="4mm",
-               desc="grad",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
+            rules.gen_grad_template.output.grad,
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
         spheres=expand(
-            bids(
-                root=join(config["output_dir"], "landmarks_to_spheres"),
-                space=config["space"],
-                suffix="landmarks.nii.gz",
-                **config["subj_wildcards"],
-            ),
+            rules.landmarks_to_spheres.output.sphere,
             zip,
-            allow_missing=True,
             **config["input_zip_lists"]["t1w"],
         ),
     params:
@@ -313,9 +169,5 @@ rule train_c3d:
             space=config["space"],
         ),
     container: config["singularity"]["neuroglia"]
-    # shell:
-    #     'c4d -verbose {input.images_warped} -foreach -popas ALLMRI -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -push ALLMRI -push ALLSEG -rf-param-treedepth {params.treedepth} -rf-param-ntrees {params.ntrees} -rf-train {output.model}'
     shell:
-        # 'c4d -verbose {input.images_warped} -foreach -popas ALLMRI -endfor {input.images_grad} -foreach -popas ALLMRI -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -push ALLMRI -push ALLSEG -rf-param-treedepth {params.treedepth} -rf-param-ntrees {params.ntrees} -rf-train {output.model}'
-        # 'c4d -verbose {input.images_warped} {input.images_warped_upsample} {input.images_grad} {input.images_grad_upsample} -foreach -popas ALLMRI -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -push ALLMRI -push ALLSEG -rf-param-treedepth {params.treedepth} -rf-param-ntrees {params.ntrees} -rf-train {output.model}'
-        'c4d -verbose {input.images_warped} -tile w -popas ALLMRI {input.images_grad} -tile w -popas ALLGRAD {input.spheres} -tile w -popas ALLSEG -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -push ALLMRI -push ALLGRAD -push ALLSEG -rf-train {output.model}'
+        'c4d -verbose {input.images_warped} -foreach -popas ALLMRI -endfor {input.images_grad} -foreach -popas ALLGRAD -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -push ALLMRI -push ALLGRAD -push ALLSEG -rf-train {output.model}'

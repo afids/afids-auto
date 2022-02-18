@@ -57,7 +57,7 @@ c3d:
     ntrees: 200
   landmarks:
     sphere_size: 2
-template: /scratch/tkai/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
 space: MNI152NLin2009cAsym
 snakemake_dir: /home/tkai/opt/git/auto-afids/c3d-train
 snakefile: /home/tkai/opt/git/auto-afids/c3d-train/workflow/Snakefile
