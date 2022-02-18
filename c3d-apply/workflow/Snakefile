@@ -54,6 +54,7 @@ rule align_template_rigid:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
             datatype="anat",
+            res="1mm",
             suffix="T1w.nii.gz",
             space=config["space"],
             **config["subj_wildcards"],
@@ -66,15 +67,105 @@ rule align_template_rigid:
             **config["subj_wildcards"],
         ), 
     params:
-        fixed = join(workflow.basedir, config['template']),
+        fixed = config['template'],
     container: config["singularity"]["neuroglia"]
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
+################### ADDED CODE ############################
+### Resampling
+rule upsample_template:
+    input:
+        image=rules.align_template_rigid.output.warped
+    output:
+        image=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            res="0.5mm",
+            suffix="T1w.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        )
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d -verbose {input.image} -resample 200% -interpolation Cubic {output.image}"
+
+rule downsample_template:
+    input:
+        image=rules.align_template_rigid.output.warped
+    output:
+        image=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            res="4mm",
+            suffix="T1w.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        )
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d -verbose {input.image} -resample 25% -interpolation Cubic {output.image}"
+
+### Gradients
+rule gen_grad_template:
+    input:
+        image=rules.align_template_rigid.output.warped,
+    output:
+        grad=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            res="1mm",
+            desc="grad",
+            suffix="T1w.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        )
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d -verbose {input.image} -grad -oo {output.grad}"
+
+rule gen_grad_upsample_template:
+    input:
+        image=rules.downsample_template.output.image,
+    output:
+        grad=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            res="0.5mm",
+            desc="grad",
+            suffix="T1w.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        )
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d -verbose {input.image} -grad -oo {output.grad}"
+
+rule gen_grad_downsample_template:
+    input:
+        image=rules.upsample_template.output.image,
+    output:
+        grad=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            datatype="anat",
+            res="4mm",
+            desc="grad",
+            suffix="T1w.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        )
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d -verbose {input.image} -grad -oo {output.grad}"
+
+##################### END OF ADDED CODE #####################
 
 rule apply_model:
     input:
         image=rules.align_template_rigid.output.warped,
+        image_upsample=rules.upsample_template.output.image,
+        grad=rules.gen_grad_template.output.grad,
+        grad_upsample=rules.gen_grad_upsample_template.output.grad,
         model=bids(
             root=join(config["model_dir"], "auto-afids-train"),
             datatype="anat",
@@ -95,4 +186,4 @@ rule apply_model:
         )
     container: config["singularity"]["neuroglia"]
     shell:
-        'c4d -verbose {input.image} -rf-apply {input.model} -oo {output.prob_map}'
+        'c4d -verbose {input.image} {input.grad} -rf-apply {input.model} -oo {output.prob_map}'

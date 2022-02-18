@@ -1,5 +1,5 @@
-bids_dir: /scratch/tkuehn/autoafids-input/OASIS
-output_dir: /scratch/tkuehn/autoafids-output/predict_model-clinical-c3d_input-OASIS
+bids_dir: /project/6050199/akhanf/cfmm-bids/data/Khan/clinical_imaging/autoafids/data/clinical
+output_dir: /scratch/tkai/test/train-clinical-c3d
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -57,15 +57,14 @@ c3d:
     ntrees: 200
   landmarks:
     sphere_size: 2
-template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+template: /scratch/tkai/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
 space: MNI152NLin2009cAsym
-snakemake_dir: /scratch/tkuehn/Auto-afids/c3d-train
-snakefile: /scratch/tkuehn/Auto-afids/c3d-train/workflow/Snakefile
+snakemake_dir: /home/tkai/opt/git/auto-afids/c3d-train
+snakefile: /home/tkai/opt/git/auto-afids/c3d-train/workflow/Snakefile
 snakemake_args:
 - --cores
 - --use-singularity
-- --config
-- model_dir=/scratch/tkuehn/autoafids-output/train-clinical-c3d/
+- -p
 workflow_mode: false
 force_conversion: false
 retrofit: false
