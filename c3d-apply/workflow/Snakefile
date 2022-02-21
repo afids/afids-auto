@@ -5,6 +5,11 @@ from snakebids import bids
 
 import os
 from os.path import join
+import pandas as pd
+
+df_test=pd.read_table(join(workflow.basedir, config['test_subs']), sep='\t',header=0, dtype=str)
+if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
+    config["participant_label"]=df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list()
 
 configfile: 'config/snakebids.yml'
 
@@ -65,7 +70,7 @@ rule align_template_rigid:
             suffix="xfm.txt",
             space=config["space"],
             **config["subj_wildcards"],
-        ), 
+        ),
     params:
         fixed = join(workflow.basedir, config['template']),
     container: config["singularity"]["neuroglia"]
@@ -78,42 +83,73 @@ rule gen_grad_template:
     input:
         image=rules.align_template_rigid.output.warped,
     output:
-        grad=bids(
-        root=join(config["output_dir"], "c3d_grad"),
-        datatype="anat",
-        res="1mm",
-        desc="gradalldirs",
-        suffix="T1w.nii.gz",
-        space=config["space"],
-        **config["subj_wildcards"],
-    ),
+        gradx=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['x'],
+            allow_missing=True,
+        ),
+        grady=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['y'],
+            allow_missing=True,
+        ),
+        gradz=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['z'],
+            allow_missing=True,
+        ),
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d -verbose {input.image} -grad -omc {output.grad}"
+        "c3d -verbose {input.image} -smooth 1.0vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 ##################### END OF ADDED CODE #####################
 
 rule apply_model:
     input:
         image=rules.align_template_rigid.output.warped,
-        grad=rules.gen_grad_template.output.grad,
+        gradx=rules.gen_grad_template.output.gradx,
+        grady=rules.gen_grad_template.output.grady,
+        gradz=rules.gen_grad_template.output.gradz,
         model=bids(
             root=join(config["model_dir"], "auto-afids-train"),
-            datatype="anat",
             suffix="model.rf",
             space=config["space"],
         )
     output:
         prob_map=expand(
-            bids(
-                root=join(config["output_dir"], "c3d_rf-apply"),
-                space=config["space"],
-                suffix="probs.nii.gz",
-                desc="afid{afid_num}",
-                **config["subj_wildcards"],
-            ),
+                bids(
+                    root=join(config["output_dir"], "c3d_rf-apply"),
+                    space=config["space"],
+                    suffix="probs.nii.gz",
+                    desc="afid{afid_num}",
+                    **config["subj_wildcards"],
+                ),
             afid_num=range(1, 33),
             allow_missing=True,
         )
     container: config["singularity"]["neuroglia"]
     shell:
-        'c4d -verbose {input.image} {input.grad} -rf-apply {input.model} -oo {output.prob_map}'
+        'c4d -verbose {input.image} {input.gradx} {input.grady} {input.gradz} -rf-apply {input.model} -oo {output.prob_map}'

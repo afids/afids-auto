@@ -5,9 +5,22 @@ from snakebids import bids
 
 import os
 from os.path import join
+import pandas as pd
 
 configfile: 'config/snakebids.yml'
 
+exclude_subs=[]
+df=pd.read_table(join(workflow.basedir, config['reg_issues']),sep='\t',header=0, dtype=str)
+if df[df['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
+    exclude_subs.extend(df[df['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list())
+
+df_test=pd.read_table(join(workflow.basedir, config['test_subs']),sep='\t',header=0, dtype=str)
+if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
+    exclude_subs.extend(df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list())
+
+config["exclude_participant_label"]=exclude_subs
+
+exclude_subs=[]
 #writes inputs_config.yml and updates config dict
 config.update(
     snakebids.generate_inputs(
@@ -32,7 +45,6 @@ rule all:
     input:
         bids(
             root=join(config["output_dir"], "auto-afids-train"),
-            datatype="anat",
             suffix="model.rf",
             space=config["space"],
         ),
@@ -56,7 +68,7 @@ rule align_template_rigid:
             suffix="xfm.txt",
             space=config["space"],
             **config["subj_wildcards"],
-        ), 
+        ),
     params:
         fixed = join(workflow.basedir, config['template']),
     container: config["singularity"]["neuroglia"]
@@ -69,18 +81,48 @@ rule gen_grad_template:
     input:
         image=rules.align_template_rigid.output.warped,
     output:
-        grad=bids(
-            root=join(config["output_dir"], "c3d_grad"),
-            datatype="anat",
-            res="1mm",
-            desc="gradalldirs",
-            suffix="T1w.nii.gz",
-            space=config["space"],
-            **config["subj_wildcards"],
+        gradx=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['x'],
+            allow_missing=True,
+        ),
+        grady=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['y'],
+            allow_missing=True,
+        ),
+        gradz=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['z'],
+            allow_missing=True,
         ),
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d -verbose {input.image} -grad -omc {output.grad}"
+        "c3d -verbose {input.image} -smooth 1.0vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
 ##################### END OF ADDED CODE #####################
 
@@ -147,8 +189,18 @@ rule train_c3d:
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
-        images_grad=expand(
-            rules.gen_grad_template.output.grad,
+        images_gradx=expand(
+            rules.gen_grad_template.output.gradx,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        images_grady=expand(
+            rules.gen_grad_template.output.grady,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        images_gradz=expand(
+            rules.gen_grad_template.output.gradz,
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
@@ -164,10 +216,15 @@ rule train_c3d:
     output:
         model=bids(
             root=join(config["output_dir"], "auto-afids-train"),
-            datatype="anat",
             suffix="model.rf",
             space=config["space"],
         ),
     container: config["singularity"]["neuroglia"]
     shell:
-        'c4d -verbose {input.images_warped} -foreach -popas ALLMRI -endfor {input.images_grad} -foreach -popas ALLGRAD -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -push ALLMRI -push ALLGRAD -push ALLSEG -rf-train {output.model}'
+        'c4d -verbose {input.images_warped} -tile w -popas ALLMRI \
+        {input.images_gradx} -tile w -popas ALLGRADX \
+        {input.images_grady} -tile w -popas ALLGRADY \
+        {input.images_gradz} -tile w -popas ALLGRADZ \
+        {input.spheres} -tile w -popas ALLSEG \
+        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} \
+        -push ALLMRI -push ALLGRADX -push ALLGRADY -push ALLGRADZ -push ALLSEG -rf-train {output.model}'
