@@ -50,7 +50,14 @@ rule all:
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
-
+        bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            session='test',
+            from_='subject',
+            to=config["space"],
+            desc='rigid',
+            suffix="regqc.html",
+        ),
 
 rule align_template_rigid:
     input:
@@ -125,7 +132,28 @@ rule gen_grad_template:
     container: config["singularity"]["neuroglia"]
     shell:
         "c3d -verbose {input.image} -smooth 1.0vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
+
 ##################### END OF ADDED CODE #####################
+
+rule reg_qc:
+    input:
+        images_ct=expand(
+            rules.align_template_rigid.output.warped,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+    output:
+        html_fig=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            session='test',
+            from_='subject',
+            to=config["space"],
+            desc='rigid',
+            suffix="regqc.html",
+        ),
+    script:
+        './scripts/reg_qc.py'
+
 
 rule apply_model:
     input:

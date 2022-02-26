@@ -20,6 +20,8 @@ if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[
 
 config["exclude_participant_label"]=exclude_subs
 
+dataset_name=os.path.basename(str(config["bids_dir"]))
+
 exclude_subs=[]
 #writes inputs_config.yml and updates config dict
 config.update(
@@ -48,7 +50,14 @@ rule all:
             suffix="model.rf",
             space=config["space"],
         ),
-
+        bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            session='train',
+            from_='subject',
+            to=config["space"],
+            desc='rigid',
+            suffix="regqc.html",
+        ),
 
 rule align_template_rigid:
     input:
@@ -122,7 +131,7 @@ rule gen_grad_template:
         ),
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d -verbose {input.image} -smooth 1.0vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
+        "c3d -verbose {input.image} -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
 ##################### END OF ADDED CODE #####################
 
@@ -139,7 +148,6 @@ rule fid_tform_mni_rigid:
     params:
         template = workflow.source_path('../resources/dummy.fcsv'),
     output:
-        # Need to consider LPS
         fcsv_new=bids(
             root=join(config['output_dir'], 'tform_script'),
             suffix="afids.fcsv",
@@ -180,6 +188,26 @@ rule landmarks_to_spheres:
     container: config["singularity"]["neuroglia"]
     shell:
         "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} {params.sphere_size} -o {output.sphere}"
+
+
+rule reg_qc:
+    input:
+        images_ct=expand(
+            rules.align_template_rigid.output.warped,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+    output:
+        html_fig=bids(
+            root=join(config["output_dir"], "reg_aladin"),
+            session='train',
+            from_='subject',
+            to=config["space"],
+            desc='rigid',
+            suffix="regqc.html",
+        ),
+    script:
+        './scripts/reg_qc.py'
 
 
 rule train_c3d:
@@ -226,5 +254,5 @@ rule train_c3d:
         {input.images_grady} -tile w -popas ALLGRADY \
         {input.images_gradz} -tile w -popas ALLGRADZ \
         {input.spheres} -tile w -popas ALLSEG \
-        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} \
+        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -rf-param-usexyz \
         -push ALLMRI -push ALLGRADX -push ALLGRADY -push ALLGRADZ -push ALLSEG -rf-train {output.model}'

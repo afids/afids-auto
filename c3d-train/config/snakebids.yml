@@ -1,5 +1,5 @@
-bids_dir: /home/greydon/Documents/data/autoafids/clinical
-output_dir: /home/greydon/Documents/data/autoafids/clinical/derivatives/run_2022-02-22
+bids_dir: /home/greydon/Documents/data/autoafids/OASIS
+output_dir: /home/greydon/Documents/data/autoafids/OASIS/derivatives/run_2022-02-22
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -53,8 +53,8 @@ singularity:
 c3d:
   model_params:
     patch: 3x3x3x0
-    treedepth: 50
-    ntrees: 200
+    treedepth: 40
+    ntrees: 300
   landmarks:
     sphere_size: 2
 reg_issues: ../../reg_issues.txt
@@ -64,7 +64,7 @@ space: MNI152NLin2009cAsym
 snakemake_dir: /home/greydon/Documents/GitHub/auto-afids/c3d-train
 snakefile: /home/greydon/Documents/GitHub/auto-afids/c3d-train/workflow/Snakefile
 snakemake_args:
-- -c4
+- -c2
 workflow_mode: false
 force_conversion: false
 retrofit: false
