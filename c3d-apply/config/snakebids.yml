@@ -1,5 +1,5 @@
-bids_dir: /home/greydon/Documents/data/autoafids/OASIS
-output_dir: /home/greydon/Documents/data/autoafids/OASIS/derivatives/run_2022-02-22
+bids_dir: /home/greydon/data/data/auto-afids/data/clinical
+output_dir: /home/greydon/data/data/auto-afids/data/clinical/20220228_v2
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -67,7 +67,8 @@ space: MNI152NLin2009cAsym
 snakemake_dir: /home/greydon/Documents/GitHub/auto-afids/c3d-apply
 snakefile: /home/greydon/Documents/GitHub/auto-afids/c3d-apply/workflow/Snakefile
 snakemake_args:
-- -c2
+- -c4
+- -p
 workflow_mode: false
 force_conversion: false
 retrofit: false
@@ -76,4 +77,4 @@ analysis_level: participant
 participant_label: null
 exclude_participant_label: null
 root: ''
-model_dir: /home/greydon/Documents/data/autoafids/OASIS/derivatives/run_2022-02-22
+model_dir: /home/greydon/data/data/auto-afids/data/clinical/20220228_v2

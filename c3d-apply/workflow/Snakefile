@@ -131,7 +131,7 @@ rule gen_grad_template:
         ),
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d -verbose {input.image} -smooth 1.0vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
+        "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
 ##################### END OF ADDED CODE #####################
 
