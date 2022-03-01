@@ -1,5 +1,5 @@
 bids_dir: /home/greydon/Documents/data/afids-auto/data/OASIS
-output_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301
+output_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301_noxyz
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -76,4 +76,4 @@ analysis_level: participant
 participant_label: null
 exclude_participant_label: null
 root: ''
-model_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301
+model_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301_noxyz

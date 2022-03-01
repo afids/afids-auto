@@ -254,5 +254,5 @@ rule train_c3d:
         {input.images_grady} -tile w -popas ALLGRADY \
         {input.images_gradz} -tile w -popas ALLGRADZ \
         {input.spheres} -tile w -popas ALLSEG \
-        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -rf-param-usexyz \
+        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} \
         -push ALLMRI -push ALLGRADX -push ALLGRADY -push ALLGRADZ -push ALLSEG -rf-train {output.model}'

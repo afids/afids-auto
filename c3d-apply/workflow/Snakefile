@@ -7,11 +7,12 @@ import os
 from os.path import join
 import pandas as pd
 
+configfile: 'config/snakebids.yml'
+
 df_test=pd.read_table(join(workflow.basedir, config['test_subs']), sep='\t',header=0, dtype=str)
 if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
     config["participant_label"]=df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list()
 
-configfile: 'config/snakebids.yml'
 
 #writes inputs_config.yml and updates config dict
 config.update(
@@ -57,6 +58,18 @@ rule all:
             to=config["space"],
             desc='rigid',
             suffix="regqc.html",
+        ),
+        expand(
+            bids(
+                root=join(config["output_dir"], "threshold_prob"),
+                datatype="anat",
+                res="1mm",
+                suffix="probs.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            zip,
+            **config["input_zip_lists"]["t1w"],
         ),
 
 rule align_template_rigid:
@@ -181,3 +194,29 @@ rule apply_model:
     container: config["singularity"]["neuroglia"]
     shell:
         'c4d -verbose {input.image} {input.gradx} {input.grady} {input.gradz} -rf-apply {input.model} -oo {output.prob_map}'
+
+rule threshold_prob:
+    input:
+        warped_img=rules.align_template_rigid.output.warped,
+        prob_map=expand(
+                bids(
+                    root=join(config["output_dir"], "c3d_rf-apply"),
+                    space=config["space"],
+                    suffix="probs.nii.gz",
+                    desc="afid{afid_num}",
+                    **config["subj_wildcards"],
+                ),
+            afid_num=range(1, 33),
+            allow_missing=True,
+        ),
+    output:
+        prob_combined=bids(
+            root=join(config["output_dir"], "threshold_prob"),
+            datatype="anat",
+            res="1mm",
+            suffix="probs.nii.gz",
+            space=config["space"],
+            **config["subj_wildcards"],
+        ),
+    script:
+        './scripts/prob_thres.py'

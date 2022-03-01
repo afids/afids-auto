@@ -1,0 +1,3 @@
+KeyError in line 10 of /home/greydon/Documents/GitHub/afids-auto/c3d-apply/workflow/Snakefile:
+'test_subs'
+  File "/home/greydon/Documents/GitHub/afids-auto/c3d-apply/workflow/Snakefile", line 10, in <module>

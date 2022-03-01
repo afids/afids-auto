@@ -1,5 +1,5 @@
 bids_dir: /home/greydon/Documents/data/afids-auto/data/OASIS
-output_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301
+output_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301_noxyz
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -64,8 +64,8 @@ space: MNI152NLin2009cAsym
 snakemake_dir: /home/greydon/Documents/GitHub/afids-auto/c3d-train
 snakefile: /home/greydon/Documents/GitHub/afids-auto/c3d-train/workflow/Snakefile
 snakemake_args:
-- --model_dir=/home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301
 - -c4
+- --rerun-incomplete
 workflow_mode: false
 force_conversion: false
 retrofit: false
