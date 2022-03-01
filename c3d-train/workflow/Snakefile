@@ -236,7 +236,7 @@ rule train_c3d:
             rules.landmarks_to_spheres.output.sphere,
             zip,
             **config["input_zip_lists"]["t1w"],
-        ),0
+        ),
     params:
         patch=config["c3d"]["model_params"]["patch"],
         treedepth=config["c3d"]["model_params"]["treedepth"],

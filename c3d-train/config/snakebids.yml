@@ -1,5 +1,5 @@
-bids_dir: /home/greydon/data/data/auto-afids/data/clinical
-output_dir: /home/greydon/data/data/auto-afids/data/clinical/20220228_v2
+bids_dir: /home/greydon/Documents/data/afids-auto/data/OASIS
+output_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -54,18 +54,17 @@ c3d:
   model_params:
     patch: 3x3x3x0
     treedepth: 40
-    ntrees: 300
+    ntrees: 500
   landmarks:
-    sphere_size: 2
+    sphere_size: 3
 reg_issues: ../../reg_issues.txt
 test_subs: ../../participants_testing.txt
 template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
 space: MNI152NLin2009cAsym
-snakemake_dir: /home/greydon/Documents/GitHub/auto-afids/c3d-train
-snakefile: /home/greydon/Documents/GitHub/auto-afids/c3d-train/workflow/Snakefile
+snakemake_dir: /home/greydon/Documents/GitHub/afids-auto/c3d-train
+snakefile: /home/greydon/Documents/GitHub/afids-auto/c3d-train/workflow/Snakefile
 snakemake_args:
 - -c4
-- -p
 workflow_mode: false
 force_conversion: false
 retrofit: false

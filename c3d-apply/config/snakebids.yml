@@ -57,9 +57,9 @@ c3d:
   model_params:
     patch: 3x3x3x0
     treedepth: 40
-    ntrees: 300
+    ntrees: 500
   landmarks:
-    sphere_size: 2
+    sphere_size: 3
 reg_issues: ../../reg_issues.txt
 test_subs: ../../participants_testing.txt
 template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz

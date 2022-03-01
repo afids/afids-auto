@@ -49,17 +49,17 @@ if debug:
 voxelCoords = []
 afid_num = 1
 for iprob in sorted_nicely(glob.glob(snakemake.input.probs)):
-    # load up tissue probability, warped from template
-    tissue_prob_vol = nib.load(iprob).get_fdata().squeeze(3)
+
+    # load up afid probability
+    afid_prob_vol = nib.load(iprob).get_fdata().squeeze(3)
     voxel_dims = (nib.load(iprob).header["dim"])[1:4]
 
-    hist_y, hist_x = np.histogram(tissue_prob_vol.flatten(), bins=100)
+    hist_y, hist_x = np.histogram(afid_prob_vol.flatten(), bins=100)
     hist_x = hist_x[0:-1]
-    cumHist_y = np.cumsum(hist_y.astype(float)) / np.prod(
-        np.array(tissue_prob_vol.shape)
-    )
+    cumHist_y = np.cumsum(hist_y.astype(float)) / np.prod(np.array(afid_prob_vol.shape))
+
     # The background should contain half of the voxels
-    minThreshold_byCount = hist_x[np.where(cumHist_y > 0.99)[0][0]]
+    minThreshold_byCount = hist_x[np.where(cumHist_y > 0.90)[0][0]]
     hist_diff = np.diff(hist_y)
     hist_diff_zc = np.where(np.diff(np.sign(hist_diff)) == -2)[0].flatten()
     if len(hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)]) == 0:
@@ -69,38 +69,40 @@ for iprob in sorted_nicely(glob.glob(snakemake.input.probs)):
             hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)][0]
         ]
 
-    tissue_prob_vol[tissue_prob_vol < minThreshold] = 0
-    tissue_prob_vol_binary = tissue_prob_vol > 0
+    afid_prob_vol[afid_prob_vol < minThreshold] = 0
+    afid_prob_vol_binary = afid_prob_vol > 0
 
     labels, n_labels = measure.label(
-        tissue_prob_vol_binary.astype(int), background=0, return_num=True
+        afid_prob_vol_binary.astype(int), background=0, return_num=True
     )
+
     properties = measure.regionprops(labels)
     properties.sort(key=lambda x: x.area, reverse=True)
     areas = np.array([prop.area for prop in properties])
     if len(areas) > 10:
         areas = areas[:10]
 
-    elecIdxs = []
+    areaIdxs = []
     for icomp in range(len(areas)):
         if properties[icomp].area < 100:
-            elecIdxs.append(
+            areaIdxs.append(
                 [
                     icomp,
-                    np.mean(tissue_prob_vol[labels == properties[icomp].label]),
+                    np.mean(afid_prob_vol[labels == properties[icomp].label]),
                     properties[icomp].area,
                     properties[icomp].label,
                 ]
             )
 
-    if elecIdxs:
-        elecIdxs.sort(key=lambda x: x[1], reverse=True)
+    if areaIdxs:
+        areaIdxs.sort(key=lambda x: x[1], reverse=True)
         voxelCoords.append(
             np.c_[
-                properties[elecIdxs[0][0]].coords,
-                np.repeat(afid_num, len(properties[elecIdxs[0][0]].coords)),
+                properties[areaIdxs[0][0]].coords,
+                np.repeat(afid_num, len(properties[areaIdxs[0][0]].coords)),
             ]
         )
+
     afid_num += 1
 
 
