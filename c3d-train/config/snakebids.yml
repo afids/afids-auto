@@ -64,6 +64,7 @@ space: MNI152NLin2009cAsym
 snakemake_dir: /home/greydon/Documents/GitHub/afids-auto/c3d-train
 snakefile: /home/greydon/Documents/GitHub/afids-auto/c3d-train/workflow/Snakefile
 snakemake_args:
+- --model_dir=/home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301
 - -c4
 workflow_mode: false
 force_conversion: false
