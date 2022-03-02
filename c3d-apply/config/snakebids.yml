@@ -64,6 +64,7 @@ reg_issues: ../../reg_issues.txt
 test_subs: ../../participants_testing.txt
 template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
 space: MNI152NLin2009cAsym
+fcsv_template: ../resources/afids_template.fcsv
 snakemake_dir: /home/greydon/Documents/GitHub/afids-auto/c3d-apply
 snakefile: /home/greydon/Documents/GitHub/afids-auto/c3d-apply/workflow/Snakefile
 snakemake_args:
