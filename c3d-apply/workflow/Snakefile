@@ -220,3 +220,20 @@ rule threshold_prob:
         ),
     script:
         './scripts/prob_thres.py'
+
+rule create_fcsv:
+    # MIGHT NEED TO BE FIXED, BUT STRUCTURE IS THERE
+    # TRIED TO MATCH AFIDS NAMING SCHEME
+    input:
+        seg=rules.threhsold_prob.output.prob_combined,
+        fcsv_template=config['fcsv_template']
+    output:
+        fcsv=bids(
+            root=join(config["output_dir"], "fcsv_out"),
+            datatype="anat",
+            suffix="{contrast}_T1_afids-auto_01.fcsv"
+            **config["subj_wildcards"]
+        ),
+        contrast=config["space"]
+    script:
+        './scripts/seg_to_fcsv.py'
