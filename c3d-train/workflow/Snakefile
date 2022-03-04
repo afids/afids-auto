@@ -192,7 +192,7 @@ rule landmarks_to_spheres:
 
 #rule reg_qc:
 #    input:
-#        images_ct=expand(
+#        images=expand(
 #            rules.align_template_rigid.output.warped,
 #            zip,
 #            **config["input_zip_lists"]["t1w"],

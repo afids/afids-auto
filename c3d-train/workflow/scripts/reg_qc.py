@@ -4,7 +4,7 @@
 import base64
 import os
 import re
-from io import BytesIO
+from io import BytesIO, StringIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import uuid4
@@ -17,12 +17,9 @@ from nilearn.datasets import load_mni152_template
 from svgutils.compose import Unit
 from svgutils.transform import GroupElement, SVGFigure, fromstring
 
-template = load_mni152_template(resolution=1.00)
-
 
 def svg2str(display_object, dpi):
     """Serialize a nilearn display object to string."""
-    from io import StringIO
 
     image_buf = StringIO()
     display_object.frame_axes.figure.savefig(
@@ -48,6 +45,7 @@ def extract_svg(display_object, dpi=250):
     # rfind gives the start index of the substr. We want this substr
     # included in our return value so we add its length to the index.
     end_idx += len(end_tag)
+
     return image_svg[start_idx:end_idx]
 
 
@@ -130,78 +128,88 @@ def sorted_nicely(data, reverse=False):
     return sorted(data, key=alphanum_key, reverse=reverse)
 
 
-html_list = []
-for ifloat in snakemake.input.images_ct:
-    isub = os.path.basename(ifloat).split("_")[0]
+def output_html(template, input_img, output_html):
+    html_list = []
+    for ifloat in input_img:
+        isub = os.path.basename(ifloat).split("_")[0]
 
-    float_img = nib.load(ifloat)
-    float_img = nib.Nifti1Image(
-        float_img.get_fdata().astype(np.float32),
-        header=float_img.header,
-        affine=float_img.affine,
+        float_img = nib.load(ifloat)
+        float_img = nib.Nifti1Image(
+            float_img.get_fdata().astype(np.float32),
+            header=float_img.header,
+            affine=float_img.affine,
+        )
+
+        plot_args_ref = {"dim": 1}
+
+        display = plotting.plot_anat(
+            float_img,
+            display_mode="ortho",
+            draw_cross=False,
+            cut_coords=[0, 0, 40],
+            **plot_args_ref,
+        )
+
+        fg_svgs = [fromstring(extract_svg(display, 300))]
+        display.close()
+
+        display = plotting.plot_anat(
+            template,
+            display_mode="ortho",
+            draw_cross=False,
+            cut_coords=[0, 0, 40],
+            **plot_args_ref,
+        )
+
+        bg_svgs = [fromstring(extract_svg(display, 300))]
+        display.close()
+
+        final_svg = "\n".join(clean_svg(fg_svgs, bg_svgs))
+
+        anat_params = {
+            "vmin": float_img.get_fdata(dtype="float32").min(),
+            "vmax": float_img.get_fdata(dtype="float32").max(),
+            "cmap": plt.cm.gray,
+            "interpolation": "none",
+            "draw_cross": False,
+        }
+
+        display = plotting.plot_anat(float_img, **anat_params)
+        display.add_contours(template, colors="r", alpha=0.7, linewidths=0.8)
+
+        tmpfile = BytesIO()
+        display.savefig(tmpfile, dpi=300)
+        display.close()
+        tmpfile.seek(0)
+        encoded = base64.b64encode(tmpfile.getvalue())
+
+        html_list.append(
+            f"""
+                <center>
+                    <h1 style="font-size:42px">{isub}</h1>
+                    <p>{final_svg}</p>
+                    <p><img src="data:image/png;base64, {encoded.decode("utf-8")}" width=1600 height=600></p>
+                    <hr style="height:4px;border-width:0;color:black;background-color:black;margin:30px;">
+                </center>"""
+        )
+
+        print(f"Done {isub}")
+
+
+    html_string = "".join(html_list)
+    message = f"""<html>
+            <head></head>
+            <body>{html_string}</body>
+            </html>"""
+
+    with open(output_html, "w") as fid:
+        fid.write(message)
+
+if __name__ == '__main__':
+    template = load_mni152_template(resolution=1.00)
+
+    output_html(
+        template=template,
+        input_img=snakemake.input.images,
+        output_html=snakemake.output.html_fig,
     )
-
-    plot_args_ref = {"dim": 1}
-
-    display = plotting.plot_anat(
-        float_img,
-        display_mode="ortho",
-        draw_cross=False,
-        cut_coords=[0, 0, 40],
-        **plot_args_ref,
-    )
-
-    fg_svgs = [fromstring(extract_svg(display, 300))]
-    display.close()
-
-    display = plotting.plot_anat(
-        template,
-        display_mode="ortho",
-        draw_cross=False,
-        cut_coords=[0, 0, 40],
-        **plot_args_ref,
-    )
-
-    bg_svgs = [fromstring(extract_svg(display, 300))]
-    display.close()
-
-    final_svg = "\n".join(clean_svg(fg_svgs, bg_svgs))
-
-    anat_params = {
-        "vmin": float_img.get_fdata(dtype="float32").min(),
-        "vmax": float_img.get_fdata(dtype="float32").max(),
-        "cmap": plt.cm.gray,
-        "interpolation": "none",
-        "draw_cross": False,
-    }
-
-    display = plotting.plot_anat(float_img, **anat_params)
-    display.add_contours(template, colors="r", alpha=0.7, linewidths=0.8)
-
-    tmpfile = BytesIO()
-    display.savefig(tmpfile, dpi=300)
-    display.close()
-    tmpfile.seek(0)
-    encoded = base64.b64encode(tmpfile.getvalue())
-
-    html_list.append(
-        f"""
-            <center>
-                <h1 style="font-size:42px">{isub}</h1>
-                <p>{final_svg}</p>
-                <p><img src="data:image/png;base64, {encoded.decode("utf-8")}" width=1600 height=600></p>
-                <hr style="height:4px;border-width:0;color:black;background-color:black;margin:30px;">
-            </center>"""
-    )
-
-    print(f"Done {isub}")
-
-
-html_string = "".join(html_list)
-message = f"""<html>
-        <head></head>
-        <body>{html_string}</body>
-        </html>"""
-
-with open(snakemake.output.html_fig, "w") as fid:
-    fid.write(message)
