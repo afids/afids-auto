@@ -17,14 +17,14 @@ def compute_centroid(seg, affine, fid):
     return affine[:3, :3].dot(centroid) + affine[:3, 3]
 
 
-def main():
+def seg_to_csv(prob_seg, fcsv_template, fcsv_output):
     # Grab data and affine
-    prob_seg = nib.load(snakemake.input.seg)
+    prob_seg = nib.load(prob_seg)
     prob_seg_affine = prob_seg.affine
     prob_seg_data = prob_seg.get_fdata()
 
     # Read in fcsv template
-    with open(snakemake.input.fcsv_template, "r") as f:
+    with open(fcsv_template, "r") as f:
         fcsv = [line.strip() for line in f]
 
     # Loop over fiducials
@@ -39,9 +39,13 @@ def main():
         fcsv[line_idx] = fcsv[line_idx].replace(f"afid{fid}_z", str(centroid_mm[2]))
 
     # Write output fcsv
-    with open(snakemake.output.fcsv, "w") as f:
+    with open(fcsv_output, "w") as f:
         f.write("\n".join(line for line in fcsv))
 
 
 if __name__ == "__main__":
-    main()
+    seg_to_csv(
+        prob_seg=snakemake.input.seg,
+        fcsv_template=snakemake.input.fcsv_template,
+        fcsv_output=snakemake.output.fcsv,
+    )
