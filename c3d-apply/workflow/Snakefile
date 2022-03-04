@@ -97,8 +97,6 @@ rule align_template_rigid:
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
-################### ADDED CODE ############################
-### Gradients
 rule gen_grad_template:
     input:
         image=rules.align_template_rigid.output.warped,
@@ -146,11 +144,9 @@ rule gen_grad_template:
     shell:
         "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
-##################### END OF ADDED CODE #####################
-
 rule reg_qc:
     input:
-        images_ct=expand(
+        images=expand(
             rules.align_template_rigid.output.warped,
             zip,
             **config["input_zip_lists"]["t1w"],
@@ -209,6 +205,8 @@ rule threshold_prob:
             afid_num=range(1, 33),
             allow_missing=True,
         ),
+    params:
+        fcsv_tempalte=config['fcsv_template'],
     output:
         prob_combined=bids(
             root=join(config["output_dir"], "threshold_prob"),
@@ -218,22 +216,15 @@ rule threshold_prob:
             space=config["space"],
             **config["subj_wildcards"],
         ),
+        fcsv=expand(
+            bids(
+                root=join(config["output_dir"], "threshold_prob"),
+                datatype="anat",
+                suffix="{contrast}_T1_afids-auto_01.fcsv"
+                **config["subj_wildcards"]
+            ),
+            contrast=config["space"],
+            allow_missing=True
+        )
     script:
         './scripts/prob_thres.py'
-
-rule create_fcsv:
-    # MIGHT NEED TO BE FIXED, BUT STRUCTURE IS THERE
-    # TRIED TO MATCH AFIDS NAMING SCHEME
-    input:
-        seg=rules.threhsold_prob.output.prob_combined,
-        fcsv_template=config['fcsv_template']
-    output:
-        fcsv=bids(
-            root=join(config["output_dir"], "fcsv_out"),
-            datatype="anat",
-            suffix="{contrast}_T1_afids-auto_01.fcsv"
-            **config["subj_wildcards"]
-        ),
-        contrast=config["space"]
-    script:
-        './scripts/seg_to_fcsv.py'
