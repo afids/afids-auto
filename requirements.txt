@@ -1,8 +1,0 @@
-scikit-learn~=0.24
-nibabel~=3.2
-nilearn~=0.8
-joblib~=1.0
-pybids~=0.12
-hickle~=4.0
-snakemake~=7.0.1
-snakebids~=0.3
