@@ -41,6 +41,7 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
 
     # Load input image
     warped_img_obj = nib.load(input_image)
+    img_affine = warped_img_obj.affine
     img_data = warped_img_obj.get_fdata()
 
     # Instantiate segmentation volume
@@ -99,7 +100,7 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
                         np.mean(afid_prob_vol[labels == properties[icomp].label]),
                         properties[icomp].area,
                         properties[icomp].label,
-                        properties[icomp].weighted_centroid,
+                        properties[icomp].centroid_weighted,
                     ]
                 )
 
@@ -109,7 +110,7 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
             areaIdxs.sort(key=lambda x: x[1], reverse=True)
             afid_prob_vol_out[labels == areaIdxs[0][-2]] = afid_num
 
-        weighted_centroids.append(areaIdxs[0][-1])
+        weighted_centroids.append(img_affine[:3, :3].dot(areaIdxs[0][-1]) + img_affine[:3, 3])
 
         # Move onto next fiducial
         afid_num += 1
@@ -121,7 +122,7 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
     return weighted_centroids
 
 
-def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
+def seg_to_csv(weighted_centroids, fcsv_template, fcsv_output):
     # Read in fcsv template
     with open(fcsv_template, "r") as f:
         fcsv = [line.strip() for line in f]
@@ -136,13 +137,13 @@ def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
         fcsv[line_idx] = fcsv[line_idx].replace(f"afid{fid}_z", str(weighted_centroids[centroid_idx][2]))
 
     # Write output fcsv
-    with open(str(fcsv_output), "w") as f:
+    with open(fcsv_output, "w") as f:
         f.write("\n".join(line for line in fcsv))
 
 
 if __name__ == '__main__':
     weighted_centroids = seg_prob(
-        input_image=snakemake.input.warped_img,
+        input_img=snakemake.input.warped_img,
         prob_map=snakemake.input.prob_map,
         prob_combined=snakemake.output.prob_combined,
     )
