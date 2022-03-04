@@ -1,0 +1,15 @@
+{
+    "Name": "auto_afids - Automatically fit AFIDs to a T1w image.",
+    "BIDSVersion": "1.4.0",
+    "DatasetType": "derivative",
+    "GeneratedBy": [
+        {
+            "Name": "auto_afids",
+            "Version": "0.1.0",
+            "CodeURL": "http://github.com/tkkuehn/auto_afids",
+            "Author": "Daniel Cao",
+            "AuthorEmail": "tkuehn@uwo.ca"
+
+        }
+    ]
+}

@@ -5,9 +5,24 @@ from snakebids import bids
 
 import os
 from os.path import join
+import pandas as pd
 
 configfile: 'config/snakebids.yml'
 
+exclude_subs=[]
+df=pd.read_table(join(workflow.basedir, config['reg_issues']),sep='\t',header=0, dtype=str)
+if df[df['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
+    exclude_subs.extend(df[df['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list())
+
+df_test=pd.read_table(join(workflow.basedir, config['test_subs']),sep='\t',header=0, dtype=str)
+if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
+    exclude_subs.extend(df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list())
+
+config["exclude_participant_label"]=exclude_subs
+
+dataset_name=os.path.basename(str(config["bids_dir"]))
+
+exclude_subs=[]
 #writes inputs_config.yml and updates config dict
 config.update(
     snakebids.generate_inputs(
@@ -30,17 +45,19 @@ wildcard_constraints:  **snakebids.get_wildcard_constraints(\
 
 rule all:
     input:
-        expand(
-            bids(
-                root=join(config["output_dir"], "auto-afids-train"),
-                datatype="anat",
-                suffix="model.rf",
-                desc="afid{afid_num}",
-                space=config["space"],
-            ),
-            afid_num=[str(num).zfill(2) for num in range(1, 33)],
+        bids(
+            root=join(config["output_dir"], "auto-afids-train"),
+            suffix="model.rf",
+            space=config["space"],
         )
-
+        #bids(
+        #    root=join(config["output_dir"], "reg_aladin"),
+        #    session='train',
+        #    from_='subject',
+        #    to=config["space"],
+        #    desc='rigid',
+        #    suffix="regqc.html",
+        #),
 
 rule align_template_rigid:
     input:
@@ -49,6 +66,7 @@ rule align_template_rigid:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
             datatype="anat",
+            res="1mm",
             suffix="T1w.nii.gz",
             space=config["space"],
             **config["subj_wildcards"],
@@ -59,13 +77,63 @@ rule align_template_rigid:
             suffix="xfm.txt",
             space=config["space"],
             **config["subj_wildcards"],
-        ), 
+        ),
     params:
-        fixed = workflow.source_path(config['template']),
+        fixed = join(workflow.basedir, config['template']),
     container: config["singularity"]["neuroglia"]
     shell:
-        "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras} -speeeed"
+        "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
+################### ADDED CODE ############################
+### Gradients
+rule gen_grad_template:
+    input:
+        image=rules.align_template_rigid.output.warped,
+    output:
+        gradx=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['x'],
+            allow_missing=True,
+        ),
+        grady=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['y'],
+            allow_missing=True,
+        ),
+        gradz=expand(
+                bids(
+                root=join(config["output_dir"], "c3d_grad"),
+                datatype="anat",
+                res="1mm",
+                desc="grad{grad_dir}",
+                suffix="T1w.nii.gz",
+                space=config["space"],
+                **config["subj_wildcards"],
+            ),
+            grad_dir=['z'],
+            allow_missing=True,
+        ),
+    container: config["singularity"]["neuroglia"]
+    shell:
+        "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
+
+##################### END OF ADDED CODE #####################
 
 rule fid_tform_mni_rigid:
     input:
@@ -80,7 +148,6 @@ rule fid_tform_mni_rigid:
     params:
         template = workflow.source_path('../resources/dummy.fcsv'),
     output:
-        # Need to consider LPS
         fcsv_new=bids(
             root=join(config['output_dir'], 'tform_script'),
             suffix="afids.fcsv",
@@ -93,43 +160,26 @@ rule fid_tform_mni_rigid:
 
 rule rewrite_fcsv:
     input:
-        fcsv_new=bids(
-            root=join(config["output_dir"], "tform_script"),
+        fcsv_new=rules.fid_tform_mni_rigid.output.fcsv_new,
+    output:
+        landmarks=bids(
+            root=join(config["output_dir"], "fcsv_to_landmarks"),
             space=config["space"],
-            suffix="afids.fcsv",
+            suffix="landmarks.txt",
             **config["subj_wildcards"],
         ),
-    output:
-        afids_txt=expand(
-            bids(
-                root=join(config["output_dir"], "fcsv_to_landmarks"),
-                space=config["space"],
-                desc="afid{afid_num}",
-                suffix="landmarks.txt",
-                **config["subj_wildcards"],
-            ),
-            afid_num=[str(num).zfill(2) for num in range(1, 33)],
-            allow_missing=True,
-        )
     script:
         "./scripts/fcsv_to_landmarks.py"
 
 
 rule landmarks_to_spheres:
     input:
-        afids_txt=bids(
-            root=join(config["output_dir"], "fcsv_to_landmarks"),
-            space=config["space"],
-            desc="afid{afid_num}",
-            suffix="landmarks.txt",
-            **config["subj_wildcards"],
-        ),
+        afids_txt=rules.rewrite_fcsv.output.landmarks,
         warped=rules.align_template_rigid.output.warped,
     output:
         sphere=bids(
             root=join(config["output_dir"], "landmarks_to_spheres"),
             space=config["space"],
-            desc="afid{afid_num}",
             suffix="landmarks.nii.gz",
             **config["subj_wildcards"]
         )
@@ -137,32 +187,54 @@ rule landmarks_to_spheres:
         sphere_size=config["c3d"]["landmarks"]["sphere_size"],
     container: config["singularity"]["neuroglia"]
     shell:
-        "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} -o {output.sphere}"
+        "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} {params.sphere_size} -o {output.sphere}"
+
+
+#rule reg_qc:
+#    input:
+#        images_ct=expand(
+#            rules.align_template_rigid.output.warped,
+#            zip,
+#            **config["input_zip_lists"]["t1w"],
+#        ),
+#    output:
+#        html_fig=bids(
+#            root=join(config["output_dir"], "reg_aladin"),
+#            session='train',
+#            from_='subject',
+#            to=config["space"],
+#            desc='rigid',
+#            suffix="regqc.html",
+#        ),
+#    script:
+#        './scripts/reg_qc.py'
 
 
 rule train_c3d:
     input:
         images_warped=expand(
-            bids(
-               root=join(config["output_dir"], "reg_aladin"),
-               datatype="anat",
-               suffix="T1w.nii.gz",
-               space=config["space"],
-               **config["subj_wildcards"],
-            ),
+            rules.align_template_rigid.output.warped,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        images_gradx=expand(
+            rules.gen_grad_template.output.gradx,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        images_grady=expand(
+            rules.gen_grad_template.output.grady,
+            zip,
+            **config["input_zip_lists"]["t1w"],
+        ),
+        images_gradz=expand(
+            rules.gen_grad_template.output.gradz,
             zip,
             **config["input_zip_lists"]["t1w"],
         ),
         spheres=expand(
-            bids(
-                root=join(config["output_dir"], "landmarks_to_spheres"),
-                space=config["space"],
-                desc="afid{afid_num}",
-                suffix="landmarks.nii.gz",
-                **config["subj_wildcards"],
-            ),
+            rules.landmarks_to_spheres.output.sphere,
             zip,
-            allow_missing=True,
             **config["input_zip_lists"]["t1w"],
         ),
     params:
@@ -172,11 +244,15 @@ rule train_c3d:
     output:
         model=bids(
             root=join(config["output_dir"], "auto-afids-train"),
-            datatype="anat",
             suffix="model.rf",
-            desc="afid{afid_num}",
             space=config["space"],
         ),
     container: config["singularity"]["neuroglia"]
     shell:
-        'c4d -verbose {input.images_warped} -foreach -popas ALLMRI -endfor {input.spheres} -foreach -popas ALLSEG -endfor -rf-param-patch {params.patch} -push ALLMRI -push ALLSEG -rf-param-treedepth {params.treedepth} -rf-param-ntrees {params.ntrees} -rf-train {output.model}'
+        'c4d -verbose {input.images_warped} -tile w -popas ALLMRI \
+        {input.images_gradx} -tile w -popas ALLGRADX \
+        {input.images_grady} -tile w -popas ALLGRADY \
+        {input.images_gradz} -tile w -popas ALLGRADZ \
+        {input.spheres} -tile w -popas ALLSEG \
+        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} \
+        -push ALLMRI -push ALLGRADX -push ALLGRADY -push ALLGRADZ -push ALLSEG -rf-train {output.model}'
