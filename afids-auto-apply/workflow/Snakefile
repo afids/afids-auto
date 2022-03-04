@@ -206,7 +206,7 @@ rule threshold_prob:
             allow_missing=True,
         ),
     params:
-        fcsv_tempalte=config['fcsv_template'],
+        fcsv_template=join(workflow.basedir, config['fcsv_template']),
     output:
         prob_combined=bids(
             root=join(config["output_dir"], "threshold_prob"),
@@ -220,7 +220,7 @@ rule threshold_prob:
             bids(
                 root=join(config["output_dir"], "threshold_prob"),
                 datatype="anat",
-                suffix="{contrast}_T1_afids-auto_01.fcsv"
+                suffix="{contrast}_T1_afids-auto_01.fcsv",
                 **config["subj_wildcards"]
             ),
             contrast=config["space"],
