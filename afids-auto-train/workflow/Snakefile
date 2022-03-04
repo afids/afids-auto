@@ -84,8 +84,6 @@ rule align_template_rigid:
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
-################### ADDED CODE ############################
-### Gradients
 rule gen_grad_template:
     input:
         image=rules.align_template_rigid.output.warped,
@@ -132,8 +130,6 @@ rule gen_grad_template:
     container: config["singularity"]["neuroglia"]
     shell:
         "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
-
-##################### END OF ADDED CODE #####################
 
 rule fid_tform_mni_rigid:
     input:
@@ -254,5 +250,5 @@ rule train_c3d:
         {input.images_grady} -tile w -popas ALLGRADY \
         {input.images_gradz} -tile w -popas ALLGRADZ \
         {input.spheres} -tile w -popas ALLSEG \
-        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} \
+        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -rf-param-usexyz \
         -push ALLMRI -push ALLGRADX -push ALLGRADY -push ALLGRADZ -push ALLSEG -rf-train {output.model}'
