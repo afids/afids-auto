@@ -17,7 +17,7 @@ def compute_centroid(seg, affine, fid):
     return affine[:3, :3].dot(centroid) + affine[:3, 3]
 
 
-### MAIN ###
+## MAIN ##
 # Grab data and affine
 prob_seg = nib.load(snakemake.input.seg)
 prob_seg_affine = prob_seg.affine
@@ -33,9 +33,10 @@ for fid in range(1, 33):
     centroid_mm = compute_centroid(prob_seg_data, prob_seg_affine, fid)
 
     # Update fcsv, skipping header lines
-    fcsv[2 + fid] = fcsv[2 + fid].replace(f"afid{fid}_x", str(centroid_mm[0]))
-    fcsv[2 + fid] = fcsv[2 + fid].replace(f"afid{fid}_y", str(centroid_mm[1]))
-    fcsv[2 + fid] = fcsv[2 + fid].replace(f"afid{fid}_z", str(centroid_mm[2]))
+    line_idx = fid + 2
+    fcsv[line_idx] = fcsv[line_idx].replace(f"afid{fid}_x", str(centroid_mm[0]))
+    fcsv[line_idx] = fcsv[line_idx].replace(f"afid{fid}_y", str(centroid_mm[1]))
+    fcsv[line_idx] = fcsv[line_idx].replace(f"afid{fid}_z", str(centroid_mm[2]))
 
 # Write output fcsv
 with open(snakemake.output.fcsv, "w") as f:
