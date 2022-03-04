@@ -1,5 +1,5 @@
-bids_dir: /scratch/tkuehn/autoafids-input/OASIS
-output_dir: /scratch/tkuehn/autoafids-output/predict_model-clinical-c3d_input-OASIS
+bids_dir: /home/greydon/Documents/data/afids-auto/data/OASIS
+output_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301_noxyz
 debug: false
 derivatives: false
 analysis_levels: &id002
@@ -48,24 +48,26 @@ parse_args:
     default: false
     type: *id001
     nargs: +
+  --model_dir:
+    help: The directory where the trained model is located.
+    type: *id001
 singularity:
   neuroglia: /project/6050199/akhanf/singularity/bids-apps/khanlab_neuroglia-core_latest.sif
 c3d:
   model_params:
     patch: 3x3x3x0
-    treedepth: 50
-    ntrees: 200
+    treedepth: 40
+    ntrees: 500
   landmarks:
     sphere_size: 3
+reg_issues: ../../reg_issues.txt
+test_subs: ../../participants_testing.txt
 template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
 space: MNI152NLin2009cAsym
-snakemake_dir: /scratch/tkuehn/Auto-afids/c3d-apply
-snakefile: /scratch/tkuehn/Auto-afids/c3d-apply/workflow/Snakefile
+snakemake_dir: /home/greydon/Documents/GitHub/afids-auto/c3d-apply
+snakefile: /home/greydon/Documents/GitHub/afids-auto/c3d-apply/workflow/Snakefile
 snakemake_args:
-- --cores
-- --use-singularity
-- --config
-- model_dir=/scratch/tkuehn/autoafids-output/train-clinical-c3d/
+- -c4
 workflow_mode: false
 force_conversion: false
 retrofit: false
@@ -74,3 +76,4 @@ analysis_level: participant
 participant_label: null
 exclude_participant_label: null
 root: ''
+model_dir: /home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301_noxyz
