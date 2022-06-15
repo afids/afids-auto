@@ -16,7 +16,7 @@ scikit-image = "~0.18.2"
 flake8 = "^4.0"
 pytest-console-scripts = "^1.2"
 pytest = "^6.2"
-black = "^21.10b0"
+black = "^22.1"
 pylint = "^2.11"
 isort = "^5.10"
 poethepoet = "^0.10"
@@ -28,7 +28,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 setup = "pre-commit install"
-quality = { shell = "isort c3d_train/*.py && black c3d_train" }
+quality = { shell = "isort afids-auto-*/*.py && black afids-auto-*" }
 
 [tool.isort]
 profile = "black"
