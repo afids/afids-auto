@@ -9,11 +9,6 @@ import pandas as pd
 
 configfile: 'config/snakebids.yml'
 
-df_test=pd.read_table(join(workflow.basedir, config['test_subs']), sep='\t',header=0, dtype=str)
-if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
-    config["participant_label"]=df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list()
-
-
 #writes inputs_config.yml and updates config dict
 config.update(
     snakebids.generate_inputs(

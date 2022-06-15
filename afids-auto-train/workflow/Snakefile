@@ -9,20 +9,6 @@ import pandas as pd
 
 configfile: 'config/snakebids.yml'
 
-exclude_subs=[]
-df=pd.read_table(join(workflow.basedir, config['reg_issues']),sep='\t',header=0, dtype=str)
-if df[df['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
-    exclude_subs.extend(df[df['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list())
-
-df_test=pd.read_table(join(workflow.basedir, config['test_subs']),sep='\t',header=0, dtype=str)
-if df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))].shape[0]>0:
-    exclude_subs.extend(df_test[df_test['dataset']==os.path.basename(str(config["bids_dir"]))]['participant'].to_list())
-
-config["exclude_participant_label"]=exclude_subs
-
-dataset_name=os.path.basename(str(config["bids_dir"]))
-
-exclude_subs=[]
 #writes inputs_config.yml and updates config dict
 config.update(
     snakebids.generate_inputs(
