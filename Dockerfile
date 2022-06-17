@@ -39,6 +39,8 @@ FROM debian:bullseye AS requirements
 
 COPY --from=niftyreg /opt/niftyreg /opt/niftyreg
 COPY --from=c3d /opt/c3d /opt/c3d
+COPY ./poetry.lock /
+COPY ./pyproject.toml /
 ENV PATH=/opt/niftyreg/bin:/opt/c3d/bin:$PATH
 ENV LD_LIBRARY_PATH=/opt/niftyreg/lib:$LD_LIBRARY_PATH
 RUN apt-get update -qq \
@@ -51,13 +53,9 @@ RUN apt-get update -qq \
         python3-pip=20.3.4-4+deb11u1 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && pip install --prefer-binary --no-cache-dir \
-        snakebids==0.6.0 \
-        snakemake==7.8.0 \
-        numpy==1.22.4 \
-        pandas==1.4.2 \
-        nilearn==0.9.1 \
-        matplotlib==3.5.2 \
-        svgutils==0.3.4 \
+        poetry==1.1.13 \
+    && poetry config virtualenvs.create false \
+    && poetry install \
     && apt-get purge -y -q \
         g++ \
         python3.9-dev \
