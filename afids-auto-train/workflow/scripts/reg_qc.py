@@ -195,7 +195,6 @@ def output_html(template, input_img, output_html):
 
         print(f"Done {isub}")
 
-
     html_string = "".join(html_list)
     message = f"""<html>
             <head></head>
@@ -205,7 +204,8 @@ def output_html(template, input_img, output_html):
     with open(output_html, "w") as fid:
         fid.write(message)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     template = load_mni152_template(resolution=1.00)
 
     output_html(
