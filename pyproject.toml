@@ -6,10 +6,8 @@ authors = ["Daniel Cao, Tristan Kuehn, Greydon Gilmore, Jonathan Lau"]
 
 [tool.poetry.dependencies]
 python = ">=3.7.1, <3.10"
-snakemake = "~7.0.1"
-snakebids = "~0.4"
+snakebids = "~0.6.1"
 numpy = "~1.21"
-pybids = "~0.14"
 pandas = "~1.3"
 svgutils = "~0.3.4"
 scikit-image = "~0.18.2"
@@ -18,7 +16,7 @@ scikit-image = "~0.18.2"
 flake8 = "^4.0"
 pytest-console-scripts = "^1.2"
 pytest = "^6.2"
-black = "^21.10b0"
+black = "^22.1"
 pylint = "^2.11"
 isort = "^5.10"
 poethepoet = "^0.10"
@@ -30,7 +28,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 setup = "pre-commit install"
-quality = { shell = "isort c3d_train/*.py && black c3d_train" }
+quality = { shell = "isort afids-auto-*/*.py && black afids-auto-*" }
 
 [tool.isort]
 profile = "black"
