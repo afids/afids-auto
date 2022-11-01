@@ -10,17 +10,14 @@ import pandas as pd
 configfile: 'config/snakebids.yml'
 
 #writes inputs_config.yml and updates config dict
-config.update(
-    snakebids.generate_inputs(
-        bids_dir=config["bids_dir"],
-        pybids_inputs=config["pybids_inputs"],
-        derivatives=config["derivatives"],
-        participant_label=config["participant_label"],
-        exclude_participant_label=config["exclude_participant_label"]
-    )
+inputs = snakebids.generate_inputs(
+    bids_dir=config["bids_dir"],
+    pybids_inputs=config["pybids_inputs"],
+    derivatives=config["derivatives"],
+    participant_label=config["participant_label"],
+    exclude_participant_label=config["exclude_participant_label"],
+    use_bids_inputs=True,
 )
-
-
 
 #this adds constraints to the bids naming
 wildcard_constraints:  **snakebids.get_wildcard_constraints(\
@@ -47,7 +44,7 @@ rule all:
 
 rule align_template_rigid:
     input:
-        image=config["input_path"]["t1w"],
+        image=inputs["t1w"].input_path
     output:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
@@ -55,14 +52,14 @@ rule align_template_rigid:
             res="1mm",
             suffix="T1w.nii.gz",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
         xfm_ras=bids(
             root=join(config["output_dir"], "reg_aladin"),
             datatype="anat",
             suffix="xfm.txt",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards
         ),
     params:
         fixed = join(workflow.basedir, config['template']),
@@ -82,7 +79,7 @@ rule gen_grad_template:
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             grad_dir=['x'],
             allow_missing=True,
@@ -95,7 +92,7 @@ rule gen_grad_template:
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             grad_dir=['y'],
             allow_missing=True,
@@ -108,7 +105,7 @@ rule gen_grad_template:
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             grad_dir=['z'],
             allow_missing=True,
@@ -125,7 +122,7 @@ rule fid_tform_mni_rigid:
             space="T1w",
             desc="groundtruth",
             suffix="afids.fcsv",
-            **config["subj_wildcards"],
+            **inputs.subj_wildcards,
         ),
     params:
         template = workflow.source_path('../resources/dummy.fcsv'),
@@ -134,7 +131,7 @@ rule fid_tform_mni_rigid:
             root=join(config['output_dir'], 'tform_script'),
             suffix="afids.fcsv",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
     script:
         './scripts/tform_script.py'
@@ -148,7 +145,7 @@ rule rewrite_fcsv:
             root=join(config["output_dir"], "fcsv_to_landmarks"),
             space=config["space"],
             suffix="landmarks.txt",
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
     script:
         "./scripts/fcsv_to_landmarks.py"
@@ -163,7 +160,7 @@ rule landmarks_to_spheres:
             root=join(config["output_dir"], "landmarks_to_spheres"),
             space=config["space"],
             suffix="landmarks.nii.gz",
-            **config["subj_wildcards"]
+            **inputs["t1w"].input_wildcards
         )
     params:
         sphere_size=config["c3d"]["landmarks"]["sphere_size"],
@@ -197,27 +194,27 @@ rule train_c3d:
         images_warped=expand(
             rules.align_template_rigid.output.warped,
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
         images_gradx=expand(
             rules.gen_grad_template.output.gradx,
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
         images_grady=expand(
             rules.gen_grad_template.output.grady,
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
         images_gradz=expand(
             rules.gen_grad_template.output.gradz,
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
         spheres=expand(
             rules.landmarks_to_spheres.output.sphere,
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
     params:
         patch=config["c3d"]["model_params"]["patch"],
