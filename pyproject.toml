@@ -15,7 +15,7 @@ scikit-image = "~0.18.2"
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0"
 pytest-console-scripts = "^1.2"
-pytest = "^6.2"
+pytest = "^7.2"
 black = "^22.1"
 pylint = "^2.11"
 isort = "^5.10"
