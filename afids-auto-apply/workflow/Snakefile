@@ -10,14 +10,13 @@ import pandas as pd
 configfile: 'config/snakebids.yml'
 
 #writes inputs_config.yml and updates config dict
-config.update(
-    snakebids.generate_inputs(
-        bids_dir=config["bids_dir"],
-        pybids_inputs=config["pybids_inputs"],
-        derivatives=config["derivatives"],
-        participant_label=config["participant_label"],
-        exclude_participant_label=config["exclude_participant_label"]
-    )
+inputs = snakebids.generate_inputs(
+    bids_dir=config["bids_dir"],
+    pybids_inputs=config["pybids_inputs"],
+    derivatives=config["derivatives"],
+    participant_label=config["participant_label"],
+    exclude_participant_label=config["exclude_participant_label"],
+    use_bids_inputs=True,
 )
 
 
@@ -38,21 +37,13 @@ rule all:
                     space=config["space"],
                     suffix="probs.nii.gz",
                     desc="afid{afid_num}",
-                    **config["subj_wildcards"],
+                    **inputs["t1w"].input_wildcards,
                 ),
                 afid_num=range(1, 33),
                 allow_missing=True,
             ),
             zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-        bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            session='test',
-            from_='subject',
-            to=config["space"],
-            desc='rigid',
-            suffix="regqc.html",
+            **inputs["t1w"].input_zip_lists,
         ),
         expand(
             bids(
@@ -61,15 +52,15 @@ rule all:
                 res="1mm",
                 suffix="probs.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
 
 rule align_template_rigid:
     input:
-        image=config["input_path"]["t1w"],
+        image=inputs["t1w"].input_path,
     output:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
@@ -77,14 +68,14 @@ rule align_template_rigid:
             res="1mm",
             suffix="T1w.nii.gz",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
         xfm_ras=bids(
             root=join(config["output_dir"], "reg_aladin"),
             datatype="anat",
             suffix="xfm.txt",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
     params:
         fixed = join(workflow.basedir, config['template']),
@@ -104,7 +95,7 @@ rule gen_grad_template:
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             grad_dir=['x'],
             allow_missing=True,
@@ -117,7 +108,7 @@ rule gen_grad_template:
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             grad_dir=['y'],
             allow_missing=True,
@@ -130,7 +121,7 @@ rule gen_grad_template:
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             grad_dir=['z'],
             allow_missing=True,
@@ -144,7 +135,7 @@ rule reg_qc:
         images=expand(
             rules.align_template_rigid.output.warped,
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
     output:
         html_fig=bids(
@@ -177,7 +168,7 @@ rule apply_model:
                     space=config["space"],
                     suffix="probs.nii.gz",
                     desc="afid{afid_num}",
-                    **config["subj_wildcards"],
+                    **inputs["t1w"].input_wildcards,
                 ),
             afid_num=range(1, 33),
             allow_missing=True,
@@ -195,7 +186,7 @@ rule threshold_prob:
                     space=config["space"],
                     suffix="probs.nii.gz",
                     desc="afid{afid_num}",
-                    **config["subj_wildcards"],
+                    **inputs["t1w"].input_wildcards,
                 ),
             afid_num=range(1, 33),
             allow_missing=True,
@@ -209,14 +200,14 @@ rule threshold_prob:
             res="1mm",
             suffix="probs.nii.gz",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
         fcsv=expand(
             bids(
                 root=join(config["output_dir"], "threshold_prob"),
                 datatype="anat",
                 suffix="{contrast}_T1_afids-auto_01.fcsv",
-                **config["subj_wildcards"]
+                **inputs["t1w"].input_wildcards,
             ),
             contrast=config["space"],
             allow_missing=True
