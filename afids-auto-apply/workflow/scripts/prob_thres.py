@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 import re
 
 import nibabel as nib
 import numpy as np
 from skimage import measure
+
+
+logger = logging.getLogger(__name__)
 
 
 def sorted_nicely(lst):
@@ -16,29 +20,11 @@ def sorted_nicely(lst):
     return sorted_lst
 
 
-def seg_prob(input_image, prob_map, prob_combined, debug=False):
-    # Debug mode
-    if debug:
-
-        class dotdict(dict):
-            """dot.notation access to dictionary attributes"""
-
-            __getattr__ = dict.get
-            __setattr__ = dict.__setitem__
-            __delattr__ = dict.__delitem__
-
-        class Namespace:
-            def __init__(self, **kwargs):
-                self.__dict__.update(kwargs)
-
-        input = dotdict(
-            {
-                "probs": "/home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301/c3d_rf-apply/sub-0249/*_probs.nii.gz",
-                "image": "/home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301/reg_aladin/sub-0249/anat/sub-0249_space-MNI152NLin2009cAsym_res-1mm_T1w.nii.gz",
-            }
-        )
-        snakemake = Namespace(input=input)
-
+def seg_prob(
+    input_image,
+    prob_map,
+    prob_combined,
+):
     # Load input image
     warped_img_obj = nib.load(input_image)
     img_affine = warped_img_obj.affine
@@ -50,6 +36,7 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
     afid_num = 1
     weighted_centroids = []
     for iprob in sorted_nicely(prob_map):
+        logger.info("Handling afid %s", afid_num)
         # load up afid probability
         afid_prob_obj = nib.load(iprob)
         afid_prob_vol = afid_prob_obj.get_fdata().squeeze(3)
@@ -72,8 +59,7 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
             minThreshold = hist_x[
                 hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)][0]
             ]
-
-        minThreshold = minThreshold + 0.1
+        minThreshold += 0.1
 
         afid_prob_vol[afid_prob_vol < minThreshold] = 0
         afid_prob_vol_binary = afid_prob_vol > 0
@@ -83,34 +69,43 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
         )
 
         # find connected components remaining weighted by probability
-        properties = measure.regionprops(
-            label_image=labels, intensity_image=afid_prob_vol
-        )
-        properties.sort(key=lambda x: x.area, reverse=True)
-        areas = np.array([prop.area for prop in properties])
+        regions = measure.regionprops(label_image=labels, intensity_image=afid_prob_vol)
+        regions.sort(key=lambda x: x.area, reverse=True)
+        areas = np.array([region.area for region in regions])
+        logger.info("CC areas: %s", areas)
 
-        # extract any component with an area less than 100
-        areaIdxs = []
-        for icomp in range(len(areas)):
-            if properties[icomp].area < 100:
-                areaIdxs.append(
-                    [
-                        icomp,
-                        np.mean(afid_prob_vol[labels == properties[icomp].label]),
-                        properties[icomp].area,
-                        properties[icomp].label,
-                        properties[icomp].weighted_centroid,
-                    ]
+        area_idxs = []
+        for idx, region in enumerate(regions):
+            if region.area > 100:
+                logger.warning(
+                    "Using a region with an unusually large area (%s)", region.area
                 )
+            area_idxs.append(
+                [
+                    idx,
+                    np.mean(afid_prob_vol[labels == region.label]),
+                    region.area,
+                    region.label,
+                    region.weighted_centroid,
+                ]
+            )
+
+        if not area_idxs:
+            logger.warning("No appropriate region found for AFID %s", afid_num)
+            raise ValueError(
+                f"No appropriate region found for AFID {afid_num} in image "
+                f"{iprob}.\n"
+                "Areas:\n"
+                f"{areas}"
+            )
 
         # sort the candidate components based on mean probability value of area
         # take the component with highest mean
-        if areaIdxs:
-            areaIdxs.sort(key=lambda x: x[1], reverse=True)
-            afid_prob_vol_out[labels == areaIdxs[0][-2]] = afid_num
+        area_idxs.sort(key=lambda x: x[1], reverse=True)
+        afid_prob_vol_out[labels == area_idxs[0][-2]] = afid_num
 
         weighted_centroids.append(
-            img_affine[:3, :3].dot(areaIdxs[0][-1]) + img_affine[:3, 3]
+            img_affine[:3, :3].dot(area_idxs[0][-1]) + img_affine[:3, 3]
         )
 
         # Move onto next fiducial
