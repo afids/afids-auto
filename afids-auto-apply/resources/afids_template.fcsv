@@ -23,10 +23,10 @@
 20,afid20_x,afid20_y,afid20_z,0,0,0,1,1,1,1,20,Splenium of CC,vtkMRMLScalarVolumeNode1
 21,afid21_x,afid21_y,afid21_z,0,0,0,1,1,1,1,21,R AL temporal horn,vtkMRMLScalarVolumeNode1
 22,afid22_x,afid22_y,afid22_z,0,0,0,1,1,1,1,22,L AL temporal horn,vtkMRMLScalarVolumeNode1
-23,afid23_x,afid23_y,afid23_z,0,0,0,1,1,1,1,25,R inferior AM temporal horn,vtkMRMLScalarVolumeNode1
-24,afid24_x,afid24_y,afid24_z,0,0,0,1,1,1,1,26,L inferior AM temporal horn,vtkMRMLScalarVolumeNode1
-25,afid25_x,afid25_y,afid25_z,0,0,0,1,1,1,1,23,R superior AM temporal horn,vtkMRMLScalarVolumeNode1
-26,afid26_x,afid26_y,afid26_z,0,0,0,1,1,1,1,24,L superior AM temporal horn,vtkMRMLScalarVolumeNode1
+23,afid23_x,afid23_y,afid23_z,0,0,0,1,1,1,1,23,R superior AM temporal horn,vtkMRMLScalarVolumeNode1
+24,afid24_x,afid24_y,afid24_z,0,0,0,1,1,1,1,24,L superior AM temporal horn,vtkMRMLScalarVolumeNode1
+25,afid25_x,afid25_y,afid25_z,0,0,0,1,1,1,1,25,R inferior AM temporal horn,vtkMRMLScalarVolumeNode1
+26,afid26_x,afid26_y,afid26_z,0,0,0,1,1,1,1,26,L inferior AM temporal horn,vtkMRMLScalarVolumeNode1
 27,afid27_x,afid27_y,afid27_z,0,0,0,1,1,1,1,27,R indusium griseum origin,vtkMRMLScalarVolumeNode1
 28,afid28_x,afid28_y,afid28_z,0,0,0,1,1,1,1,28,L indusium griseum origin,vtkMRMLScalarVolumeNode1
 29,afid29_x,afid29_y,afid29_z,0,0,0,1,1,1,1,29,R ventral occipital horn,vtkMRMLScalarVolumeNode1
