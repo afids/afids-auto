@@ -220,6 +220,7 @@ rule train_c3d:
         patch=config["c3d"]["model_params"]["patch"],
         treedepth=config["c3d"]["model_params"]["treedepth"],
         ntrees=config["c3d"]["model_params"]["ntrees"],
+        usexyz="-rf-param-usexyz" if config["c3d"]["model_params"]["usexyz"] else ""
     output:
         model=bids(
             root=join(config["output_dir"], "auto-afids-train"),
@@ -233,5 +234,6 @@ rule train_c3d:
         {input.images_grady} -tile w -popas ALLGRADY \
         {input.images_gradz} -tile w -popas ALLGRADZ \
         {input.spheres} -tile w -popas ALLSEG \
-        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} -rf-param-usexyz \
+        -rf-param-patch {params.patch} -rf-param-ntrees {params.ntrees} {params.usexyz} \
+        -rf-param-treedepth {params.treedepth} \
         -push ALLMRI -push ALLGRADX -push ALLGRADY -push ALLGRADZ -push ALLSEG -rf-train {output.model}'

@@ -85,6 +85,7 @@ c3d:
     patch: 3x3x3x0
     treedepth: 40
     ntrees: 500
+    usexyz: true
   landmarks:
     sphere_size: 3
 
