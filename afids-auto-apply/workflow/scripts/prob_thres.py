@@ -41,27 +41,9 @@ def seg_prob(
         afid_prob_obj = nib.load(iprob)
         afid_prob_vol = afid_prob_obj.get_fdata().squeeze(3)
 
-        # dynamically set using cumulative density
-        hist_y, hist_x = np.histogram(afid_prob_vol.flatten(), bins=100)
-        hist_x = hist_x[0:-1]
-        cumHist_y = np.cumsum(hist_y.astype(float)) / np.prod(
-            np.array(afid_prob_vol.shape)
-        )
+        threshold = np.percentile(afid_prob_vol, 90)
 
-        # The background should contain half of the voxels
-        # Currently uses 90th percentile, can be tuned
-        minThreshold_byCount = hist_x[np.where(cumHist_y > 0.9)[0][0]]
-        hist_diff = np.diff(hist_y)
-        hist_diff_zc = np.where(np.diff(np.sign(hist_diff)) == -2)[0].flatten()
-        if len(hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)]) == 0:
-            minThreshold = hist_x[hist_diff_zc][-1]
-        else:
-            minThreshold = hist_x[
-                hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)][0]
-            ]
-        minThreshold += 0.1
-
-        afid_prob_vol[afid_prob_vol < minThreshold] = 0
+        afid_prob_vol[afid_prob_vol < threshold] = 0
         afid_prob_vol_binary = afid_prob_vol > 0
 
         labels, _ = measure.label(
