@@ -41,7 +41,7 @@ def seg_prob(
         afid_prob_obj = nib.load(iprob)
         afid_prob_vol = afid_prob_obj.get_fdata().squeeze(3)
 
-        threshold = np.percentile(afid_prob_vol, 90)
+        threshold = np.max(afid_prob_vol, 99.9)
 
         afid_prob_vol[afid_prob_vol < threshold] = 0
         afid_prob_vol_binary = afid_prob_vol > 0
