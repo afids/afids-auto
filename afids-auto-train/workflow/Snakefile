@@ -42,9 +42,37 @@ rule all:
         #    suffix="regqc.html",
         #),
 
+rule skull_strip: 
+    input: 
+    	brainskull = inputs["t1w"].input_path,
+    output: 
+        brain=expand(
+                bids(
+                root=join(config["output_dir"], "skull_striped"),
+                datatype="anat",
+                res="native",
+                suffix="T1w.nii.gz",
+                desc="synthstrip"
+                space=config["space"],
+                **inputs["t1w"].input_wildcards,
+            ),
+        mask=expand(
+                bids(
+                root=join(config["output_dir"], "skull_striped"),
+                datatype="anat",
+                res="native",
+                suffix="brainmask.nii.gz",
+                desc="synthstrip"
+                space=config["space"],
+                **inputs["t1w"].input_wildcards,
+            ),
+    container: config["singularity"]["synthstrip"]
+    shell:
+        "mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
+    
 rule align_template_rigid:
     input:
-        image=inputs["t1w"].input_path
+        image=rules.skull_strip.output.brain,
     output:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
@@ -67,10 +95,27 @@ rule align_template_rigid:
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
+rule normalize: 
+    input:
+        im=rules.align_template_rigid.output.warped,
+    output:
+        im_norm=bids(
+            root=join(config["output_dir"], "normalized"),
+            datatype="anat",
+            res="1mm",
+            suffix="normT1w.nii.gz",
+            space=config["space"],
+            **inputs["t1w"].input_wildcards,
+        ),
+    script:
+        "./scripts/normalization_script.py"
+
+
+
 rule gen_grad_template:
     input:
-        image=rules.align_template_rigid.output.warped,
-    output:
+        image=rules.normalize.outputs.im_norm,
+    output:Z
         gradx=expand(
                 bids(
                 root=join(config["output_dir"], "c3d_grad"),

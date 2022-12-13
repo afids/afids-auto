@@ -79,6 +79,7 @@ parse_args:
 
 singularity:
   neuroglia: docker://khanlab/neuroglia-core:latest
+  synthstrip: "intser_here"
 
 c3d:
   model_params:
