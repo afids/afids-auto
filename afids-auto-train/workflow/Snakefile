@@ -46,23 +46,21 @@ rule skull_strip:
     input: 
     	brainskull = inputs["t1w"].input_path,
     output: 
-        brain=expand(
-                bids(
+        brain= bids(
                 root=join(config["output_dir"], "skull_stripped"),
                 datatype="anat",
                 res="native",
                 suffix="T1w.nii.gz",
-                desc="synthstrip"
+                desc="synthstrip",
                 space=config["space"],
                 **inputs["t1w"].input_wildcards,
             ),
-        mask=expand(
-                bids(
+        mask=   bids(
                 root=join(config["output_dir"], "skull_stripped"),
                 datatype="anat",
                 res="native",
                 suffix="mask.nii.gz",
-                desc="synthstripbrain"
+                desc="synthstripbrain",
                 space=config["space"],
                 **inputs["t1w"].input_wildcards,
             ),
@@ -104,7 +102,7 @@ rule normalize:
             datatype="anat",
             res="1mm",
             suffix="T1w.nii.gz",
-            desc="synthstripnorm"
+            desc="synthstripnorm",
             space=config["space"],
             **inputs["t1w"].input_wildcards,
         ),
@@ -115,8 +113,8 @@ rule normalize:
 
 rule gen_grad_template:
     input:
-        image=rules.normalize.outputs.im_norm,
-    output:Z
+        image=rules.normalize.output.im_norm,
+    output:
         gradx=expand(
                 bids(
                 root=join(config["output_dir"], "c3d_grad"),
