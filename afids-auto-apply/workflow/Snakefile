@@ -7,9 +7,7 @@ import os
 from os.path import join
 import pandas as pd
 
-
 configfile: "config/snakebids.yml"
-
 
 # writes inputs_config.yml and updates config dict
 inputs = snakebids.generate_inputs(
@@ -60,10 +58,36 @@ rule all:
             **inputs["t1w"].input_zip_lists,
         ),
 
-
+rule skull_strip: 
+    input: 
+    	brainskull = inputs["t1w"].input_path,
+    output: 
+        brain= bids(
+                root=join(config["output_dir"], "skull_stripped"),
+                datatype="anat",
+                res="native",
+                suffix="T1w.nii.gz",
+                desc="synthstrip",
+                space=config["space"],
+                **inputs["t1w"].input_wildcards,
+            ),
+        mask=   bids(
+                root=join(config["output_dir"], "skull_stripped"),
+                datatype="anat",
+                res="native",
+                suffix="mask.nii.gz",
+                desc="synthstripbrain",
+                space=config["space"],
+                **inputs["t1w"].input_wildcards,
+            ),
+    container: config["singularity"]["synthstrip"]
+    shell:
+        "mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
+        
+        
 rule align_template_rigid:
     input:
-        image=inputs["t1w"].input_path,
+        image=rules.skull_strip.output.brain,
     output:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
@@ -86,6 +110,22 @@ rule align_template_rigid:
         config["singularity"]["neuroglia"]
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
+
+rule normalize: 
+    input:
+        im=rules.align_template_rigid.output.warped,
+    output:
+        im_norm=bids(
+            root=join(config["output_dir"], "normalized"),
+            datatype="anat",
+            res="1mm",
+            suffix="T1w.nii.gz",
+            desc="synthstripnorm",
+            space=config["space"],
+            **inputs["t1w"].input_wildcards,
+        ),
+    script:
+        "./scripts/normalization_script.py"
 
 
 rule gen_grad_template:
