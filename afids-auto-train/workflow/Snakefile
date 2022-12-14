@@ -48,7 +48,7 @@ rule skull_strip:
     output: 
         brain=expand(
                 bids(
-                root=join(config["output_dir"], "skull_striped"),
+                root=join(config["output_dir"], "skull_stripped"),
                 datatype="anat",
                 res="native",
                 suffix="T1w.nii.gz",
@@ -58,11 +58,11 @@ rule skull_strip:
             ),
         mask=expand(
                 bids(
-                root=join(config["output_dir"], "skull_striped"),
+                root=join(config["output_dir"], "skull_stripped"),
                 datatype="anat",
                 res="native",
-                suffix="brainmask.nii.gz",
-                desc="synthstrip"
+                suffix="mask.nii.gz",
+                desc="synthstripbrain"
                 space=config["space"],
                 **inputs["t1w"].input_wildcards,
             ),
@@ -103,7 +103,8 @@ rule normalize:
             root=join(config["output_dir"], "normalized"),
             datatype="anat",
             res="1mm",
-            suffix="normT1w.nii.gz",
+            suffix="T1w.nii.gz",
+            desc="synthstripnorm"
             space=config["space"],
             **inputs["t1w"].input_wildcards,
         ),
