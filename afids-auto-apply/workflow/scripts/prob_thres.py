@@ -6,6 +6,7 @@ import re
 
 import nibabel as nib
 import numpy as np
+from numpy.typing import ArrayLike
 from skimage import measure
 
 
@@ -13,11 +14,58 @@ logger = logging.getLogger(__name__)
 
 
 def sorted_nicely(lst):
-    convert = lambda text: int(text) if text.isdigit() else text
-    alphanum_key = lambda key: [convert(c) for c in re.split("([0-9]+)", key)]
+    def convert(text):
+        return int(text) if text.isdigit() else text
+
+    def alphanum_key(key):
+        return [convert(c) for c in re.split("([0-9]+)", key)]
+
     sorted_lst = sorted(lst, key=alphanum_key)
 
     return sorted_lst
+
+
+def localize_afid(afid_prob_vol: ArrayLike):
+    threshold = np.max(afid_prob_vol, 99.9)
+
+    afid_prob_vol[afid_prob_vol < threshold] = 0
+    afid_prob_vol_binary = afid_prob_vol > 0
+
+    labels, _ = measure.label(
+        afid_prob_vol_binary.astype(int), background=0, return_num=True
+    )
+
+    # find connected components remaining weighted by probability
+    regions = measure.regionprops(label_image=labels, intensity_image=afid_prob_vol)
+    regions.sort(key=lambda x: x.area, reverse=True)
+
+    area_idxs = []
+    dropped_regions = 0
+    for idx, region in enumerate(regions):
+        if region.area > 100:
+            logger.warning(
+                "Using a region with an unusually large area (%s)", region.area
+            )
+        elif region.area <= 5:
+            continue
+        area_idxs.append(
+            [
+                idx,
+                np.mean(afid_prob_vol[labels == region.label]),
+                region.area,
+                region.label,
+                region.weighted_centroid,
+            ]
+        )
+    logger.info("Dropped %s regions with area <= 5", dropped_regions)
+
+    if not area_idxs:
+        logger.warning("No appropriate region found.")
+        raise ValueError("No appropriate region found.")
+
+    # sort the candidate components based on mean probability value of area
+    # take the component with highest mean
+    return max(area_idxs, key=lambda x: x[1]), labels
 
 
 def seg_prob(
@@ -40,54 +88,20 @@ def seg_prob(
         # load up afid probability
         afid_prob_obj = nib.load(iprob)
         afid_prob_vol = afid_prob_obj.get_fdata().squeeze(3)
-
-        threshold = np.max(afid_prob_vol, 99.9)
-
-        afid_prob_vol[afid_prob_vol < threshold] = 0
-        afid_prob_vol_binary = afid_prob_vol > 0
-
-        labels, _ = measure.label(
-            afid_prob_vol_binary.astype(int), background=0, return_num=True
-        )
-
-        # find connected components remaining weighted by probability
-        regions = measure.regionprops(label_image=labels, intensity_image=afid_prob_vol)
-        regions.sort(key=lambda x: x.area, reverse=True)
-        areas = np.array([region.area for region in regions])
-        logger.info("CC areas: %s", areas)
-
-        area_idxs = []
-        for idx, region in enumerate(regions):
-            if region.area > 100:
-                logger.warning(
-                    "Using a region with an unusually large area (%s)", region.area
-                )
-            area_idxs.append(
-                [
-                    idx,
-                    np.mean(afid_prob_vol[labels == region.label]),
-                    region.area,
-                    region.label,
-                    region.weighted_centroid,
-                ]
-            )
-
-        if not area_idxs:
+        try:
+            afid_info, labels = localize_afid(afid_prob_vol)
+        except ValueError as err:
             logger.warning("No appropriate region found for AFID %s", afid_num)
             raise ValueError(
-                f"No appropriate region found for AFID {afid_num} in image "
-                f"{iprob}.\n"
-                "Areas:\n"
-                f"{areas}"
-            )
+                f"No appropriate region found for AFID {afid_num} in image " f"{iprob}"
+            ) from err
 
         # sort the candidate components based on mean probability value of area
         # take the component with highest mean
-        area_idxs.sort(key=lambda x: x[1], reverse=True)
-        afid_prob_vol_out[labels == area_idxs[0][-2]] = afid_num
+        afid_prob_vol_out[labels == afid_info[-2]] = afid_num
 
         weighted_centroids.append(
-            img_affine[:3, :3].dot(area_idxs[0][-1]) + img_affine[:3, 3]
+            img_affine[:3, :3].dot(afid_info[-1]) + img_affine[:3, 3]
         )
 
         # Move onto next fiducial
@@ -102,8 +116,8 @@ def seg_prob(
 
 def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
     # Read in fcsv template
-    with open(fcsv_template, "r") as f:
-        fcsv = [line.strip() for line in f]
+    with open(fcsv_template, "r", encoding="utf-8") as file_:
+        fcsv = [line.strip() for line in file_]
 
     # Loop over fiducials
     for fid in range(1, 33):
@@ -121,8 +135,8 @@ def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
         )
 
     # Write output fcsv
-    with open(fcsv_output, "w") as f:
-        f.write("\n".join(line for line in fcsv))
+    with open(fcsv_output, "w", encoding="utf-8") as file_:
+        file_.write("\n".join(line for line in fcsv))
 
 
 if __name__ == "__main__":
