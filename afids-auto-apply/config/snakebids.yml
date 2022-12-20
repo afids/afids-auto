@@ -99,7 +99,8 @@ space: MNI152NLin2009cAsym
 
 
 singularity:
-  neuroglia: docker://khanlab/neuroglia-core:latest 
+  neuroglia: /project/6050199/akhanf/singularity/bids-apps/khanlab_neuroglia-core_latest.sif
+  synthstrip: /scratch/tkuehn/synthstrip.sif
 c3d:
   model_params:
     patch: 3x3x3x0
@@ -108,7 +109,7 @@ c3d:
   landmarks:
     sphere_size: 3
 
-template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+template: ../resources/tpl-MNI152NLin2009cAsym_res-01_T1w.nii.gz
 space: MNI152NLin2009cAsym
 fcsv_template: ../resources/afids_template.fcsv
 

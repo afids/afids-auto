@@ -27,7 +27,7 @@ wildcard_constraints:
 
 # ---- end snakebids boilerplate ------------------------------------------------
 
-
+localrules: all
 rule all:
     input:
         expand(
@@ -58,6 +58,7 @@ rule all:
             **inputs["t1w"].input_zip_lists,
         ),
 
+localrules: skull_strip
 rule skull_strip: 
     input: 
     	brainskull = inputs["t1w"].input_path,
@@ -71,7 +72,7 @@ rule skull_strip:
                 space=config["space"],
                 **inputs["t1w"].input_wildcards,
             ),
-        mask=   bids(
+        mask=bids(
                 root=join(config["output_dir"], "skull_stripped"),
                 datatype="anat",
                 res="native",
@@ -81,10 +82,14 @@ rule skull_strip:
                 **inputs["t1w"].input_wildcards,
             ),
     container: config["singularity"]["synthstrip"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
-        "mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
+        "python3 /freesurfer/mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
         
         
+localrules: align_template_rigid
 rule align_template_rigid:
     input:
         image=rules.skull_strip.output.brain,
@@ -108,9 +113,34 @@ rule align_template_rigid:
         fixed=join(workflow.basedir, config["template"]),
     container:
         config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
+localrules: xfm_mask
+rule xfm_mask:
+    input:
+        image=rules.align_template_rigid.output.warped,
+        xfm=rules.align_template_rigid.output.xfm_ras,
+        mask=rules.skull_strip.output.mask,
+    output:
+        mask_warped=bids(
+            root=join(config["output_dir"], "skull_stripped"),
+            datatype="anat",
+            res="1mm",
+            suffix="mask.nii.gz",
+            desc="synthstripbrain",
+            space=config["space"],
+            **inputs["t1w"].input_wildcards,
+        )
+    container:
+        config["singularity"]["neuroglia"]
+    shell:
+        "c3d {input.image} {input.mask} -reslice-matrix {input.xfm} -o {output.mask_warped}"
+
+localrules: normalize
 rule normalize: 
     input:
         im=rules.align_template_rigid.output.warped,
@@ -124,13 +154,17 @@ rule normalize:
             space=config["space"],
             **inputs["t1w"].input_wildcards,
         ),
+    resources:
+        mem_mb=8000,
+        local_cores=1
     script:
         "./scripts/normalization_script.py"
 
 
+localrules: gen_grad_template
 rule gen_grad_template:
     input:
-        image=rules.align_template_rigid.output.warped,
+        image=rules.normalize.output.im_norm,
     output:
         gradx=expand(
             bids(
@@ -173,33 +207,36 @@ rule gen_grad_template:
         ),
     container:
         config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
 
-rule reg_qc:
-    input:
-        images=expand(
-            rules.align_template_rigid.output.warped,
-            zip,
-            **inputs["t1w"].input_zip_lists,
-        ),
-    output:
-        html_fig=bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            session="test",
-            from_="subject",
-            to=config["space"],
-            desc="rigid",
-            suffix="regqc.html",
-        ),
-    script:
-        "./scripts/reg_qc.py"
+#rule reg_qc:
+#    input:
+#        images=expand(
+#            rules.align_template_rigid.output.warped,
+#            zip,
+#            **inputs["t1w"].input_zip_lists,
+#        ),
+#    output:
+#        html_fig=bids(
+#            root=join(config["output_dir"], "reg_aladin"),
+#            session="test",
+#            from_="subject",
+#            to=config["space"],
+#            desc="rigid",
+#            suffix="regqc.html",
+#        ),
+#    script:
+#        "./scripts/reg_qc.py"
 
 
 rule apply_model:
     input:
-        image=rules.align_template_rigid.output.warped,
+        image=rules.normalize.output.im_norm,
         gradx=rules.gen_grad_template.output.gradx,
         grady=rules.gen_grad_template.output.grady,
         gradz=rules.gen_grad_template.output.gradz,
@@ -222,6 +259,11 @@ rule apply_model:
         ),
     container:
         config["singularity"]["neuroglia"]
+    group: "application"
+    resources:
+        mem_mb=32000,
+        time=159
+    threads: 1
     shell:
         "c4d -verbose {input.image} {input.gradx} {input.grady} {input.gradz} -rf-apply {input.model} -oo {output.prob_map}"
 
@@ -229,6 +271,7 @@ rule apply_model:
 rule threshold_prob:
     input:
         warped_img=rules.align_template_rigid.output.warped,
+        mask=rules.xfm_mask.output.mask_warped,
         prob_map=expand(
             bids(
                 root=join(config["output_dir"], "c3d_rf-apply"),
@@ -258,5 +301,10 @@ rule threshold_prob:
             suffix="afids.fcsv",
             **inputs["t1w"].input_wildcards,
         ),
+    group: "application"
+    resources:
+        mem_mb=8000,
+        time=20
+    threads: 1
     script:
         "./scripts/prob_thres.py"

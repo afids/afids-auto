@@ -26,6 +26,7 @@ wildcard_constraints:  **snakebids.get_wildcard_constraints(\
 
 #---- end snakebids boilerplate ------------------------------------------------
 
+localrules: all
 rule all:
     input:
         bids(
@@ -42,6 +43,7 @@ rule all:
         #    suffix="regqc.html",
         #),
 
+localrules: skull_strip
 rule skull_strip: 
     input: 
     	brainskull = inputs["t1w"].input_path,
@@ -55,7 +57,7 @@ rule skull_strip:
                 space=config["space"],
                 **inputs["t1w"].input_wildcards,
             ),
-        mask=   bids(
+        mask=bids(
                 root=join(config["output_dir"], "skull_stripped"),
                 datatype="anat",
                 res="native",
@@ -65,9 +67,14 @@ rule skull_strip:
                 **inputs["t1w"].input_wildcards,
             ),
     container: config["singularity"]["synthstrip"]
+    threads: 1
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
-        "mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
+        "python3 /freesurfer/mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
     
+localrules: align_template_rigid
 rule align_template_rigid:
     input:
         image=rules.skull_strip.output.brain,
@@ -90,9 +97,13 @@ rule align_template_rigid:
     params:
         fixed = join(workflow.basedir, config['template']),
     container: config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
+localrules: normalize
 rule normalize: 
     input:
         im=rules.align_template_rigid.output.warped,
@@ -106,11 +117,15 @@ rule normalize:
             space=config["space"],
             **inputs["t1w"].input_wildcards,
         ),
+    resources:
+        mem_mb=8000,
+        local_cores=1
     script:
         "./scripts/normalization_script.py"
 
 
 
+localrules: gen_grad_template
 rule gen_grad_template:
     input:
         image=rules.normalize.output.im_norm,
@@ -155,9 +170,13 @@ rule gen_grad_template:
             allow_missing=True,
         ),
     container: config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
+localrules: fid_tform_mni_rigid,
 rule fid_tform_mni_rigid:
     input:
         xfm_new=rules.align_template_rigid.output.xfm_ras,
@@ -177,10 +196,13 @@ rule fid_tform_mni_rigid:
             space=config["space"],
             **inputs["t1w"].input_wildcards,
         ),
+    resources:
+        local_cores=1,
     script:
         './scripts/tform_script.py'
 
 
+localrules: rewrite_fcsv
 rule rewrite_fcsv:
     input:
         fcsv_new=rules.fid_tform_mni_rigid.output.fcsv_new,
@@ -195,6 +217,7 @@ rule rewrite_fcsv:
         "./scripts/fcsv_to_landmarks.py"
 
 
+localrules: landmarks_to_spheres
 rule landmarks_to_spheres:
     input:
         afids_txt=rules.rewrite_fcsv.output.landmarks,
@@ -209,6 +232,9 @@ rule landmarks_to_spheres:
     params:
         sphere_size=config["c3d"]["landmarks"]["sphere_size"],
     container: config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "c3d {input.warped} -scale 0 -landmarks-to-spheres {input.afids_txt} {params.sphere_size} -o {output.sphere}"
 
@@ -236,7 +262,7 @@ rule landmarks_to_spheres:
 rule train_c3d:
     input:
         images_warped=expand(
-            rules.align_template_rigid.output.warped,
+            rules.normalize.output.im_norm,
             zip,
             **inputs["t1w"].input_zip_lists,
         ),
@@ -272,6 +298,10 @@ rule train_c3d:
             space=config["space"],
         ),
     container: config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=32000,
+        time=179
+    threads: 1
     shell:
         'c4d -verbose {input.images_warped} -tile w -popas ALLMRI \
         {input.images_gradx} -tile w -popas ALLGRADX \

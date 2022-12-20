@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import numpy as np
-import nibabel as nb
+import nibabel as nib
 
 
     
@@ -23,4 +23,5 @@ def read_nii_metadata(nii_path):
 intermediate = read_nii_metadata(input_im)
 
 
-output_im = nib.Nifti1Image(intermediate[1], affine=intermediate[0])
+nib.save(nib.Nifti1Image(intermediate[1], affine=intermediate[0]), output_im)
+

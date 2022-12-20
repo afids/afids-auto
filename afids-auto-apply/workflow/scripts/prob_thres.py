@@ -25,9 +25,10 @@ def sorted_nicely(lst):
     return sorted_lst
 
 
-def localize_afid(afid_prob_vol: ArrayLike):
-    threshold = np.max(afid_prob_vol, 99.9)
+def localize_afid(afid_prob_vol: ArrayLike, mask_vol: ArrayLike):
+    threshold = np.percentile(afid_prob_vol, 99.9)
 
+    afid_prob_vol[mask_vol == 0] = 0
     afid_prob_vol[afid_prob_vol < threshold] = 0
     afid_prob_vol_binary = afid_prob_vol > 0
 
@@ -70,6 +71,7 @@ def localize_afid(afid_prob_vol: ArrayLike):
 
 def seg_prob(
     input_image,
+    input_mask,
     prob_map,
     prob_combined,
 ):
@@ -80,7 +82,7 @@ def seg_prob(
 
     # Instantiate segmentation volume
     afid_prob_vol_out = np.empty(img_data.shape)
-
+    mask_arr = nib.load(input_mask).get_fdata()
     afid_num = 1
     weighted_centroids = []
     for iprob in sorted_nicely(prob_map):
@@ -89,7 +91,7 @@ def seg_prob(
         afid_prob_obj = nib.load(iprob)
         afid_prob_vol = afid_prob_obj.get_fdata().squeeze(3)
         try:
-            afid_info, labels = localize_afid(afid_prob_vol)
+            afid_info, labels = localize_afid(afid_prob_vol, mask_arr)
         except ValueError as err:
             logger.warning("No appropriate region found for AFID %s", afid_num)
             raise ValueError(
@@ -142,6 +144,7 @@ def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
 if __name__ == "__main__":
     weighted_centroids = seg_prob(
         input_image=snakemake.input.warped_img,
+        input_mask=snakemake.input["mask"],
         prob_map=snakemake.input.prob_map,
         prob_combined=snakemake.output.prob_combined,
     )

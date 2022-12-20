@@ -78,8 +78,8 @@ parse_args:
 # custom command-line parameters can then be added, these will get added to the config
 
 singularity:
-  neuroglia: docker://khanlab/neuroglia-core:latest
-  synthstrip: "insert_here" #docker pull freesurfer/synthstrip
+  neuroglia: /project/6050199/akhanf/singularity/bids-apps/khanlab_neuroglia-core_latest.sif
+  synthstrip: /scratch/tkuehn/synthstrip.sif 
 
 c3d:
   model_params:
@@ -90,5 +90,5 @@ c3d:
   landmarks:
     sphere_size: 3
 
-template: ../resources/mni_icbm152_t1_tal_nlin_asym_09c.nii.gz
+template: ../resources/tpl-MNI152NLin2009cAsym_res-01_T1w.nii.gz
 space: MNI152NLin2009cAsym
