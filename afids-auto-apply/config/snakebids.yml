@@ -32,6 +32,7 @@ pybids_inputs:
     - session
     - acquisition
     - task
+    - run
 
 
 # configuration for the command-line parameters to make available
