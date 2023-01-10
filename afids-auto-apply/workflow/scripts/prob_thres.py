@@ -1,44 +1,83 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 import re
 
 import nibabel as nib
 import numpy as np
+from numpy.typing import ArrayLike
 from skimage import measure
 
 
+logger = logging.getLogger(__name__)
+
+
 def sorted_nicely(lst):
-    convert = lambda text: int(text) if text.isdigit() else text
-    alphanum_key = lambda key: [convert(c) for c in re.split("([0-9]+)", key)]
+    def convert(text):
+        return int(text) if text.isdigit() else text
+
+    def alphanum_key(key):
+        return [convert(c) for c in re.split("([0-9]+)", key)]
+
     sorted_lst = sorted(lst, key=alphanum_key)
 
     return sorted_lst
 
 
-def seg_prob(input_image, prob_map, prob_combined, debug=False):
-    # Debug mode
-    if debug:
+def localize_afid(afid_prob_vol: ArrayLike, mask_vol: ArrayLike):
+    threshold = np.percentile(afid_prob_vol, 99.9)
 
-        class dotdict(dict):
-            """dot.notation access to dictionary attributes"""
+    afid_prob_vol[mask_vol == 0] = 0
+    afid_prob_vol[afid_prob_vol < threshold] = 0
+    afid_prob_vol_binary = afid_prob_vol > 0
 
-            __getattr__ = dict.get
-            __setattr__ = dict.__setitem__
-            __delattr__ = dict.__delitem__
+    labels, _ = measure.label(
+        afid_prob_vol_binary.astype(int), background=0, return_num=True
+    )
 
-        class Namespace:
-            def __init__(self, **kwargs):
-                self.__dict__.update(kwargs)
+    # find connected components remaining weighted by probability
+    regions = measure.regionprops(label_image=labels, intensity_image=afid_prob_vol)
+    regions.sort(key=lambda x: x.area, reverse=True)
 
-        input = dotdict(
-            {
-                "probs": "/home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301/c3d_rf-apply/sub-0249/*_probs.nii.gz",
-                "image": "/home/greydon/Documents/data/afids-auto/data/OASIS/derivatives/20200301/reg_aladin/sub-0249/anat/sub-0249_space-MNI152NLin2009cAsym_res-1mm_T1w.nii.gz",
-            }
+    area_idxs = []
+    dropped_regions = 0
+    for idx, region in enumerate(regions):
+        # region.area is the number of voxels in the region
+        # these thresholds are arbitrary, chosen after some informal tuning
+        if region.area > 100:
+            logger.warning(
+                "Using a region with an unusually large number of voxels (%s)",
+                region.area
+            )
+        elif region.area <= 5:
+            continue
+        area_idxs.append(
+            [
+                idx,
+                np.mean(afid_prob_vol[labels == region.label]),
+                region.area,
+                region.label,
+                region.weighted_centroid,
+            ]
         )
-        snakemake = Namespace(input=input)
+    logger.info("Dropped %s regions with fewer than 6 voxels", dropped_regions)
 
+    if not area_idxs:
+        logger.warning("No appropriate region found.")
+        raise ValueError("No appropriate region found.")
+
+    # sort the candidate components based on mean probability value of area
+    # take the component with highest mean
+    return max(area_idxs, key=lambda x: x[1]), labels
+
+
+def seg_prob(
+    input_image,
+    input_mask,
+    prob_map,
+    prob_combined,
+):
     # Load input image
     warped_img_obj = nib.load(input_image)
     img_affine = warped_img_obj.affine
@@ -46,71 +85,28 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
 
     # Instantiate segmentation volume
     afid_prob_vol_out = np.empty(img_data.shape)
-
+    mask_arr = nib.load(input_mask).get_fdata()
     afid_num = 1
     weighted_centroids = []
     for iprob in sorted_nicely(prob_map):
+        logger.info("Handling afid %s", afid_num)
         # load up afid probability
         afid_prob_obj = nib.load(iprob)
         afid_prob_vol = afid_prob_obj.get_fdata().squeeze(3)
-
-        # dynamically set using cumulative density
-        hist_y, hist_x = np.histogram(afid_prob_vol.flatten(), bins=100)
-        hist_x = hist_x[0:-1]
-        cumHist_y = np.cumsum(hist_y.astype(float)) / np.prod(
-            np.array(afid_prob_vol.shape)
-        )
-
-        # The background should contain half of the voxels
-        # Currently uses 90th percentile, can be tuned
-        minThreshold_byCount = hist_x[np.where(cumHist_y > 0.9)[0][0]]
-        hist_diff = np.diff(hist_y)
-        hist_diff_zc = np.where(np.diff(np.sign(hist_diff)) == -2)[0].flatten()
-        if len(hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)]) == 0:
-            minThreshold = hist_x[hist_diff_zc][-1]
-        else:
-            minThreshold = hist_x[
-                hist_diff_zc[hist_x[hist_diff_zc] > (minThreshold_byCount)][0]
-            ]
-
-        minThreshold = minThreshold + 0.1
-
-        afid_prob_vol[afid_prob_vol < minThreshold] = 0
-        afid_prob_vol_binary = afid_prob_vol > 0
-
-        labels, _ = measure.label(
-            afid_prob_vol_binary.astype(int), background=0, return_num=True
-        )
-
-        # find connected components remaining weighted by probability
-        properties = measure.regionprops(
-            label_image=labels, intensity_image=afid_prob_vol
-        )
-        properties.sort(key=lambda x: x.area, reverse=True)
-        areas = np.array([prop.area for prop in properties])
-
-        # extract any component with an area less than 100
-        areaIdxs = []
-        for icomp in range(len(areas)):
-            if properties[icomp].area < 100:
-                areaIdxs.append(
-                    [
-                        icomp,
-                        np.mean(afid_prob_vol[labels == properties[icomp].label]),
-                        properties[icomp].area,
-                        properties[icomp].label,
-                        properties[icomp].weighted_centroid,
-                    ]
-                )
+        try:
+            afid_info, labels = localize_afid(afid_prob_vol, mask_arr)
+        except ValueError as err:
+            logger.warning("No appropriate region found for AFID %s", afid_num)
+            raise ValueError(
+                f"No appropriate region found for AFID {afid_num} in image {iprob}"
+            ) from err
 
         # sort the candidate components based on mean probability value of area
         # take the component with highest mean
-        if areaIdxs:
-            areaIdxs.sort(key=lambda x: x[1], reverse=True)
-            afid_prob_vol_out[labels == areaIdxs[0][-2]] = afid_num
+        afid_prob_vol_out[labels == afid_info[-2]] = afid_num
 
         weighted_centroids.append(
-            img_affine[:3, :3].dot(areaIdxs[0][-1]) + img_affine[:3, 3]
+            img_affine[:3, :3].dot(afid_info[-1]) + img_affine[:3, 3]
         )
 
         # Move onto next fiducial
@@ -125,8 +121,8 @@ def seg_prob(input_image, prob_map, prob_combined, debug=False):
 
 def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
     # Read in fcsv template
-    with open(fcsv_template, "r") as f:
-        fcsv = [line.strip() for line in f]
+    with open(fcsv_template, "r", encoding="utf-8") as file_:
+        fcsv = [line.strip() for line in file_]
 
     # Loop over fiducials
     for fid in range(1, 33):
@@ -144,13 +140,14 @@ def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
         )
 
     # Write output fcsv
-    with open(fcsv_output, "w") as f:
-        f.write("\n".join(line for line in fcsv))
+    with open(fcsv_output, "w", encoding="utf-8") as file_:
+        file_.write("\n".join(line for line in fcsv))
 
 
 if __name__ == "__main__":
     weighted_centroids = seg_prob(
         input_image=snakemake.input.warped_img,
+        input_mask=snakemake.input.mask,
         prob_map=snakemake.input.prob_map,
         prob_combined=snakemake.output.prob_combined,
     )

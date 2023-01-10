@@ -1,4 +1,4 @@
-#---- begin snakebids boilerplate ----------------------------------------------
+# ---- begin snakebids boilerplate ----------------------------------------------
 
 import snakebids
 from snakebids import bids
@@ -7,28 +7,27 @@ import os
 from os.path import join
 import pandas as pd
 
-configfile: 'config/snakebids.yml'
+configfile: "config/snakebids.yml"
 
-#writes inputs_config.yml and updates config dict
-config.update(
-    snakebids.generate_inputs(
-        bids_dir=config["bids_dir"],
-        pybids_inputs=config["pybids_inputs"],
-        derivatives=config["derivatives"],
-        participant_label=config["participant_label"],
-        exclude_participant_label=config["exclude_participant_label"]
-    )
+# writes inputs_config.yml and updates config dict
+inputs = snakebids.generate_inputs(
+    bids_dir=config["bids_dir"],
+    pybids_inputs=config["pybids_inputs"],
+    derivatives=config["derivatives"],
+    participant_label=config["participant_label"],
+    exclude_participant_label=config["exclude_participant_label"],
+    use_bids_inputs=True,
 )
 
 
+# this adds constraints to the bids naming
+wildcard_constraints:
+    **snakebids.get_wildcard_constraints(config["pybids_inputs"]),
 
-#this adds constraints to the bids naming
-wildcard_constraints:  **snakebids.get_wildcard_constraints(\
-    config["pybids_inputs"]\
-)
 
-#---- end snakebids boilerplate ------------------------------------------------
+# ---- end snakebids boilerplate ------------------------------------------------
 
+localrules: all
 rule all:
     input:
         expand(
@@ -38,21 +37,13 @@ rule all:
                     space=config["space"],
                     suffix="probs.nii.gz",
                     desc="afid{afid_num}",
-                    **config["subj_wildcards"],
+                    **inputs["t1w"].input_wildcards,
                 ),
                 afid_num=range(1, 33),
                 allow_missing=True,
             ),
             zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-        bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            session='test',
-            from_='subject',
-            to=config["space"],
-            desc='rigid',
-            suffix="regqc.html",
+            **inputs["t1w"].input_zip_lists,
         ),
         expand(
             bids(
@@ -61,15 +52,47 @@ rule all:
                 res="1mm",
                 suffix="probs.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
             zip,
-            **config["input_zip_lists"]["t1w"],
+            **inputs["t1w"].input_zip_lists,
         ),
 
+localrules: skull_strip
+rule skull_strip: 
+    input: 
+    	brainskull = inputs["t1w"].input_path,
+    output: 
+        brain= bids(
+                root=join(config["output_dir"], "skull_stripped"),
+                datatype="anat",
+                res="native",
+                suffix="T1w.nii.gz",
+                desc="synthstrip",
+                space=config["space"],
+                **inputs["t1w"].input_wildcards,
+            ),
+        mask=bids(
+                root=join(config["output_dir"], "skull_stripped"),
+                datatype="anat",
+                res="native",
+                suffix="mask.nii.gz",
+                desc="synthstripbrain",
+                space=config["space"],
+                **inputs["t1w"].input_wildcards,
+            ),
+    container: config["singularity"]["synthstrip"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
+    shell:
+        "python3 /freesurfer/mri_synthstrip -i {input.brainskull} -o {output.brain} -m {output.mask}"
+        
+        
+localrules: align_template_rigid
 rule align_template_rigid:
     input:
-        image=config["input_path"]["t1w"],
+        image=rules.skull_strip.output.brain,
     output:
         warped=bids(
             root=join(config["output_dir"], "reg_aladin"),
@@ -77,91 +100,143 @@ rule align_template_rigid:
             res="1mm",
             suffix="T1w.nii.gz",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
         xfm_ras=bids(
             root=join(config["output_dir"], "reg_aladin"),
             datatype="anat",
             suffix="xfm.txt",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
     params:
-        fixed = join(workflow.basedir, config['template']),
-    container: config["singularity"]["neuroglia"]
+        fixed=join(workflow.basedir, config["template"]),
+    container:
+        config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "reg_aladin -flo {input.image} -ref {params.fixed} -res {output.warped} -rigOnly -interp 0 -aff {output.xfm_ras}"
 
-rule gen_grad_template:
+localrules: xfm_mask
+rule xfm_mask:
     input:
         image=rules.align_template_rigid.output.warped,
+        xfm=rules.align_template_rigid.output.xfm_ras,
+        mask=rules.skull_strip.output.mask,
+    output:
+        mask_warped=bids(
+            root=join(config["output_dir"], "skull_stripped"),
+            datatype="anat",
+            res="1mm",
+            suffix="mask.nii.gz",
+            desc="synthstripbrain",
+            space=config["space"],
+            **inputs["t1w"].input_wildcards,
+        )
+    container:
+        config["singularity"]["neuroglia"]
+    shell:
+        "c3d {input.image} {input.mask} -reslice-matrix {input.xfm} -o {output.mask_warped}"
+
+localrules: normalize
+rule normalize: 
+    input:
+        im=rules.align_template_rigid.output.warped,
+    output:
+        im_norm=bids(
+            root=join(config["output_dir"], "normalized"),
+            datatype="anat",
+            res="1mm",
+            suffix="T1w.nii.gz",
+            desc="synthstripnorm",
+            space=config["space"],
+            **inputs["t1w"].input_wildcards,
+        ),
+    resources:
+        mem_mb=8000,
+        local_cores=1
+    script:
+        "./scripts/normalization_script.py"
+
+
+localrules: gen_grad_template
+rule gen_grad_template:
+    input:
+        image=rules.normalize.output.im_norm,
     output:
         gradx=expand(
-                bids(
+            bids(
                 root=join(config["output_dir"], "c3d_grad"),
                 datatype="anat",
                 res="1mm",
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
-            grad_dir=['x'],
+            grad_dir=["x"],
             allow_missing=True,
         ),
         grady=expand(
-                bids(
+            bids(
                 root=join(config["output_dir"], "c3d_grad"),
                 datatype="anat",
                 res="1mm",
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
-            grad_dir=['y'],
+            grad_dir=["y"],
             allow_missing=True,
         ),
         gradz=expand(
-                bids(
+            bids(
                 root=join(config["output_dir"], "c3d_grad"),
                 datatype="anat",
                 res="1mm",
                 desc="grad{grad_dir}",
                 suffix="T1w.nii.gz",
                 space=config["space"],
-                **config["subj_wildcards"],
+                **inputs["t1w"].input_wildcards,
             ),
-            grad_dir=['z'],
+            grad_dir=["z"],
             allow_missing=True,
         ),
-    container: config["singularity"]["neuroglia"]
+    container:
+        config["singularity"]["neuroglia"]
+    resources:
+        mem_mb=8000,
+        local_cores=1
     shell:
         "c3d -verbose {input.image} -smooth 1x1x1vox -grad -oo {output.gradx} {output.grady} {output.gradz}"
 
-rule reg_qc:
-    input:
-        images=expand(
-            rules.align_template_rigid.output.warped,
-            zip,
-            **config["input_zip_lists"]["t1w"],
-        ),
-    output:
-        html_fig=bids(
-            root=join(config["output_dir"], "reg_aladin"),
-            session='test',
-            from_='subject',
-            to=config["space"],
-            desc='rigid',
-            suffix="regqc.html",
-        ),
-    script:
-        './scripts/reg_qc.py'
+
+#rule reg_qc:
+#    input:
+#        images=expand(
+#            rules.align_template_rigid.output.warped,
+#            zip,
+#            **inputs["t1w"].input_zip_lists,
+#        ),
+#    output:
+#        html_fig=bids(
+#            root=join(config["output_dir"], "reg_aladin"),
+#            session="test",
+#            from_="subject",
+#            to=config["space"],
+#            desc="rigid",
+#            suffix="regqc.html",
+#        ),
+#    script:
+#        "./scripts/reg_qc.py"
 
 
 rule apply_model:
     input:
-        image=rules.align_template_rigid.output.warped,
+        image=rules.normalize.output.im_norm,
         gradx=rules.gen_grad_template.output.gradx,
         grady=rules.gen_grad_template.output.grady,
         gradz=rules.gen_grad_template.output.gradz,
@@ -169,39 +244,47 @@ rule apply_model:
             root=join(config["model_dir"], "auto-afids-train"),
             suffix="model.rf",
             space=config["space"],
-        )
+        ),
     output:
         prob_map=expand(
-                bids(
-                    root=join(config["output_dir"], "c3d_rf-apply"),
-                    space=config["space"],
-                    suffix="probs.nii.gz",
-                    desc="afid{afid_num}",
-                    **config["subj_wildcards"],
-                ),
+            bids(
+                root=join(config["output_dir"], "c3d_rf-apply"),
+                space=config["space"],
+                suffix="probs.nii.gz",
+                desc="afid{afid_num}",
+                **inputs["t1w"].input_wildcards,
+            ),
             afid_num=range(1, 33),
             allow_missing=True,
-        )
-    container: config["singularity"]["neuroglia"]
+        ),
+    container:
+        config["singularity"]["neuroglia"]
+    group: "application"
+    resources:
+        mem_mb=32000,
+        time=159
+    threads: 1
     shell:
-        'c4d -verbose {input.image} {input.gradx} {input.grady} {input.gradz} -rf-apply {input.model} -oo {output.prob_map}'
+        "c4d -verbose {input.image} {input.gradx} {input.grady} {input.gradz} -rf-apply {input.model} -oo {output.prob_map}"
+
 
 rule threshold_prob:
     input:
         warped_img=rules.align_template_rigid.output.warped,
+        mask=rules.xfm_mask.output.mask_warped,
         prob_map=expand(
-                bids(
-                    root=join(config["output_dir"], "c3d_rf-apply"),
-                    space=config["space"],
-                    suffix="probs.nii.gz",
-                    desc="afid{afid_num}",
-                    **config["subj_wildcards"],
-                ),
+            bids(
+                root=join(config["output_dir"], "c3d_rf-apply"),
+                space=config["space"],
+                suffix="probs.nii.gz",
+                desc="afid{afid_num}",
+                **inputs["t1w"].input_wildcards,
+            ),
             afid_num=range(1, 33),
             allow_missing=True,
         ),
     params:
-        fcsv_template=join(workflow.basedir, config['fcsv_template']),
+        fcsv_template=join(workflow.basedir, config["fcsv_template"]),
     output:
         prob_combined=bids(
             root=join(config["output_dir"], "threshold_prob"),
@@ -209,17 +292,19 @@ rule threshold_prob:
             res="1mm",
             suffix="probs.nii.gz",
             space=config["space"],
-            **config["subj_wildcards"],
+            **inputs["t1w"].input_wildcards,
         ),
-        fcsv=expand(
-            bids(
-                root=join(config["output_dir"], "threshold_prob"),
-                datatype="anat",
-                suffix="{contrast}_T1_afids-auto_01.fcsv",
-                **config["subj_wildcards"]
-            ),
-            contrast=config["space"],
-            allow_missing=True
-        )
+        fcsv=bids(
+            root=join(config["output_dir"], "threshold_prob"),
+            datatype="anat",
+            space=config["space"],
+            suffix="afids.fcsv",
+            **inputs["t1w"].input_wildcards,
+        ),
+    group: "application"
+    resources:
+        mem_mb=8000,
+        time=20
+    threads: 1
     script:
-        './scripts/prob_thres.py'
+        "./scripts/prob_thres.py"
