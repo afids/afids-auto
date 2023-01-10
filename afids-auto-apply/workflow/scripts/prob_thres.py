@@ -43,9 +43,12 @@ def localize_afid(afid_prob_vol: ArrayLike, mask_vol: ArrayLike):
     area_idxs = []
     dropped_regions = 0
     for idx, region in enumerate(regions):
+        # region.area is the number of voxels in the region
+        # these thresholds are arbitrary, chosen after some informal tuning
         if region.area > 100:
             logger.warning(
-                "Using a region with an unusually large area (%s)", region.area
+                "Using a region with an unusually large number of voxels (%s)",
+                region.area
             )
         elif region.area <= 5:
             continue
@@ -58,7 +61,7 @@ def localize_afid(afid_prob_vol: ArrayLike, mask_vol: ArrayLike):
                 region.weighted_centroid,
             ]
         )
-    logger.info("Dropped %s regions with area <= 5", dropped_regions)
+    logger.info("Dropped %s regions with fewer than 6 voxels", dropped_regions)
 
     if not area_idxs:
         logger.warning("No appropriate region found.")
@@ -95,7 +98,7 @@ def seg_prob(
         except ValueError as err:
             logger.warning("No appropriate region found for AFID %s", afid_num)
             raise ValueError(
-                f"No appropriate region found for AFID {afid_num} in image " f"{iprob}"
+                f"No appropriate region found for AFID {afid_num} in image {iprob}"
             ) from err
 
         # sort the candidate components based on mean probability value of area
@@ -144,7 +147,7 @@ def seg_to_fcsv(weighted_centroids, fcsv_template, fcsv_output):
 if __name__ == "__main__":
     weighted_centroids = seg_prob(
         input_image=snakemake.input.warped_img,
-        input_mask=snakemake.input["mask"],
+        input_mask=snakemake.input.mask,
         prob_map=snakemake.input.prob_map,
         prob_combined=snakemake.output.prob_combined,
     )
